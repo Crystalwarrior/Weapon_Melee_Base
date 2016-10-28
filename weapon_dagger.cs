@@ -114,8 +114,8 @@ datablock ShapeBaseImageData(DaggerImage)
 	stateTransitionOnNoAmmo[1]		 = "StabReady";
 
 	stateName[2]                    = "Fire";
-	stateTransitionOnTimeout[2]     = "StopFire";
-	stateTimeoutValue[2]            = 0.2;
+	stateTransitionOnTimeout[2]     = "CheckTrigger";
+	stateTimeoutValue[2]            = 0.24;
 	stateFire[2]                    = true;
 	stateAllowImageChange[2]        = false;
 	stateScript[2]                  = "onFire";

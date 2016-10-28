@@ -385,7 +385,7 @@ function lightSaberImage::onStanceSwitch(%this, %obj, %slot)
 {
 	if (%obj.getImageState(%slot) !$= "Ready") return;
 	%obj.meleeStance = (%obj.meleeStance + 1) % 2;
-	%obj.stopMeleeHitregLoop(%obj, %slot);
+	%this.stopMeleeHitregLoop(%obj, %slot);
 	%obj.playThread(2, tswing @ (%obj.swingPhase + 1) % 2 + (%obj.meleeStance ? 3 : 1));
 	%obj.schedule(0, stopThread, 2);
 	if (isobject(%client=%obj.client)) %client.centerPrint("\c4Switched to " @ (%obj.meleeStance ? "horizontal" : "vertical") @ " stance.", 2);
