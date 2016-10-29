@@ -56,6 +56,12 @@ function WeaponImage::stopMeleeHitregLoop(%this, %obj, %slot)
 	%obj.activeSwing = 0;
 }
 
+function WeaponImage::MeleeCheckClash(%this, %obj, %slot, %col)
+{
+	%targImg = %col.getMountedImage(%slot);
+	return %this.meleeCanClash && isObject(%targImg) && %targImg.meleeStances && %targImg.meleeCanClash && %obj.meleeStance == !%col.meleeStance && %col.activeSwing;
+}
+
 function WeaponImage::MeleeDamage(%this, %obj, %slot, %col, %damage, %pos)
 {
 	if (%damage $= "")
@@ -78,10 +84,10 @@ function WeaponImage::MeleeHitregLoop(%this, %obj, %slot, %frames, %damage, %las
 		return;
 	}
 	%obj.activeSwing = 1;
-	if (!isObject(%obj.line))
-			%obj.line = createShape(CubeGlowShapeData, "1 1 1 0.5");
-	if (!isObject(%obj.line2))
-			%obj.line2 = createShape(CubeGlowShapeData, "1 1 1 1");
+	//if (!isObject(%obj.line))
+	//		%obj.line = createShape(CubeGlowShapeData, "1 1 1 0.5");
+	//if (!isObject(%obj.line2))
+	//		%obj.line2 = createShape(CubeGlowShapeData, "1 1 1 1");
 
 	%a = getWords(%obj.getSlotTransform(%slot), 0, 2);
 	%b = %obj.getMuzzlePoint(%slot);
@@ -90,7 +96,7 @@ function WeaponImage::MeleeHitregLoop(%this, %obj, %slot, %frames, %damage, %las
 	%vec = vectorScale(vectorNormalize(%vec), %this.meleeRayLength);//1.73895
 	%b = vectorAdd(%a, %vec);
 
-	%obj.line.transformLine(%a, %b, 0.1);
+	//%obj.line.transformLine(%a, %b, 0.1);
 
 	%mask =
 			$TypeMasks::FxBrickObjectType |
@@ -102,7 +108,7 @@ function WeaponImage::MeleeHitregLoop(%this, %obj, %slot, %frames, %damage, %las
 	%ray = containerRayCast(%a, %b, %mask, %obj);
 	if(%last $= "") %last = %b;
 	%ray2 = containerRayCast(%last, %b, %mask, %obj);
-	%obj.line2.transformLine(%last, %b, 0.1);
+	//%obj.line2.transformLine(%last, %b, 0.1);
 
 	if (%ray || %ray2)
 	{
@@ -114,7 +120,7 @@ function WeaponImage::MeleeHitregLoop(%this, %obj, %slot, %frames, %damage, %las
 		if(miniGameCanDamage(%obj, %ray) != 0 && isFunction(%ray.getClassName(), "damage"))
 		{
 			%targImg = %ray.getMountedImage(%slot);
-			if (%this.meleeStances && %this.meleeCanClash && isObject(%targImg) && %targImg.meleeStances && %targImg.meleeCanClash && %obj.meleeStance == !%ray.meleeStance && %ray.activeSwing)
+			if (%this.meleeStances && %this.MeleeCheckClash(%obj, %slot, %ray))
 			{
 				%start = %obj.getPosition();
 				%end = %ray.getPosition();

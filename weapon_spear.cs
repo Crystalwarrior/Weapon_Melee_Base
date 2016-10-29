@@ -104,7 +104,7 @@ datablock ShapeBaseImageData(MeleeSpearImage)
 
 	stateName[2]                    = "Fire";
 	stateTransitionOnTimeout[2]     = "Ready";
-	stateTimeoutValue[2]            = 0.36;
+	stateTimeoutValue[2]            = 0.4;
 	stateFire[2]                    = true;
 	stateAllowImageChange[2]        = false;
 	stateScript[2]                  = "onFire";

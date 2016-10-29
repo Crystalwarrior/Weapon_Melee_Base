@@ -84,7 +84,7 @@ datablock ShapeBaseImageData(DaggerImage)
 	meleePierceTerrain = false; //If we hit terrain hitreg will still go on until it hits a player
 	meleeSingleHitProjectile = false; //If pierce terrain is on, set this to true so it doesn't spam hit projectiles
 
-	meleeBlockedVelocity = 7;
+	meleeBlockedVelocity = 1;
 	meleeBlockedStunTime = 0.500; //Length of stun in seconds
 
 	//raise your arm up or not
@@ -115,7 +115,7 @@ datablock ShapeBaseImageData(DaggerImage)
 
 	stateName[2]                    = "Fire";
 	stateTransitionOnTimeout[2]     = "CheckTrigger";
-	stateTimeoutValue[2]            = 0.24;
+	stateTimeoutValue[2]            = 0.3;
 	stateFire[2]                    = true;
 	stateAllowImageChange[2]        = false;
 	stateScript[2]                  = "onFire";
@@ -209,4 +209,12 @@ function DaggerImage::MeleeDamage(%this, %obj, %slot, %col, %damage, %pos)
 		%damage *= 3 + (2 * %obj.meleeStance); //Reverse grip deals 4x damage + %dot, so almost 5x
 	}
 	%col.damage(%obj, %pos, %damage, $DamageType::Sword);
+}
+
+function DaggerImage::MeleeCheckClash(%this, %obj, %slot, %col)
+{
+	%targImg = %col.getMountedImage(%slot);
+	if (isObject(%targImg) && %targImg == DaggerImage.getID())
+		return %obj.meleeStance == 0 && %col.activeSwing && %col.meleeStance == 0;
+	return %obj.meleeStance == 0 && isObject(%targImg) && %targImg.meleeStances && %targImg.meleeCanClash && %col.activeSwing;
 }
