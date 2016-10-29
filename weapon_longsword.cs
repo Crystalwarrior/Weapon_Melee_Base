@@ -100,6 +100,7 @@ datablock ShapeBaseImageData(LongSwordImage)
 	stateName[1]                     = "Ready";
 	stateTransitionOnTriggerDown[1]  = "Fire";
 	stateAllowImageChange[1]         = true;
+	stateWaitForTimeout[1]			= false;
 	stateTransitionOnNotLoaded[1]      = "noAmmo";
 
 	stateName[2]                    = "Fire";
@@ -113,6 +114,7 @@ datablock ShapeBaseImageData(LongSwordImage)
 	stateName[3]                    = "StopFire";
 	stateTransitionOnTriggerUp[3]   = "Ready";
 	stateAllowImageChange[3]        = false;
+	stateWaitForTimeout[3]			= false;
 	stateScript[3]                  = "onStopFire";
 
 	stateName[4]                    = "noAmmo";

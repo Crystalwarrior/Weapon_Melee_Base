@@ -110,32 +110,36 @@ datablock ShapeBaseImageData(DaggerImage)
 	stateName[1]                     = "Ready";
 	stateTransitionOnTriggerDown[1]  = "Fire";
 	stateAllowImageChange[1]         = true;
+	stateWaitForTimeout[1]			= false;
 	stateTransitionOnNotLoaded[1]    = "noAmmo";
 	stateTransitionOnNoAmmo[1]		 = "StabReady";
 
 	stateName[2]                    = "Fire";
-	stateTransitionOnTimeout[2]     = "CheckTrigger";
+	stateTransitionOnTimeout[2]     = "StopFire";
 	stateTimeoutValue[2]            = 0.3;
 	stateFire[2]                    = true;
 	stateAllowImageChange[2]        = false;
 	stateScript[2]                  = "onFire";
 	stateWaitForTimeout[2]		       = true;
 
-	stateName[3]					= "CheckTrigger";
-	stateTransitionOnTriggerUp[3]	= "Ready";
-	stateTransitionOnTriggerDown[3]	= "Fire";
-	stateTransitionOnNoAmmo[3]		 = "StabReady";
-	stateTransitionOnNotLoaded[3]    = "noAmmo";
-	stateAllowImageChange[3]        = false;
+	//Autofire
+	//stateName[3]					= "CheckTrigger";
+	//stateTransitionOnTriggerUp[3]	= "Ready";
+	//stateTransitionOnTriggerDown[3]	= "Fire";
+	//stateTransitionOnNoAmmo[3]		 = "StabReady";
+	//stateTransitionOnNotLoaded[3]    = "noAmmo";
+	//stateAllowImageChange[3]        = false;
 
 	stateName[4]                    = "StopFire";
 	stateTransitionOnTriggerUp[4]   = "Ready";
 	stateAllowImageChange[4]        = false;
 	stateScript[4]                  = "onStopFire";
+	stateWaitForTimeout[4]			= false;
 
 	stateName[5]                     = "StabReady";
 	stateTransitionOnTriggerDown[5]  = "StabFire";
 	stateAllowImageChange[5]         = true;
+	stateWaitForTimeout[5]			= false;
 	stateTransitionOnNotLoaded[5]    = "noAmmo";
 	stateTransitionOnAmmo[5]		 = "Ready";
 
@@ -160,7 +164,7 @@ function DaggerImage::onMount(%this, %obj, %slot)
 	else
 		%obj.playthread(2, swingdagger @ (%obj.swingPhase + 1) % 3 + 1);
 	%obj.schedule(32, stopThread, 2);
-	%obj.setImageAmmo(%slot, 1);
+	%obj.setImageAmmo(%slot, !%obj.meleeStance);
 }
 
 function DaggerImage::onStanceSwitch(%this, %obj, %slot)
@@ -187,13 +191,13 @@ function DaggerImage::onFire(%this, %obj, %slot)
 	{
 		%obj.swingPhase = (%obj.swingPhase + 1) % 2;
 		%obj.playthread(2, stabdagger @ %obj.swingPhase + 1);
-		%damage = 20;
+		%damage = 15;
 	}
 	else
 	{
 		%obj.swingPhase = (%obj.swingPhase + 1) % 3;
 		%obj.playthread(2, swingdagger @ %obj.swingPhase + 1);
-		%damage = 15;
+		%damage = 10;
 	}
 	
 	%this.MeleeHitregLoop(%obj, %slot, 12, %damage);
@@ -206,7 +210,7 @@ function DaggerImage::MeleeDamage(%this, %obj, %slot, %col, %damage, %pos)
 	%dot = vectorDot(%col.getForwardVector(), %obj.getForwardVector());
 	if (%dot > 0)
 	{
-		%damage *= 3 + (2 * %obj.meleeStance); //Reverse grip deals 4x damage + %dot, so almost 5x
+		%damage *= 2 + (1 * %obj.meleeStance); //Reverse grip deals 4x damage + %dot, so almost 5x
 	}
 	%col.damage(%obj, %pos, %damage, $DamageType::Sword);
 }
