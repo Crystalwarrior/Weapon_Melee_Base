@@ -85,7 +85,7 @@ datablock ShapeBaseImageData(DaggerImage)
 	meleeSingleHitProjectile = false; //If pierce terrain is on, set this to true so it doesn't spam hit projectiles
 
 	meleeBlockedVelocity = 1;
-	meleeBlockedStunTime = 0.500; //Length of stun in seconds
+	meleeBlockedStunTime = 0.200; //Length of stun in seconds (for self)
 
 	//raise your arm up or not
 	armReady = false;
@@ -191,13 +191,13 @@ function DaggerImage::onFire(%this, %obj, %slot)
 	{
 		%obj.swingPhase = (%obj.swingPhase + 1) % 2;
 		%obj.playthread(2, stabdagger @ %obj.swingPhase + 1);
-		%damage = 15;
+		%damage = 20;
 	}
 	else
 	{
 		%obj.swingPhase = (%obj.swingPhase + 1) % 3;
 		%obj.playthread(2, swingdagger @ %obj.swingPhase + 1);
-		%damage = 10;
+		%damage = 15;
 	}
 	
 	%this.MeleeHitregLoop(%obj, %slot, 12, %damage);

@@ -85,7 +85,7 @@ datablock ShapeBaseImageData(ShortSwordImage)
 	meleeSingleHitProjectile = false; //If pierce terrain is on, set this to true so it doesn't spam hit projectiles
 
 	meleeBlockedVelocity = 7;
-	meleeBlockedStunTime = 0.500; //Length of stun in seconds
+	meleeBlockedStunTime = 0.500; //Length of stun in seconds (for self)
 
 	//raise your arm up or not
 	armReady = false;
@@ -103,7 +103,7 @@ datablock ShapeBaseImageData(ShortSwordImage)
 
 	// Initial start up state
 	stateName[0]                     = "Activate";
-	stateTimeoutValue[0]             = 0.5;
+	stateTimeoutValue[0]             = 0.6;
 	stateTransitionOnTimeout[0]      = "Ready";
 	stateSound[0]                    = SwordDrawSound;
 
@@ -115,7 +115,7 @@ datablock ShapeBaseImageData(ShortSwordImage)
 
 	stateName[2]                    = "Fire";
 	stateTransitionOnTimeout[2]     = "StopFire";
-	stateTimeoutValue[2]            = 0.5;
+	stateTimeoutValue[2]            = 0.4;
 	stateFire[2]                    = true;
 	stateAllowImageChange[2]        = false;
 	stateScript[2]                  = "onFire";

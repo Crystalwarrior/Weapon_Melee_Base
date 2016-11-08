@@ -75,7 +75,7 @@ datablock ShapeBaseImageData(LongSwordImage)
 	meleeSingleHitProjectile = false; //If pierce terrain is on, set this to true so it doesn't spam hit projectiles
 
 	meleeBlockedVelocity = 7;
-	meleeBlockedStunTime = 0.600; //Length of stun in seconds
+	meleeBlockedStunTime = 0.600; //Length of stun in seconds (for self)
 
 	//raise your arm up or not
 	armReady = false;

@@ -117,7 +117,7 @@ function WeaponImage::MeleeHitregLoop(%this, %obj, %slot, %frames, %damage, %las
 		%position = getWords(%ray, 1, 3);
 		%datablock = %this.meleeHitProjectile;
 
-		if(miniGameCanDamage(%obj, %ray) != 0 && isFunction(%ray.getClassName(), "damage"))
+		if(miniGameCanDamage(%obj, %ray) == 1 && isFunction(%ray.getClassName(), "damage"))
 		{
 			%targImg = %ray.getMountedImage(%slot);
 			if (%this.meleeStances && %this.MeleeCheckClash(%obj, %slot, %ray))
@@ -135,9 +135,8 @@ function WeaponImage::MeleeHitregLoop(%this, %obj, %slot, %frames, %damage, %las
 				%obj.stopThread(2);
 				%ray.swingPhase++;
 				%obj.swingPhase++;
-				%delay = %this.meleeBlockedStunTime * 1000;
-				%ray.schedule(%delay, setImageLoaded, %slot, 1);
-				%obj.schedule(%delay, setImageLoaded, %slot, 1);
+				%ray.schedule(%targImg.meleeBlockedStunTime * 1000, setImageLoaded, %slot, 1);
+				%obj.schedule(%this.meleeBlockedStunTime * 1000, setImageLoaded, %slot, 1);
 				%datablock = %this.meleeBlockedProjectile;
 			}
 			else
