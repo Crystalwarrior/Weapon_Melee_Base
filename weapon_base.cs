@@ -72,7 +72,7 @@ function WeaponImage::MeleeDamage(%this, %obj, %slot, %col, %damage, %pos)
 function WeaponImage::MeleeHitregLoop(%this, %obj, %slot, %frames, %damage, %last, %hitterrain)
 {
 	cancel(%obj.MeleeHitregLoop);
-	if (%frames <= 0)
+	if (%frames == 0 || %frames $= "")
 	{
 		%this.stopMeleeHitregLoop(%obj, %slot);
 		return;
@@ -110,7 +110,8 @@ function WeaponImage::MeleeHitregLoop(%this, %obj, %slot, %frames, %damage, %las
 	%ray2 = containerRayCast(%last, %b, %mask, %obj);
 	%obj.line2.transformLine(%last, %b, 0.1);
 
-	if (%ray || %ray2)
+	%swingspeed = vectorDist(%last, %b);
+	if ((%ray || %ray2) && (!%this.meleeIsFreeform || %swingspeed >= 0.2))
 	{
 		if(%ray2)
 			%ray = %ray2;
@@ -141,6 +142,9 @@ function WeaponImage::MeleeHitregLoop(%this, %obj, %slot, %frames, %damage, %las
 			}
 			else
 			{
+				if(%this.meleeIsFreeform)
+					%damage = %this.directDamage * (%swingspeed / 3); //num being the point where it multiplies the damage further
+				talk(%damage);
 				%this.MeleeDamage(%obj, slot, %ray, %damage, %position);
 				%datablock = %this.meleeHitPlayerProjectile;
 			}
@@ -169,7 +173,8 @@ function WeaponImage::MeleeHitregLoop(%this, %obj, %slot, %frames, %damage, %las
 		%hitterrain = true;
 	}
 	%last = %b;
-	%obj.MeleeHitregLoop = %this.schedule(%this.meleeTick, "MeleeHitregLoop", %obj, %slot, %frames--, %damage, %last, %hitterrain);
+	if (%frames != -1) %frames--;
+	%obj.MeleeHitregLoop = %this.schedule(%this.meleeTick, "MeleeHitregLoop", %obj, %slot, %frames, %damage, %last, %hitterrain);
 }
 
 //vars on image to mod:

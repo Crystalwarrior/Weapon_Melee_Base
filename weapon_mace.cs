@@ -22,16 +22,6 @@ datablock ItemData(MorningstarItem)
 	canDrop = true;
 };
 
-datablock ProjectileData(SwordBloodProjectile)
-{
-	explosion = MeleeBloodExplosion;
-};
-
-function SwordBloodProjectile::onExplode(%this, %obj, %pos)
-{
-	ServerPlay3D(MeleeStabSwordSound, %pos);
-}
-
 ////////////////
 //weapon image//
 ////////////////
@@ -105,7 +95,7 @@ datablock ShapeBaseImageData(MorningstarImage)
 	stateName[0]                     = "Activate";
 	stateTimeoutValue[0]             = 0.5;
 	stateTransitionOnTimeout[0]      = "Ready";
-	stateSound[0]                    = SwordDrawSound;
+	stateSound[0]                    = MeleeSwordDrawSound;
 
 	stateName[1]                     = "Ready";
 	stateTransitionOnTriggerDown[1]  = "Fire";

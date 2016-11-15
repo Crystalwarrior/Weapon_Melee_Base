@@ -1,10 +1,75 @@
 //Sounds
-datablock AudioProfile(MeleeClangSound)
+datablock AudioProfile(MeleeDrawSound)
 {
-	filename	= "./clang.wav";
+	filename	= "./generic_draw_01.wav";
 	description	= AudioClosest3d;
 	preload		= true;
 };
+
+datablock AudioProfile(MeleeSwordDrawSound)
+{
+	filename	= "./Sword_Draw_01.wav";
+	description	= AudioClosest3d;
+	preload		= true;
+};
+
+
+datablock AudioProfile(MeleeBlockSound1)
+{
+	filename	= "./Broadsword_Blocking_01.wav";
+	description	= AudioClosest3d;
+	preload		= true;
+};
+datablock AudioProfile(MeleeBlockSound2)
+{
+	filename	= "./Broadsword_Blocking_02.wav";
+	description	= AudioClosest3d;
+	preload		= true;
+};
+datablock AudioProfile(MeleeBlockSound3)
+{
+	filename	= "./Broadsword_Blocking_03.wav";
+	description	= AudioClosest3d;
+	preload		= true;
+};
+
+datablock AudioProfile(MeleeSwordHitSound1)
+{
+	filename	= "./Broadsword_Blocked_01.wav";
+	description	= AudioClosest3d;
+	preload		= true;
+};
+datablock AudioProfile(MeleeSwordHitSound2)
+{
+	filename	= "./Broadsword_Blocked_02.wav";
+	description	= AudioClosest3d;
+	preload		= true;
+};
+datablock AudioProfile(MeleeSwordHitSound3)
+{
+	filename	= "./Broadsword_Blocked_03.wav";
+	description	= AudioClosest3d;
+	preload		= true;
+};
+datablock AudioProfile(MeleeSwordHitSound4)
+{
+	filename	= "./Broadsword_Blocked_04.wav";
+	description	= AudioClosest3d;
+	preload		= true;
+};
+datablock AudioProfile(MeleeSwordHitSound5)
+{
+	filename	= "./Broadsword_Blocked_05.wav";
+	description	= AudioClosest3d;
+	preload		= true;
+};
+datablock AudioProfile(MeleeSwordHitSound6)
+{
+	filename	= "./Broadsword_Blocked_06.wav";
+	description	= AudioClosest3d;
+	preload		= true;
+};
+
 
 datablock AudioProfile(MeleeChargeSound)
 {
@@ -43,9 +108,27 @@ datablock AudioProfile(MeleeStabSound5)
 	description = AudioClosest3d;
 	preload = false;
 };
-datablock AudioProfile(MeleeStabSwordSound)
+datablock AudioProfile(MeleeSlashSound1)
 {
-	filename = "./stab_sword.wav";
+	filename = "./slash_01.wav";
+	description = AudioClosest3d;
+	preload = false;
+};
+datablock AudioProfile(MeleeSlashSound2)
+{
+	filename = "./slash_02.wav";
+	description = AudioClosest3d;
+	preload = false;
+};
+datablock AudioProfile(MeleeSlashSound3)
+{
+	filename = "./slash_03.wav";
+	description = AudioClosest3d;
+	preload = false;
+};
+datablock AudioProfile(MeleeSlashSound4)
+{
+	filename = "./slash_04.wav";
 	description = AudioClosest3d;
 	preload = false;
 };
@@ -89,7 +172,7 @@ datablock ExplosionData(MeleeSharpExplosion)
 	//explosionShape = "";
 	lifeTimeMS = 500;
 
-	soundProfile = SwordHitSound;
+	soundProfile = "";
 
 	particleEmitter = MeleeSharpExplosionEmitter;
 	particleDensity = 10;
@@ -116,6 +199,10 @@ datablock ProjectileData(MeleeSharpProjectile)
 	explosion = MeleeSharpExplosion;
 };
 
+function MeleeSharpProjectile::onExplode(%this, %obj, %pos)
+{
+	ServerPlay3D(MeleeSwordHitSound @ getRandom(1, 6), %pos);
+}
 datablock ParticleData(MeleeBloodExplosionParticle)
 {
 	dragCoefficient      = 0;
@@ -219,7 +306,7 @@ datablock ParticleEmitterData(BluntMetalExplosionSparkEmitter)
 datablock ExplosionData(BladeSmallMetalExplosion)
 {
 	//explosionShape = "";
-	soundProfile = MeleeClangSound;
+	soundProfile = "";
 
 	lifeTimeMS = 150;
 
@@ -247,3 +334,7 @@ datablock ProjectileData(MeleeBlockProjectile)
 {
 	explosion = BladeSmallMetalExplosion;
 };
+function MeleeBlockProjectile::onExplode(%this, %obj, %pos)
+{
+	ServerPlay3D(MeleeBlockSound @ getRandom(1, 3), %pos);
+}

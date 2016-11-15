@@ -29,7 +29,7 @@ datablock ProjectileData(SwordBloodProjectile)
 
 function SwordBloodProjectile::onExplode(%this, %obj, %pos)
 {
-	ServerPlay3D(MeleeStabSwordSound, %pos);
+	ServerPlay3D(MeleeSlashSound @ getRandom(1, 4), %pos);
 }
 
 ////////////////
@@ -105,7 +105,7 @@ datablock ShapeBaseImageData(ShortSwordImage)
 	stateName[0]                     = "Activate";
 	stateTimeoutValue[0]             = 0.6;
 	stateTransitionOnTimeout[0]      = "Ready";
-	stateSound[0]                    = SwordDrawSound;
+	stateSound[0]                    = MeleeSwordDrawSound;
 
 	stateName[1]                     = "Ready";
 	stateTransitionOnTriggerDown[1]  = "Fire";

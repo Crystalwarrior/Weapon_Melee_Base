@@ -342,7 +342,7 @@ datablock ShapeBaseImageData(lightSaberImage)
 	stateName[0]                     = "Activate";
 	stateTimeoutValue[0]             = 0.5;
 	stateTransitionOnTimeout[0]      = "Ready";
-	stateSound[0]                    = SwordDrawSound;
+	stateSound[0]                    = MeleeSwordDrawSound;
 
 	stateName[1]                     = "Ready";
 	stateTransitionOnTriggerDown[1]  = "Fire";
