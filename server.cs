@@ -6,6 +6,7 @@ exec("./weapon_dagger.cs");
 exec("./weapon_shortsword.cs");
 exec("./weapon_longsword.cs");
 exec("./weapon_spear.cs");
+exec("./weapon_machete.cs");
 //Blunt
 exec("./weapon_mace.cs");
 //Weirdness

@@ -125,7 +125,7 @@ datablock ShapeBaseImageData(LongSwordImage)
 	stateScript[4]                  = "onNoAmmo";
 };
 
-function WeaponImage::stopMeleeHitregLoop(%this, %obj, %slot, %final)
+function LongSwordImage::stopMeleeHitregLoop(%this, %obj, %slot, %final)
 {
 	cancel(%obj.MeleeHitregLoop);
 	if (isObject(%obj.line))
