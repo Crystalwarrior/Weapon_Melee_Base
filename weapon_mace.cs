@@ -98,34 +98,69 @@ datablock ShapeBaseImageData(MorningstarImage)
 	stateSound[0]                    = MeleeDrawSound;
 
 	stateName[1]                     = "Ready";
-	stateTransitionOnTriggerDown[1]  = "Fire";
+	stateTransitionOnTriggerDown[1]  = "CheckCharge";
 	stateAllowImageChange[1]         = true;
 	stateWaitForTimeout[1]			= false;
-	stateTransitionOnNotLoaded[1]      = "noAmmo";
+	stateTransitionOnNotLoaded[1]    = "noAmmo";
 
 	stateName[2]                    = "Fire";
-	stateTransitionOnTimeout[2]     = "StopFire";
+	stateTransitionOnTimeout[2]     = "Ready";
 	stateTimeoutValue[2]            = 0.67;
 	stateFire[2]                    = true;
 	stateAllowImageChange[2]        = false;
 	stateScript[2]                  = "onFire";
 	stateWaitForTimeout[2]		       = true;
 
-	stateName[3]                    = "StopFire";
-	stateTransitionOnTriggerUp[3]   = "Ready";
+	stateName[3]                    = "CheckCharge";
+	stateTransitionOnTriggerUp[3]   = "Fire";
+	stateTransitionOnTimeout[3]		= "ChargeReady";
+	stateTimeoutValue[3]            = 1;
 	stateAllowImageChange[3]        = false;
 	stateWaitForTimeout[3]			= false;
-	stateScript[3]                  = "onStopFire";
+	stateScript[3]                  = "onCheckCharge";
 
-	stateName[4]                    = "noAmmo";
-	stateTransitionOnLoaded[4]        = "Ready";
+	stateName[4]                    = "ChargeReady";
+	stateTransitionOnTriggerUp[4]   = "ChargeFire";
 	stateAllowImageChange[4]        = false;
-	stateScript[4]                  = "onNoAmmo";
+	stateScript[4]                  = "onCharge";
+
+	stateName[5]                    = "ChargeFire";
+	stateTransitionOnTimeout[5]     = "Ready";
+	stateTimeoutValue[5]            = 0.8;
+	stateFire[5]                    = true;
+	stateAllowImageChange[5]        = false;
+	stateScript[5]                  = "onChargeFire";
+	stateWaitForTimeout[5]		    = true;
+
+	stateName[8]                    = "noAmmo";
+	stateTransitionOnLoaded[8]      = "Ready";
+	stateAllowImageChange[8]        = false;
+	stateScript[8]                  = "onNoAmmo";
 };
+
+function MorningstarImage::onMount(%this, %obj, %slot)
+{
+	fixArmReady(%obj);
+}
 
 function MorningstarImage::onFire(%this, %obj, %slot)
 {
 	%obj.swingPhase = (%obj.swingPhase + 1) % 2;
 	%obj.playthread(2, bswing @ %obj.swingPhase + 1);
 	%this.schedule(100, MeleeHitregLoop, %obj, %slot, 18);
+}
+
+function MorningstarImage::onCharge(%this, %obj, %slot)
+{
+	%obj.playthread(2, shiftLeft);
+	%obj.playThread(3, plant);
+	serverPlay3D(MeleeChargeSound, %obj.getSlotTransform(%slot));
+}
+
+function MorningstarImage::onChargeFire(%this, %obj, %slot)
+{
+	%obj.swingPhase = 1; //Always horizontal swing
+	%obj.playthread(2, bswing @ %obj.swingPhase + 1);
+	%obj.playThread(3, activate);
+	%this.schedule(100, MeleeHitregLoop, %obj, %slot, 18, 60);
 }

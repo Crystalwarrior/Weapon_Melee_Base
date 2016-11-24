@@ -1,31 +1,10 @@
-datablock AudioProfile(MacheteHitSoundA)
-{
-	filename    = "./res/melee_blunt.wav";
-	description = AudioClose3d;
-	preload = true;
-};
-
-datablock AudioProfile(MacheteHitSoundB)
-{
-	filename    = "./res/melee_blunt2.wav";
-	description = AudioClose3d;
-	preload = true;
-};
-
-datablock AudioProfile(MacheteHitSoundC)
-{
-	filename    = "./res/melee_weapon_hit.wav";
-	description = AudioClose3d;
-	preload = true;
-};
-
 datablock ItemData(MacheteItem)
 {
 	category = "Weapon";  // Mission editor category
 	className = "Weapon"; // For inventory system
 
 	// Basic Item Properties
-	shapeFile = "./res/machete.dts";
+	shapeFile = "./machete.dts";
 	mass = 1;
 	density = 0.2;
 	elasticity = 0.2;
@@ -34,7 +13,7 @@ datablock ItemData(MacheteItem)
 
 	//gui stuff
 	uiName = "Machete";
-	iconName = "./res/machete";
+	iconName = "./machete";
 	doColorShift = true;
 	colorShiftColor = "0.7 0.7 0.75 1.000";
 
