@@ -53,6 +53,7 @@ function WeaponImage::stopMeleeHitregLoop(%this, %obj, %slot)
 		%obj.line.delete();
 	if (isObject(%obj.line2))
 		%obj.line2.delete();
+	%obj.stopping = "";
 	%obj.activeSwing = 0;
 	%obj.lastSwingStop = getSimTime();
 }
@@ -60,7 +61,7 @@ function WeaponImage::stopMeleeHitregLoop(%this, %obj, %slot)
 function WeaponImage::MeleeCheckClash(%this, %obj, %slot, %col)
 {
 	%targImg = %col.getMountedImage(%slot);
-	return %this.meleeCanClash && isObject(%targImg) && %targImg.meleeStances && %targImg.meleeCanClash && %obj.meleeStance == !%col.meleeStance && %col.activeSwing;
+	return %obj.activeSwing && %this.meleeStances && %this.meleeCanClash && isObject(%targImg) && %targImg.meleeStances && %targImg.meleeCanClash && %obj.meleeStance == !%col.meleeStance && %col.activeSwing;
 }
 
 function WeaponImage::MeleeDamage(%this, %obj, %slot, %col, %damage, %pos)
@@ -76,6 +77,7 @@ function WeaponImage::MeleeHitregLoop(%this, %obj, %slot, %frames, %damage, %pie
 	if (%frames == 0 || %frames $= "")
 	{
 		%this.stopMeleeHitregLoop(%obj, %slot);
+		//talk("No frames, stopping");
 		return;
 	}
 
@@ -85,22 +87,36 @@ function WeaponImage::MeleeHitregLoop(%this, %obj, %slot, %frames, %damage, %pie
 	if (!isObject(%obj) || %obj.getState() $= "Dead" || %obj.getMountedImage(%slot) != %this.getID())
 	{
 		%this.stopMeleeHitregLoop(%obj, %slot);
+		//talk("%obj is nonexistant/dead or image is not correct");
+		return;
+	}
+
+	if (%obj.stopping) //failsafe to make sure clashes properly cancel attacks
+	{
+		%this.stopMeleeHitregLoop(%obj, %slot);
+		//talk("Shouldn't damage, .stopping is on");
 		return;
 	}
 	%obj.activeSwing = 1;
-	//if (!isObject(%obj.line))
-	//		%obj.line = createShape(CubeGlowShapeData, "1 1 1 0.5");
-	//if (!isObject(%obj.line2))
-	//		%obj.line2 = createShape(CubeGlowShapeData, "1 1 1 1");
+	if($ComplexDebug)
+	{
+		if (!isObject(%obj.line))
+				%obj.line = createShape(CubeGlowShapeData, "1 1 1 0.5");
+		if (!isObject(%obj.line2))
+				%obj.line2 = createShape(CubeGlowShapeData, "1 1 1 1");
+	}
 
 	%a = getWords(%obj.getSlotTransform(%slot), 0, 2);
 	%b = %obj.getMuzzlePoint(%slot);
 
+	%scaleFactor = getWord(%obj.getScale(), 2);
+
 	%vec = vectorSub(%b, %a);
-	%vec = vectorScale(vectorNormalize(%vec), %this.meleeRayLength);//1.73895
+	%vec = vectorScale(vectorNormalize(%vec), %this.meleeRayLength * %scaleFactor);//1.73895
 	%b = vectorAdd(%a, %vec);
 
-	//%obj.line.transformLine(%a, %b, 0.1);
+	if($ComplexDebug)
+		%obj.line.transformLine(%a, %b, 0.1);
 
 	%mask =
 			$TypeMasks::FxBrickObjectType |
@@ -112,7 +128,8 @@ function WeaponImage::MeleeHitregLoop(%this, %obj, %slot, %frames, %damage, %pie
 	%ray = containerRayCast(%a, %b, %mask, %obj);
 	if(%last $= "") %last = %b;
 	%ray2 = containerRayCast(%last, %b, %mask, %obj);
-	//%obj.line2.transformLine(%last, %b, 0.1);
+	if($ComplexDebug)
+		%obj.line2.transformLine(%last, %b, 0.1);
 
 	%swingspeed = vectorDist(%last, %b);
 	if ((%ray || %ray2) && (!%this.meleeIsFreeform || %swingspeed >= 0.2))
@@ -129,7 +146,7 @@ function WeaponImage::MeleeHitregLoop(%this, %obj, %slot, %frames, %damage, %pie
 			if(%piercecheck)
 			{
 				%targImg = %ray.getMountedImage(%slot);
-				if (%this.meleeStances && %this.MeleeCheckClash(%obj, %slot, %ray))
+				if (%this.MeleeCheckClash(%obj, %slot, %ray) || isObject(%targImg) && %targImg.MeleeCheckClash(%ray, %slot, %obj))
 				{
 					%start = %obj.getPosition();
 					%end = %ray.getPosition();
@@ -138,8 +155,8 @@ function WeaponImage::MeleeHitregLoop(%this, %obj, %slot, %frames, %damage, %pie
 					%obj.setVelocity(vectorAdd(vectorScale(vectorNormalize(vectorSub(%start, %end)), %velmult), "0 0 3"));
 					%ray.setImageLoaded(%slot, 0);
 					%obj.setImageLoaded(%slot, 0);
-					%targImg.stopMeleeHitregLoop(%ray, %slot);
-					%this.stopMeleeHitregLoop(%obj, %slot);
+					%ray.stopping = true; //Let 'em handle it proper
+					%obj.stopping = true;
 					%ray.stopThread(2);
 					%obj.stopThread(2);
 					%ray.swingPhase++;
@@ -156,10 +173,10 @@ function WeaponImage::MeleeHitregLoop(%this, %obj, %slot, %frames, %damage, %pie
 					%datablock = %this.meleeHitPlayerProjectile;
 					%ray.tagged[%obj] = getSimTime();
 				}
-				%hitplayer = true;
 			}
 			else
 				%datablock = "";
+			%hitplayer = true;
 		}
 
 		if (isObject(%datablock) && (!%this.meleeSingleHitProjectile || !%ray.tagged[%obj] || %hitplayer || !%hitterrain))
@@ -182,8 +199,9 @@ function WeaponImage::MeleeHitregLoop(%this, %obj, %slot, %frames, %damage, %pie
 			}
 		}
 
-		if (!%this.meleePierceTerrain && (!%hitplayer || !%pierce))
+		if ((!%pierce && %hitplayer) || (!%hitplayer && !%this.meleePierceTerrain))//!%this.meleePierceTerrain && (!%hitplayer && !%pierce))
 		{
+			//talk("Badoop" SPC %this.meleePierceTerrain SPC %hitplayer SPC %pierce);
 			%this.stopMeleeHitregLoop(%obj, %slot);
 			return;
 		}

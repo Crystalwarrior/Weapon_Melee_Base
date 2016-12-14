@@ -1,3 +1,5 @@
+//Only differences between Longsword and Shortsword are speed and range.
+
 datablock ItemData(LongSwordItem)
 {
 	category = "Weapon";  // Mission editor category
@@ -61,11 +63,9 @@ datablock ShapeBaseImageData(LongSwordImage)
 	directDamage = 30;
 
 	meleeEnabled = true;
-	meleeStances = false; //Use stance system?
-	meleeCanClash = false; //If stances are enabled, can it clash?
+	meleeStances = true; //Use stance system?
+	meleeCanClash = true; //If stances are enabled, can it clash?
 	meleeTick = 24; //The speed of schedule loop in MS. Change this to animation FPS
-
-	meleeIsFreeform = 1; //TEST TEST TEST TEST
 
 	meleeRayLength = 2;
 
@@ -95,7 +95,7 @@ datablock ShapeBaseImageData(LongSwordImage)
 
 	// Initial start up state
 	stateName[0]                     = "Activate";
-	stateTimeoutValue[0]             = 0.5;
+	stateTimeoutValue[0]             = 0.6;
 	stateTransitionOnTimeout[0]      = "Ready";
 	stateSound[0]                    = MeleeSwordDrawSound;
 
@@ -107,7 +107,7 @@ datablock ShapeBaseImageData(LongSwordImage)
 
 	stateName[2]                    = "Fire";
 	stateTransitionOnTimeout[2]     = "StopFire";
-	stateTimeoutValue[2]            = 0.34;
+	stateTimeoutValue[2]            = 0.4;
 	stateFire[2]                    = true;
 	stateAllowImageChange[2]        = false;
 	stateScript[2]                  = "onFire";
@@ -125,31 +125,27 @@ datablock ShapeBaseImageData(LongSwordImage)
 	stateScript[4]                  = "onNoAmmo";
 };
 
-function LongSwordImage::stopMeleeHitregLoop(%this, %obj, %slot, %final)
-{
-	cancel(%obj.MeleeHitregLoop);
-	if (isObject(%obj.line))
-		%obj.line.delete();
-	if (isObject(%obj.line2))
-		%obj.line2.delete();
-	%obj.activeSwing = 0;
-	if(%final) return;
-	%this.schedule(500, MeleeHitregLoop, %obj, %slot, -1);
-}
-
 function LongSwordImage::onMount(%this, %obj, %slot)
 {
-	//%obj.playThread(2, tswing @ (%obj.swingPhase + 1) % 2 + (%obj.meleeStance ? 3 : 1));
-	%obj.setArmThread(testswing1);
-	%this.schedule(100, MeleeHitregLoop, %obj, %slot, -1);
+	%obj.playThread(2, tswing @ (%obj.swingPhase + 1) % 2 + (%obj.meleeStance ? 3 : 1));
+	%obj.schedule(32, stopThread, 2);
 }
 
-function LongSwordImage::onUnMount(%this, %obj, %slot)
+function LongSwordImage::onStanceSwitch(%this, %obj, %slot)
 {
-	%this.stopMeleeHitregLoop(%obj, %slot, 1);
-	%obj.setArmThread(look);
+	if (%obj.getImageState(%slot) !$= "Ready") return;
+	%obj.meleeStance = (%obj.meleeStance + 1) % 2;
+	%this.stopMeleeHitregLoop(%obj, %slot);
+	%obj.playThread(2, tswing @ (%obj.swingPhase + 1) % 2 + (%obj.meleeStance ? 3 : 1));
+	%obj.schedule(0, stopThread, 2);
+	if (isobject(%client=%obj.client)) %client.centerPrint("\c4Switched to " @ (%obj.meleeStance ? "horizontal" : "vertical") @ " stance.", 2);
+	%obj.playThread(3, plant);
+	serverPlay3D(WeaponSwitchSound, %obj.getSlotTransform(0));
 }
 
 function LongSwordImage::onFire(%this, %obj, %slot)
 {
+	%obj.swingPhase = (%obj.swingPhase + 1) % 2;
+	%obj.playthread(2, tswing @ %obj.swingPhase + (%obj.meleeStance ? 3 : 1));
+	%this.MeleeHitregLoop(%obj, %slot, 12);
 }

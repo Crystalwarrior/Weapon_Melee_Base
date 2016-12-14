@@ -1,10 +1,10 @@
-datablock ItemData(MaceItem)
+datablock ItemData(ClaymoreItem)
 {
 	category = "Weapon";  // Mission editor category
 	className = "Weapon"; // For inventory system
 
 	// Basic Item Properties
-	shapeFile = "./mace.dts";
+	shapeFile = "./claymore.dts";
 	mass = 1;
 	density = 0.2;
 	elasticity = 0.2;
@@ -12,23 +12,99 @@ datablock ItemData(MaceItem)
 	emap = true;
 
 	//gui stuff
-	uiName = "Mace";
+	uiName = "Claymore";
 	iconName = "./icon_sword";
 	doColorShift = true;
 	colorShiftColor = "0.471 0.471 0.471 1.000";
 
 	// Dynamic properties defined by the scripts
-	image = MaceImage;
+	image = ClaymoreImage;
 	canDrop = true;
 };
+
+datablock AudioProfile(MeleeClaymoreHitSound1)
+{
+	filename	= "./sounds/large_sword_Blocked_01.wav";
+	description	= AudioClosest3d;
+	preload		= true;
+};
+datablock AudioProfile(MeleeClaymoreHitSound2)
+{
+	filename	= "./sounds/large_sword_Blocked_02.wav";
+	description	= AudioClosest3d;
+	preload		= true;
+};
+datablock AudioProfile(MeleeClaymoreHitSound3)
+{
+	filename	= "./sounds/large_sword_Blocked_03.wav";
+	description	= AudioClosest3d;
+	preload		= true;
+};
+datablock AudioProfile(MeleeClaymoreHitSound4)
+{
+	filename	= "./sounds/large_sword_Blocked_04.wav";
+	description	= AudioClosest3d;
+	preload		= true;
+};
+datablock AudioProfile(MeleeClaymoreHitSound5)
+{
+	filename	= "./sounds/large_sword_Blocked_05.wav";
+	description	= AudioClosest3d;
+	preload		= true;
+};
+datablock AudioProfile(MeleeClaymoreHitSound6)
+{
+	filename	= "./sounds/large_sword_Blocked_06.wav";
+	description	= AudioClosest3d;
+	preload		= true;
+};
+
+datablock AudioProfile(MeleeClaymoreBlockSound1)
+{
+	filename	= "./sounds/large_sword_blocking_01.wav";
+	description	= AudioClosest3d;
+	preload		= true;
+};
+datablock AudioProfile(MeleeClaymoreBlockSound2)
+{
+	filename	= "./sounds/large_sword_blocking_02.wav";
+	description	= AudioClosest3d;
+	preload		= true;
+};
+datablock AudioProfile(MeleeClaymoreBlockSound3)
+{
+	filename	= "./sounds/large_sword_blocking_03.wav";
+	description	= AudioClosest3d;
+	preload		= true;
+};
+
+datablock ProjectileData(MeleeClaymoreProjectile)
+{
+	explosion = MeleeSharpExplosion;
+};
+
+function MeleeClaymoreProjectile::onExplode(%this, %obj, %pos)
+{
+	ServerPlay3D(MeleeClaymoreHitSound @ getRandom(1, 6), %pos);
+}
+
+datablock ProjectileData(MeleeClaymoreBlockProjectile)
+{
+	explosion = BladeSmallMetalExplosion;
+};
+function MeleeClaymoreBlockProjectile::onExplode(%this, %obj, %pos)
+{
+	ServerPlay3D(MeleeClaymoreBlockSound @ getRandom(1, 3), %pos);
+}
+
 
 ////////////////
 //weapon image//
 ////////////////
-datablock ShapeBaseImageData(MaceImage)
+datablock ShapeBaseImageData(ClaymoreImage)
 {
 	// Basic Item properties
-	shapeFile = "./mace.dts";
+	shapeFile = "./claymore.dts";
 	emap = true;
 
 	// Specify mount point & offset for 3rd person, and eye offset
@@ -49,9 +125,9 @@ datablock ShapeBaseImageData(MaceImage)
 	className = "WeaponImage";
 
 	// Projectile && Ammo.
-	item = MaceItem;
+	item = ClaymoreItem;
 	ammo = " ";
-	projectile = MeleeSharpProjectile;
+	projectile = MeleeClaymoreProjectile;
 	projectileType = Projectile;
 
 	//melee particles shoot from eye node for consistancy
@@ -65,17 +141,18 @@ datablock ShapeBaseImageData(MaceImage)
 	meleeCanClash = true; //If stances are enabled, can it clash? Keep this on if you want dagger to clash it
 	meleeTick = 24; //The speed of schedule loop in MS. Change this to animation FPS
 
-	meleeRayLength = 1.73895;
+	meleeRayLength = 2.35;
 
-	meleeHitProjectile = MeleeSharpProjectile;
-	meleeBlockedProjectile = MeleeBlockProjectile;
+	meleeHitProjectile = MeleeClaymoreProjectile;
+	meleeBlockedProjectile = MeleeClaymoreBlockProjectile;
 	meleeHitPlayerProjectile = SwordBloodProjectile;
 
 	meleePierceTerrain = false; //If we hit terrain hitreg will still go on until it hits a player
 	meleeSingleHitProjectile = false; //If pierce terrain is on, set this to true so it doesn't spam hit projectiles
+	meleeCanPierce = true; //All attacks pierce multiple targets
 
 	meleeBlockedVelocity = 7;
-	meleeBlockedStunTime = 0.700; //Length of stun in seconds (for self)
+	meleeBlockedStunTime = 1; //Length of stun in seconds (for self)
 
 	//raise your arm up or not
 	armReady = false;
@@ -95,7 +172,7 @@ datablock ShapeBaseImageData(MaceImage)
 	stateName[0]                     = "Activate";
 	stateTimeoutValue[0]             = 0.6;
 	stateTransitionOnTimeout[0]      = "Ready";
-	stateSound[0]                    = MeleeDrawSound;
+	stateSound[0]                    = MeleeSwordDrawSound;
 
 	stateName[1]                     = "Ready";
 	stateTransitionOnTriggerDown[1]  = "CheckCharge";
@@ -105,7 +182,7 @@ datablock ShapeBaseImageData(MaceImage)
 
 	stateName[2]                    = "Fire";
 	stateTransitionOnTimeout[2]     = "Ready";
-	stateTimeoutValue[2]            = 0.7;
+	stateTimeoutValue[2]            = 0.8;
 	stateFire[2]                    = true;
 	stateAllowImageChange[2]        = false;
 	stateScript[2]                  = "onFire";
@@ -126,7 +203,7 @@ datablock ShapeBaseImageData(MaceImage)
 
 	stateName[5]                    = "ChargeFire";
 	stateTransitionOnTimeout[5]     = "Ready";
-	stateTimeoutValue[5]            = 0.85;
+	stateTimeoutValue[5]            = 0.7;
 	stateFire[5]                    = true;
 	stateAllowImageChange[5]        = false;
 	stateScript[5]                  = "onChargeFire";
@@ -138,29 +215,31 @@ datablock ShapeBaseImageData(MaceImage)
 	stateScript[8]                  = "onNoAmmo";
 };
 
-function MaceImage::onMount(%this, %obj, %slot)
+function ClaymoreImage::onMount(%this, %obj, %slot)
 {
-	fixArmReady(%obj);
+	%obj.playThread(2, "2hswing" @ (%obj.swingPhase + 1) % 2 + 1);
+	%obj.schedule(32, stopThread, 2);
 }
 
-function MaceImage::onFire(%this, %obj, %slot)
+function ClaymoreImage::onFire(%this, %obj, %slot)
 {
 	%obj.swingPhase = (%obj.swingPhase + 1) % 2;
-	%obj.playthread(2, bswing @ %obj.swingPhase + 1);
-	%this.schedule(200, MeleeHitregLoop, %obj, %slot, 12);
+	%obj.playthread(2, "2hswing" @ %obj.swingPhase + 1);
+	%this.schedule(64, MeleeHitregLoop, %obj, %slot, 18);
 }
 
-function MaceImage::onCharge(%this, %obj, %slot)
+function ClaymoreImage::onCharge(%this, %obj, %slot)
 {
-	%obj.playthread(2, shiftLeft);
+	%obj.playthread(2, "2hstab1");
+	%obj.schedule(0, stopThread, 2);
 	%obj.playThread(3, plant);
 	serverPlay3D(MeleeChargeSound, %obj.getSlotTransform(%slot));
 }
 
-function MaceImage::onChargeFire(%this, %obj, %slot)
+function ClaymoreImage::onChargeFire(%this, %obj, %slot)
 {
-	//%obj.swingPhase = 1; //Always horizontal swing
-	%obj.playthread(2, bswing @ %obj.swingPhase + 1);
-	%obj.playThread(3, activate);
-	%this.schedule(200, MeleeHitregLoop, %obj, %slot, 12, 60);
+	%obj.swingPhase = 1; //Force a swing phase for later non-charge hits
+	%obj.playthread(2, "2hstab1");
+	//%obj.playThread(3, activate);
+	%this.schedule(200, MeleeHitregLoop, %obj, %slot, 18, 60);
 }

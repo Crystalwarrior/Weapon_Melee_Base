@@ -1,14 +1,14 @@
 //Sounds
 datablock AudioProfile(MeleeDrawSound)
 {
-	filename	= "./generic_draw_01.wav";
+	filename	= "./sounds/generic_draw_01.wav";
 	description	= AudioClosest3d;
 	preload		= true;
 };
 
 datablock AudioProfile(MeleeSwordDrawSound)
 {
-	filename	= "./Sword_Draw_01.wav";
+	filename	= "./sounds/Sword_Draw_01.wav";
 	description	= AudioClosest3d;
 	preload		= true;
 };
@@ -16,56 +16,56 @@ datablock AudioProfile(MeleeSwordDrawSound)
 
 datablock AudioProfile(MeleeBlockSound1)
 {
-	filename	= "./Broadsword_Blocking_01.wav";
+	filename	= "./sounds/Broadsword_Blocking_01.wav";
 	description	= AudioClosest3d;
 	preload		= true;
 };
 datablock AudioProfile(MeleeBlockSound2)
 {
-	filename	= "./Broadsword_Blocking_02.wav";
+	filename	= "./sounds/Broadsword_Blocking_02.wav";
 	description	= AudioClosest3d;
 	preload		= true;
 };
 datablock AudioProfile(MeleeBlockSound3)
 {
-	filename	= "./Broadsword_Blocking_03.wav";
+	filename	= "./sounds/Broadsword_Blocking_03.wav";
 	description	= AudioClosest3d;
 	preload		= true;
 };
 
 datablock AudioProfile(MeleeSwordHitSound1)
 {
-	filename	= "./Broadsword_Blocked_01.wav";
+	filename	= "./sounds/Broadsword_Blocked_01.wav";
 	description	= AudioClosest3d;
 	preload		= true;
 };
 datablock AudioProfile(MeleeSwordHitSound2)
 {
-	filename	= "./Broadsword_Blocked_02.wav";
+	filename	= "./sounds/Broadsword_Blocked_02.wav";
 	description	= AudioClosest3d;
 	preload		= true;
 };
 datablock AudioProfile(MeleeSwordHitSound3)
 {
-	filename	= "./Broadsword_Blocked_03.wav";
+	filename	= "./sounds/Broadsword_Blocked_03.wav";
 	description	= AudioClosest3d;
 	preload		= true;
 };
 datablock AudioProfile(MeleeSwordHitSound4)
 {
-	filename	= "./Broadsword_Blocked_04.wav";
+	filename	= "./sounds/Broadsword_Blocked_04.wav";
 	description	= AudioClosest3d;
 	preload		= true;
 };
 datablock AudioProfile(MeleeSwordHitSound5)
 {
-	filename	= "./Broadsword_Blocked_05.wav";
+	filename	= "./sounds/Broadsword_Blocked_05.wav";
 	description	= AudioClosest3d;
 	preload		= true;
 };
 datablock AudioProfile(MeleeSwordHitSound6)
 {
-	filename	= "./Broadsword_Blocked_06.wav";
+	filename	= "./sounds/Broadsword_Blocked_06.wav";
 	description	= AudioClosest3d;
 	preload		= true;
 };
@@ -80,55 +80,55 @@ datablock AudioProfile(MeleeChargeSound)
 
 datablock AudioProfile(MeleeStabSound1)
 {
-	filename = "./stab1.wav";
+	filename = "./sounds/stab1.wav";
 	description = AudioClosest3d;
 	preload = false;
 };
 datablock AudioProfile(MeleeStabSound2)
 {
-	filename = "./stab2.wav";
+	filename = "./sounds/stab2.wav";
 	description = AudioClosest3d;
 	preload = false;
 };
 datablock AudioProfile(MeleeStabSound3)
 {
-	filename = "./stab3.wav";
+	filename = "./sounds/stab3.wav";
 	description = AudioClosest3d;
 	preload = false;
 };
 datablock AudioProfile(MeleeStabSound4)
 {
-	filename = "./stab4.wav";
+	filename = "./sounds/stab4.wav";
 	description = AudioClosest3d;
 	preload = false;
 };
 datablock AudioProfile(MeleeStabSound5)
 {
-	filename = "./stab5.wav";
+	filename = "./sounds/stab5.wav";
 	description = AudioClosest3d;
 	preload = false;
 };
 datablock AudioProfile(MeleeSlashSound1)
 {
-	filename = "./slash_01.wav";
+	filename = "./sounds/slash_01.wav";
 	description = AudioClosest3d;
 	preload = false;
 };
 datablock AudioProfile(MeleeSlashSound2)
 {
-	filename = "./slash_02.wav";
+	filename = "./sounds/slash_02.wav";
 	description = AudioClosest3d;
 	preload = false;
 };
 datablock AudioProfile(MeleeSlashSound3)
 {
-	filename = "./slash_03.wav";
+	filename = "./sounds/slash_03.wav";
 	description = AudioClosest3d;
 	preload = false;
 };
 datablock AudioProfile(MeleeSlashSound4)
 {
-	filename = "./slash_04.wav";
+	filename = "./sounds/slash_04.wav";
 	description = AudioClosest3d;
 	preload = false;
 };
@@ -203,6 +203,30 @@ function MeleeSharpProjectile::onExplode(%this, %obj, %pos)
 {
 	ServerPlay3D(MeleeSwordHitSound @ getRandom(1, 6), %pos);
 }
+
+datablock ExplosionData(MeleeBluntExplosion : MeleeSharpExplosion)
+{
+	particleEmitter = MeleeSharpExplosionEmitter;
+	particleDensity = 13;
+	particleRadius = 0.3;
+
+	shakeCamera = true;
+	camShakeFreq = "22.0 24.0 22.0";
+	camShakeAmp = "1.0 1.0 1.0";
+	camShakeDuration = 0.2;
+	camShakeRadius = 5.5;
+};
+
+datablock ProjectileData(MeleeBluntProjectile)
+{
+	explosion = MeleeBluntExplosion;
+};
+
+function MeleeBluntProjectile::onExplode(%this, %obj, %pos)
+{
+	ServerPlay3D(MeleeSwordHitSound @ getRandom(1, 6), %pos);
+}
+
 datablock ParticleData(MeleeBloodExplosionParticle)
 {
 	dragCoefficient      = 0;

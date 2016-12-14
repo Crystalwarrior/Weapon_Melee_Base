@@ -68,11 +68,11 @@ datablock ShapeBaseImageData(ShortSwordImage)
 	melee = true;
 
 	//Special melee hitreg system
-	directDamage = 20;
+	directDamage = 30;
 
 	meleeEnabled = true;
 	meleeStances = true; //Use stance system?
-	meleeCanClash = true; //If stances are enabled, can it clash?
+	meleeCanClash = true; //If stances are enabled, can it clash? Keep this on if you want dagger to clash it
 	meleeTick = 24; //The speed of schedule loop in MS. Change this to animation FPS
 
 	meleeRayLength = 1.73895;
@@ -103,7 +103,7 @@ datablock ShapeBaseImageData(ShortSwordImage)
 
 	// Initial start up state
 	stateName[0]                     = "Activate";
-	stateTimeoutValue[0]             = 0.6;
+	stateTimeoutValue[0]             = 0.4;
 	stateTransitionOnTimeout[0]      = "Ready";
 	stateSound[0]                    = MeleeSwordDrawSound;
 
@@ -115,7 +115,7 @@ datablock ShapeBaseImageData(ShortSwordImage)
 
 	stateName[2]                    = "Fire";
 	stateTransitionOnTimeout[2]     = "StopFire";
-	stateTimeoutValue[2]            = 0.4;
+	stateTimeoutValue[2]            = 0.34;
 	stateFire[2]                    = true;
 	stateAllowImageChange[2]        = false;
 	stateScript[2]                  = "onFire";

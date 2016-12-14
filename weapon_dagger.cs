@@ -68,7 +68,7 @@ datablock ShapeBaseImageData(DaggerImage)
 	melee = true;
 
 	//Special melee hitreg system
-	directDamage = 10;
+	directDamage = 20;
 
 	meleeEnabled = true;
 	meleeStances = true; //Use stance system?
@@ -116,7 +116,7 @@ datablock ShapeBaseImageData(DaggerImage)
 
 	stateName[2]                    = "Fire";
 	stateTransitionOnTimeout[2]     = "StopFire";
-	stateTimeoutValue[2]            = 0.3;
+	stateTimeoutValue[2]            = 0.35;
 	stateFire[2]                    = true;
 	stateAllowImageChange[2]        = false;
 	stateScript[2]                  = "onFire";
@@ -210,7 +210,7 @@ function DaggerImage::MeleeDamage(%this, %obj, %slot, %col, %damage, %pos)
 	%dot = vectorDot(%col.getForwardVector(), %obj.getForwardVector());
 	if (%dot > 0)
 	{
-		%damage *= 2 + (1 * %obj.meleeStance); //Reverse grip deals 4x damage + %dot, so almost 5x
+		%damage *= 2 + (1 * %obj.meleeStance);
 	}
 	%col.damage(%obj, %pos, %damage, $DamageType::Sword);
 }
@@ -219,6 +219,6 @@ function DaggerImage::MeleeCheckClash(%this, %obj, %slot, %col)
 {
 	%targImg = %col.getMountedImage(%slot);
 	if (isObject(%targImg) && %targImg == DaggerImage.getID())
-		return %obj.meleeStance == 0 && %col.activeSwing && %col.meleeStance == 0;
-	return %obj.meleeStance == 0 && isObject(%targImg) && %targImg.meleeStances && %targImg.meleeCanClash && %col.activeSwing;
+		return %obj.activeSwing && %obj.meleeStance == 0 && %col.activeSwing && %col.meleeStance == 0;
+	return %obj.activeSwing && %obj.meleeStance == 0 && isObject(%targImg) && %targImg.meleeCanClash && %col.activeSwing;
 }

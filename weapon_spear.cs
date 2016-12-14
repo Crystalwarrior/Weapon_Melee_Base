@@ -62,7 +62,7 @@ datablock ShapeBaseImageData(MeleeSpearImage)
 
 	meleeEnabled = true;
 	meleeStances = false; //Use stance system?
-	meleeCanClash = false; //If stances are enabled, can it clash?
+	meleeCanClash = true; //If stances are enabled, can it clash? Keep this on if you want dagger to clash it
 	meleeTick = 24; //The speed of schedule loop in MS. Change this to animation FPS
 
 	meleeRayLength = 2.8;
@@ -148,7 +148,7 @@ function MeleeSpearImage::onFire(%this, %obj, %slot)
 {
 	%obj.swingPhase = (%obj.swingPhase + 1) % 2;
 	%obj.playthread(2, spearswing @ %obj.swingPhase + 1);
-	%this.MeleeHitregLoop(%obj, %slot, 12);
+	%this.schedule(100, MeleeHitregLoop, %obj, %slot, 12);
 }
 
 function MeleeSpearImage::onCharge(%this, %obj, %slot)
@@ -162,5 +162,5 @@ function MeleeSpearImage::onChargeFire(%this, %obj, %slot)
 {
 	%obj.swingPhase = (%obj.swingPhase + 1) % 2;
 	%obj.playthread(2, spearswing @ %obj.swingPhase + 3);
-	%this.MeleeHitregLoop(%obj, %slot, 20, 40);
+	%this.schedule(150, MeleeHitregLoop, %obj, %slot, 20, 40, true);
 }
