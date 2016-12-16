@@ -85,7 +85,7 @@ datablock ShapeBaseImageData(ShortSwordImage)
 	meleeSingleHitProjectile = false; //If pierce terrain is on, set this to true so it doesn't spam hit projectiles
 
 	meleeBlockedVelocity = 7;
-	meleeBlockedStunTime = 0.500; //Length of stun in seconds (for self)
+	meleeBlockedStunTime = 0.6; //Length of stun in seconds (for self)
 
 	//raise your arm up or not
 	armReady = false;
@@ -103,34 +103,49 @@ datablock ShapeBaseImageData(ShortSwordImage)
 
 	// Initial start up state
 	stateName[0]                     = "Activate";
-	stateTimeoutValue[0]             = 0.4;
+	stateTimeoutValue[0]             = 0.6;
 	stateTransitionOnTimeout[0]      = "Ready";
 	stateSound[0]                    = MeleeSwordDrawSound;
 
 	stateName[1]                     = "Ready";
-	stateTransitionOnTriggerDown[1]  = "Fire";
+	stateTransitionOnTriggerDown[1]  = "CheckCharge";
 	stateAllowImageChange[1]         = true;
 	stateWaitForTimeout[1]			= false;
-	stateTransitionOnNotLoaded[1]      = "noAmmo";
+	stateTransitionOnNotLoaded[1]    = "noAmmo";
 
 	stateName[2]                    = "Fire";
-	stateTransitionOnTimeout[2]     = "StopFire";
+	stateTransitionOnTimeout[2]     = "Ready";
 	stateTimeoutValue[2]            = 0.34;
 	stateFire[2]                    = true;
 	stateAllowImageChange[2]        = false;
 	stateScript[2]                  = "onFire";
 	stateWaitForTimeout[2]		       = true;
 
-	stateName[3]                    = "StopFire";
-	stateTransitionOnTriggerUp[3]   = "Ready";
+	stateName[3]                    = "CheckCharge";
+	stateTransitionOnTriggerUp[3]   = "Fire";
+	stateTransitionOnTimeout[3]		= "ChargeReady";
+	stateTimeoutValue[3]            = 1;
 	stateAllowImageChange[3]        = false;
 	stateWaitForTimeout[3]			= false;
-	stateScript[3]                  = "onStopFire";
+	stateScript[3]                  = "onCheckCharge";
 
-	stateName[4]                    = "noAmmo";
-	stateTransitionOnLoaded[4]        = "Ready";
+	stateName[4]                    = "ChargeReady";
+	stateTransitionOnTriggerUp[4]   = "ChargeFire";
 	stateAllowImageChange[4]        = false;
-	stateScript[4]                  = "onNoAmmo";
+	stateScript[4]                  = "onCharge";
+
+	stateName[5]                    = "ChargeFire";
+	stateTransitionOnTimeout[5]     = "Ready";
+	stateTimeoutValue[5]            = 0.6;
+	stateFire[5]                    = true;
+	stateAllowImageChange[5]        = false;
+	stateScript[5]                  = "onChargeFire";
+	stateWaitForTimeout[5]		    = true;
+
+	stateName[8]                    = "noAmmo";
+	stateTransitionOnLoaded[8]      = "Ready";
+	stateAllowImageChange[8]        = false;
+	stateScript[8]                  = "onNoAmmo";
 };
 
 function ShortSwordImage::onMount(%this, %obj, %slot)
@@ -156,4 +171,24 @@ function ShortSwordImage::onFire(%this, %obj, %slot)
 	%obj.swingPhase = (%obj.swingPhase + 1) % 2;
 	%obj.playthread(2, tswing @ %obj.swingPhase + (%obj.meleeStance ? 3 : 1));
 	%this.MeleeHitregLoop(%obj, %slot, 12);
+}
+
+function ShortSwordImage::onCharge(%this, %obj, %slot)
+{
+	if(%obj.meleeStance)
+		%obj.swingPhase = (%obj.swingPhase + 1) % 2;
+	%obj.playthread(2, "2h" @ (!%obj.meleeStance ? "stab1" : ("swing" @ %obj.swingPhase+1)));
+	%obj.schedule(0, stopThread, 2);
+	%obj.playThread(3, plant);
+	serverPlay3D(MeleeChargeSound, %obj.getSlotTransform(%slot));
+}
+
+function ShortSwordImage::onChargeFire(%this, %obj, %slot)
+{
+	%obj.playthread(2, "2h" @ (!%obj.meleeStance ? "stab1" : ("swing" @ %obj.swingPhase+1)));
+	%obj.chargeAttack = true;
+	%frames = 12;
+	if(%obj.meleeStance)
+		%frames = 18;
+	%this.MeleeHitregLoop(%obj, %slot, %frames, 50);
 }

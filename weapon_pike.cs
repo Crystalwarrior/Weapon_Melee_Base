@@ -1,10 +1,10 @@
-datablock ItemData(DoubleAxeItem)
+datablock ItemData(PikeItem)
 {
 	category = "Weapon";  // Mission editor category
 	className = "Weapon"; // For inventory system
 
 	// Basic Item Properties
-	shapeFile = "./DoubleAxe.dts";
+	shapeFile = "./Pike.dts";
 	mass = 1;
 	density = 0.2;
 	elasticity = 0.2;
@@ -12,23 +12,23 @@ datablock ItemData(DoubleAxeItem)
 	emap = true;
 
 	//gui stuff
-	uiName = "Double Axe";
+	uiName = "Pike";
 	iconName = "./icon_sword";
 	doColorShift = true;
 	colorShiftColor = "0.471 0.471 0.471 1.000";
 
 	// Dynamic properties defined by the scripts
-	image = DoubleAxeImage;
+	image = PikeImage;
 	canDrop = true;
 };
 
 ////////////////
 //weapon image//
 ////////////////
-datablock ShapeBaseImageData(DoubleAxeImage)
+datablock ShapeBaseImageData(PikeImage)
 {
 	// Basic Item properties
-	shapeFile = "./DoubleAxe.dts";
+	shapeFile = "./Pike.dts";
 	emap = true;
 
 	// Specify mount point & offset for 3rd person, and eye offset
@@ -49,7 +49,7 @@ datablock ShapeBaseImageData(DoubleAxeImage)
 	className = "WeaponImage";
 
 	// Projectile && Ammo.
-	item = DoubleAxeItem;
+	item = PikeItem;
 	ammo = " ";
 	projectile = MeleeClaymoreProjectile;
 	projectileType = Projectile;
@@ -58,16 +58,16 @@ datablock ShapeBaseImageData(DoubleAxeImage)
 	melee = true;
 
 	//Special melee hitreg system
-	directDamage = 45;
+	directDamage = 40;
 
-	meleeKnockbackVelocity = 9;
+	//meleeKnockbackVelocity = 0;
 
 	meleeEnabled = true;
 	meleeStances = false; //Use stance system?
-	meleeCanClash = true; //If stances are enabled, can it clash? Keep this on if you want dagger to clash it
+	meleeCanClash = false; //If stances are enabled, can it clash? Keep this on if you want dagger to clash it
 	meleeTick = 24; //The speed of schedule loop in MS. Change this to animation FPS
 
-	meleeRayLength = 2;
+	meleeRayLength = 5;
 
 	meleeHitProjectile = MeleeClaymoreProjectile;
 	meleeBlockedProjectile = MeleeClaymoreBlockProjectile;
@@ -75,7 +75,7 @@ datablock ShapeBaseImageData(DoubleAxeImage)
 
 	meleePierceTerrain = false; //If we hit terrain hitreg will still go on until it hits a player
 	meleeSingleHitProjectile = false; //If pierce terrain is on, set this to true so it doesn't spam hit projectiles
-	meleeCanPierce = true; //All attacks pierce multiple targets
+	meleeCanPierce = false; //All attacks pierce multiple targets
 
 	meleeBlockedVelocity = 9;
 	meleeBlockedStunTime = 1; //Length of stun in seconds (for self)
@@ -96,7 +96,7 @@ datablock ShapeBaseImageData(DoubleAxeImage)
 
 	// Initial start up state
 	stateName[0]                     = "Activate";
-	stateTimeoutValue[0]             = 0.6;
+	stateTimeoutValue[0]             = 2; //punish QQers
 	stateTransitionOnTimeout[0]      = "Ready";
 	stateSound[0]                    = MeleeSwordDrawSound;
 
@@ -108,7 +108,7 @@ datablock ShapeBaseImageData(DoubleAxeImage)
 
 	stateName[2]                    = "Fire";
 	stateTransitionOnTimeout[2]     = "Ready";
-	stateTimeoutValue[2]            = 1;
+	stateTimeoutValue[2]            = 1.3;
 	stateFire[2]                    = true;
 	stateAllowImageChange[2]        = false;
 	stateScript[2]                  = "onFire";
@@ -129,7 +129,7 @@ datablock ShapeBaseImageData(DoubleAxeImage)
 
 	stateName[5]                    = "ChargeFire";
 	stateTransitionOnTimeout[5]     = "Ready";
-	stateTimeoutValue[5]            = 1;
+	stateTimeoutValue[5]            = 1.3;
 	stateFire[5]                    = true;
 	stateAllowImageChange[5]        = false;
 	stateScript[5]                  = "onChargeFire";
@@ -141,32 +141,36 @@ datablock ShapeBaseImageData(DoubleAxeImage)
 	stateScript[8]                  = "onNoAmmo";
 };
 
-function DoubleAxeImage::onMount(%this, %obj, %slot)
+function PikeImage::onMount(%this, %obj, %slot)
 {
-	%obj.playThread(2, "2hswing" @ (%obj.swingPhase + 1) % 2 + 1);
+	%obj.playthread(2, pikeswing2);
 	%obj.schedule(32, stopThread, 2);
+	%obj.slowdown += 2; //TEMPORARY
 }
 
-function DoubleAxeImage::onFire(%this, %obj, %slot)
+function PikeImage::onUnMount(%this, %obj, %slot)
 {
-	%obj.swingPhase = (%obj.swingPhase + 1) % 2;
-	%obj.playthread(2, "2hswing" @ %obj.swingPhase + 1);
-	%this.schedule(64, MeleeHitregLoop, %obj, %slot, 18);
+	parent::onUnMount(%this, %obj, %slot);
+	%obj.slowdown -= 2;
 }
 
-function DoubleAxeImage::onCharge(%this, %obj, %slot)
+function PikeImage::onFire(%this, %obj, %slot)
+{	
+	%obj.playthread(2, pikeswing2);
+	%this.MeleeHitregLoop(%obj, %slot, 12);
+}
+
+function PikeImage::onCharge(%this, %obj, %slot)
 {
-	%obj.playthread(2, "2hswing" @ %obj.swingPhase + 1);
-	%obj.schedule(0, stopThread, 2);
+	%obj.playthread(2, pikecharge2);
 	%obj.playThread(3, plant);
 	serverPlay3D(MeleeChargeSound, %obj.getSlotTransform(%slot));
 }
 
-function DoubleAxeImage::onChargeFire(%this, %obj, %slot)
+function PikeImage::onChargeFire(%this, %obj, %slot)
 {
-	%obj.swingPhase = 1; //Always horizontal swing
-	%obj.playthread(2, "2hswing" @ %obj.swingPhase + 1);
-	//%obj.playThread(3, activate);
+	%obj.playthread(2, pikeswing2);
+	%obj.playThread(3, plant);
 	%obj.chargeAttack = true;
-	%this.schedule(200, MeleeHitregLoop, %obj, %slot, 18, 65);
+	%this.MeleeHitregLoop(%obj, %slot, 12, 60);
 }

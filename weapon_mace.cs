@@ -60,12 +60,14 @@ datablock ShapeBaseImageData(MaceImage)
 	//Special melee hitreg system
 	directDamage = 40;
 
+	meleeKnockbackVelocity = 0;
+
 	meleeEnabled = true;
 	meleeStances = false; //Use stance system?
 	meleeCanClash = true; //If stances are enabled, can it clash? Keep this on if you want dagger to clash it
 	meleeTick = 24; //The speed of schedule loop in MS. Change this to animation FPS
 
-	meleeRayLength = 1.73895;
+	meleeRayLength = 1.5;
 
 	meleeHitProjectile = MeleeSharpProjectile;
 	meleeBlockedProjectile = MeleeBlockProjectile;
@@ -140,27 +142,36 @@ datablock ShapeBaseImageData(MaceImage)
 
 function MaceImage::onMount(%this, %obj, %slot)
 {
-	fixArmReady(%obj);
+	%obj.playthread(2, "2hswing" @ %obj.swingPhase + 1);
+	%obj.schedule(32, stopThread, 2);
 }
 
 function MaceImage::onFire(%this, %obj, %slot)
 {
 	%obj.swingPhase = (%obj.swingPhase + 1) % 2;
-	%obj.playthread(2, bswing @ %obj.swingPhase + 1);
+	%obj.playthread(2, "2hswing" @ %obj.swingPhase + 1);
 	%this.schedule(200, MeleeHitregLoop, %obj, %slot, 12);
 }
 
 function MaceImage::onCharge(%this, %obj, %slot)
 {
-	%obj.playthread(2, shiftLeft);
 	%obj.playThread(3, plant);
 	serverPlay3D(MeleeChargeSound, %obj.getSlotTransform(%slot));
 }
 
 function MaceImage::onChargeFire(%this, %obj, %slot)
 {
-	//%obj.swingPhase = 1; //Always horizontal swing
-	%obj.playthread(2, bswing @ %obj.swingPhase + 1);
+	%obj.swingPhase = (%obj.swingPhase + 1) % 2;
+	%obj.playthread(2, "2hswing" @ %obj.swingPhase + 1);
 	%obj.playThread(3, activate);
+	%obj.chargeAttack = true;
 	%this.schedule(200, MeleeHitregLoop, %obj, %slot, 12, 60);
+}
+
+function MaceImage::MeleeDamage(%this, %obj, %slot, %col, %damage, %pos)
+{
+	%duration = 1500;
+	%col.applySlowDown(%duration, 3);
+
+	Parent::MeleeDamage(%this, %obj, %slot, %col, %damage, %pos);
 }

@@ -230,16 +230,22 @@ function ClaymoreImage::onFire(%this, %obj, %slot)
 
 function ClaymoreImage::onCharge(%this, %obj, %slot)
 {
-	%obj.playthread(2, "2hstab1");
-	%obj.schedule(0, stopThread, 2);
+	if(%obj.swingPhase != 3) //Transitional animation!!! WOOT
+		%obj.playthread(2, "2hstab1charge");
+	else
+	{
+		%obj.playthread(2, "2hstab1");
+		%obj.schedule(0, stopThread, 2);
+	}
 	%obj.playThread(3, plant);
 	serverPlay3D(MeleeChargeSound, %obj.getSlotTransform(%slot));
 }
 
 function ClaymoreImage::onChargeFire(%this, %obj, %slot)
 {
-	%obj.swingPhase = 1; //Force a swing phase for later non-charge hits
+	%obj.swingPhase = 3; //Force a swing phase for later non-charge hits
 	%obj.playthread(2, "2hstab1");
 	//%obj.playThread(3, activate);
+	%obj.chargeAttack = true;
 	%this.schedule(200, MeleeHitregLoop, %obj, %slot, 18, 60);
 }

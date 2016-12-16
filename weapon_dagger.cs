@@ -85,7 +85,7 @@ datablock ShapeBaseImageData(DaggerImage)
 	meleeSingleHitProjectile = false; //If pierce terrain is on, set this to true so it doesn't spam hit projectiles
 
 	meleeBlockedVelocity = 1;
-	meleeBlockedStunTime = 0.200; //Length of stun in seconds (for self)
+	meleeBlockedStunTime = 0.5; //Length of stun in seconds (for self)
 
 	//raise your arm up or not
 	armReady = false;
@@ -108,53 +108,48 @@ datablock ShapeBaseImageData(DaggerImage)
 	stateSound[0]                    = ""; //No sound
 
 	stateName[1]                     = "Ready";
-	stateTransitionOnTriggerDown[1]  = "Fire";
+	stateTransitionOnTriggerDown[1]  = "CheckCharge";
 	stateAllowImageChange[1]         = true;
 	stateWaitForTimeout[1]			= false;
 	stateTransitionOnNotLoaded[1]    = "noAmmo";
-	stateTransitionOnNoAmmo[1]		 = "StabReady";
-
+	
 	stateName[2]                    = "Fire";
-	stateTransitionOnTimeout[2]     = "StopFire";
+	stateTransitionOnTimeout[2]     = "Ready";
 	stateTimeoutValue[2]            = 0.35;
 	stateFire[2]                    = true;
 	stateAllowImageChange[2]        = false;
 	stateScript[2]                  = "onFire";
 	stateWaitForTimeout[2]		       = true;
 
-	//Autofire
-	//stateName[3]					= "CheckTrigger";
-	//stateTransitionOnTriggerUp[3]	= "Ready";
-	//stateTransitionOnTriggerDown[3]	= "Fire";
-	//stateTransitionOnNoAmmo[3]		 = "StabReady";
-	//stateTransitionOnNotLoaded[3]    = "noAmmo";
-	//stateAllowImageChange[3]        = false;
+	stateName[4]                     = "CheckStab";
+	stateTransitionOnAmmo[4]		= "Fire";
+	stateTransitionOnNoAmmo[4]		= "StabFire";
 
-	stateName[4]                    = "StopFire";
-	stateTransitionOnTriggerUp[4]   = "Ready";
-	stateAllowImageChange[4]        = false;
-	stateScript[4]                  = "onStopFire";
-	stateWaitForTimeout[4]			= false;
+	stateName[5]                    = "StabFire";
+	stateTransitionOnTimeout[5]     = "Ready";
+	stateTimeoutValue[5]            = 0.4;
+	stateFire[5]                    = true;
+	stateAllowImageChange[5]        = false;
+	stateScript[5]                  = "onFire";
+	stateWaitForTimeout[5]		       = true;
 
-	stateName[5]                     = "StabReady";
-	stateTransitionOnTriggerDown[5]  = "StabFire";
-	stateAllowImageChange[5]         = true;
-	stateWaitForTimeout[5]			= false;
-	stateTransitionOnNotLoaded[5]    = "noAmmo";
-	stateTransitionOnAmmo[5]		 = "Ready";
-
-	stateName[6]                    = "StabFire";
-	stateTransitionOnTimeout[6]     = "StopFire";
-	stateTimeoutValue[6]            = 0.4;
-	stateFire[6]                    = true;
+	stateName[6]                    = "CheckCharge";
+	stateTransitionOnTriggerUp[6]   = "CheckStab";
+	stateTransitionOnTimeout[6]		= "ChargeReady";
+	stateTimeoutValue[6]            = 0.3;
 	stateAllowImageChange[6]        = false;
-	stateScript[6]                  = "onFire";
-	stateWaitForTimeout[6]		       = true;
+	stateWaitForTimeout[6]			= false;
+	stateScript[6]                  = "onCheckCharge";
 
-	stateName[7]                    = "noAmmo";
-	stateTransitionOnLoaded[7]        = "Ready";
+	stateName[7]                    = "ChargeReady";
+	stateTransitionOnTriggerUp[7]   = "Fire"; //Forward grip when charged, always
 	stateAllowImageChange[7]        = false;
-	stateScript[7]                  = "onNoAmmo";
+	stateScript[7]                  = "onCharge";
+
+	stateName[10]                    = "noAmmo";
+	stateTransitionOnLoaded[10]        = "Ready";
+	stateAllowImageChange[10]        = false;
+	stateScript[10]                  = "onNoAmmo";
 };
 
 function DaggerImage::onMount(%this, %obj, %slot)
@@ -187,20 +182,30 @@ function DaggerImage::onStanceSwitch(%this, %obj, %slot)
 
 function DaggerImage::onFire(%this, %obj, %slot)
 {
-	if (%obj.meleeStance)
+	if (%obj.meleeStance && !%obj.chargeAttack)
 	{
 		%obj.swingPhase = (%obj.swingPhase + 1) % 2;
 		%obj.playthread(2, stabdagger @ %obj.swingPhase + 1);
-		%damage = 20;
+		%damage = 25;
 	}
 	else
 	{
 		%obj.swingPhase = (%obj.swingPhase + 1) % 3;
 		%obj.playthread(2, swingdagger @ %obj.swingPhase + 1);
-		%damage = 15;
+		%damage = 20;
 	}
 	
 	%this.MeleeHitregLoop(%obj, %slot, 12, %damage);
+}
+
+
+function DaggerImage::onCharge(%this, %obj, %slot)
+{
+	%obj.playThread(3, plant);
+	%obj.playthread(2, swingdagger @ (%obj.swingPhase + 1) % 3 + 1);
+	%obj.schedule(0, stopThread, 2);
+	%obj.chargeAttack = true;
+	serverPlay3D(MeleeChargeSound, %obj.getSlotTransform(%slot));
 }
 
 function DaggerImage::MeleeDamage(%this, %obj, %slot, %col, %damage, %pos)
@@ -220,5 +225,7 @@ function DaggerImage::MeleeCheckClash(%this, %obj, %slot, %col)
 	%targImg = %col.getMountedImage(%slot);
 	if (isObject(%targImg) && %targImg == DaggerImage.getID())
 		return %obj.activeSwing && %obj.meleeStance == 0 && %col.activeSwing && %col.meleeStance == 0;
+	if (%obj.chargeAttack && !%col.chargeAttack || !%obj.chargeAttack && %col.chargeAttack) //If you charge with dagger you can ONLY clash with enemy charge attack
+		return false; //Charge attacks prevent clashing for everything
 	return %obj.activeSwing && %obj.meleeStance == 0 && isObject(%targImg) && %targImg.meleeCanClash && %col.activeSwing;
 }

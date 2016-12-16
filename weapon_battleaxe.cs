@@ -1,10 +1,10 @@
-datablock ItemData(DoubleAxeItem)
+datablock ItemData(BattleAxeItem)
 {
 	category = "Weapon";  // Mission editor category
 	className = "Weapon"; // For inventory system
 
 	// Basic Item Properties
-	shapeFile = "./DoubleAxe.dts";
+	shapeFile = "./BattleAxe.dts";
 	mass = 1;
 	density = 0.2;
 	elasticity = 0.2;
@@ -12,23 +12,23 @@ datablock ItemData(DoubleAxeItem)
 	emap = true;
 
 	//gui stuff
-	uiName = "Double Axe";
+	uiName = "Battle Axe";
 	iconName = "./icon_sword";
 	doColorShift = true;
 	colorShiftColor = "0.471 0.471 0.471 1.000";
 
 	// Dynamic properties defined by the scripts
-	image = DoubleAxeImage;
+	image = BattleAxeImage;
 	canDrop = true;
 };
 
 ////////////////
 //weapon image//
 ////////////////
-datablock ShapeBaseImageData(DoubleAxeImage)
+datablock ShapeBaseImageData(BattleAxeImage)
 {
 	// Basic Item properties
-	shapeFile = "./DoubleAxe.dts";
+	shapeFile = "./BattleAxe.dts";
 	emap = true;
 
 	// Specify mount point & offset for 3rd person, and eye offset
@@ -49,7 +49,7 @@ datablock ShapeBaseImageData(DoubleAxeImage)
 	className = "WeaponImage";
 
 	// Projectile && Ammo.
-	item = DoubleAxeItem;
+	item = BattleAxeItem;
 	ammo = " ";
 	projectile = MeleeClaymoreProjectile;
 	projectileType = Projectile;
@@ -141,20 +141,20 @@ datablock ShapeBaseImageData(DoubleAxeImage)
 	stateScript[8]                  = "onNoAmmo";
 };
 
-function DoubleAxeImage::onMount(%this, %obj, %slot)
+function BattleAxeImage::onMount(%this, %obj, %slot)
 {
 	%obj.playThread(2, "2hswing" @ (%obj.swingPhase + 1) % 2 + 1);
 	%obj.schedule(32, stopThread, 2);
 }
 
-function DoubleAxeImage::onFire(%this, %obj, %slot)
+function BattleAxeImage::onFire(%this, %obj, %slot)
 {
 	%obj.swingPhase = (%obj.swingPhase + 1) % 2;
 	%obj.playthread(2, "2hswing" @ %obj.swingPhase + 1);
-	%this.schedule(64, MeleeHitregLoop, %obj, %slot, 18);
+	%this.schedule(200, MeleeHitregLoop, %obj, %slot, 15);
 }
 
-function DoubleAxeImage::onCharge(%this, %obj, %slot)
+function BattleAxeImage::onCharge(%this, %obj, %slot)
 {
 	%obj.playthread(2, "2hswing" @ %obj.swingPhase + 1);
 	%obj.schedule(0, stopThread, 2);
@@ -162,11 +162,11 @@ function DoubleAxeImage::onCharge(%this, %obj, %slot)
 	serverPlay3D(MeleeChargeSound, %obj.getSlotTransform(%slot));
 }
 
-function DoubleAxeImage::onChargeFire(%this, %obj, %slot)
+function BattleAxeImage::onChargeFire(%this, %obj, %slot)
 {
-	%obj.swingPhase = 1; //Always horizontal swing
+	%obj.swingPhase = 0; //Always vertical swing
 	%obj.playthread(2, "2hswing" @ %obj.swingPhase + 1);
 	//%obj.playThread(3, activate);
 	%obj.chargeAttack = true;
-	%this.schedule(200, MeleeHitregLoop, %obj, %slot, 18, 65);
+	%this.schedule(200, MeleeHitregLoop, %obj, %slot, 15, 65);
 }

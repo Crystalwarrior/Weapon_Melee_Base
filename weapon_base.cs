@@ -55,12 +55,15 @@ function WeaponImage::stopMeleeHitregLoop(%this, %obj, %slot)
 		%obj.line2.delete();
 	%obj.stopping = "";
 	%obj.activeSwing = 0;
+	%obj.chargeAttack = 0;
 	%obj.lastSwingStop = getSimTime();
 }
 
 function WeaponImage::MeleeCheckClash(%this, %obj, %slot, %col)
 {
 	%targImg = %col.getMountedImage(%slot);
+	if (%obj.chargeAttack || %col.chargeAttack)
+		return false; //Charge attacks prevent clashing for everything
 	return %obj.activeSwing && %this.meleeStances && %this.meleeCanClash && isObject(%targImg) && %targImg.meleeStances && %targImg.meleeCanClash && %obj.meleeStance == !%col.meleeStance && %col.activeSwing;
 }
 
@@ -140,7 +143,10 @@ function WeaponImage::MeleeHitregLoop(%this, %obj, %slot, %frames, %damage, %pie
 		%position = getWords(%ray, 1, 3);
 		%datablock = %this.meleeHitProjectile;
 
-		if(miniGameCanDamage(%obj, %ray) == 1 && isFunction(%ray.getClassName(), "damage"))
+		if (isObject(%ray.spawnBrick) && %ray.spawnBrick.getGroup().client == %obj.client)
+			%spawned = 1;
+
+		if((miniGameCanDamage(%obj, %ray) == 1 || %spawned) && isFunction(%ray.getClassName(), "damage"))
 		{
 			%piercecheck = (!%pierce || getSimTime() - %obj.lastSwingStop < getSimTime() - %ray.tagged[%obj]);
 			if(%piercecheck)
@@ -169,9 +175,17 @@ function WeaponImage::MeleeHitregLoop(%this, %obj, %slot, %frames, %damage, %pie
 				{
 					if(%this.meleeIsFreeform)
 						%damage = %this.directDamage * (%swingspeed / 3); //num being the point where it multiplies the damage further
-					%this.MeleeDamage(%obj, slot, %ray, %damage, %position);
+					%this.MeleeDamage(%obj, %slot, %ray, %damage, %position);
 					%datablock = %this.meleeHitPlayerProjectile;
 					%ray.tagged[%obj] = getSimTime();
+
+					if(%this.meleeKnockbackVelocity > 0)
+					{
+						%velmult = %this.meleeKnockbackVelocity;
+						%start = %obj.getPosition();
+						%end = %ray.getPosition();
+						%ray.setVelocity(vectorAdd(vectorScale(vectorNormalize(vectorSub(%end, %start)), %velmult), "0 0 3"));
+					}
 				}
 			}
 			else

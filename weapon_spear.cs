@@ -12,7 +12,7 @@ datablock ItemData(MeleeSpearItem)
 	emap = true;
 
 	//gui stuff
-	uiName = "Melee Spear";
+	uiName = "Spear Melee";
 	iconName = "./icon_sword";
 	doColorShift = true;
 	colorShiftColor = "0.471 0.471 0.471 1.000";
@@ -58,7 +58,7 @@ datablock ShapeBaseImageData(MeleeSpearImage)
 	melee = true;
 
 	//Special melee hitreg system
-	directDamage = 20;
+	directDamage = 35;
 
 	meleeEnabled = true;
 	meleeStances = false; //Use stance system?
@@ -73,9 +73,10 @@ datablock ShapeBaseImageData(MeleeSpearImage)
 
 	meleePierceTerrain = false; //If we hit terrain hitreg will still go on until it hits a player
 	meleeSingleHitProjectile = false; //If pierce terrain is on, set this to true so it doesn't spam hit projectiles
+	meleeCanPierce = false; //All attacks pierce multiple targets
 
 	meleeBlockedVelocity = 7;
-	meleeBlockedStunTime = 0.600; //Length of stun in seconds (for self)
+	meleeBlockedStunTime = 1; //Length of stun in seconds (for self)
 
 	//raise your arm up or not
 	armReady = false;
@@ -105,7 +106,7 @@ datablock ShapeBaseImageData(MeleeSpearImage)
 
 	stateName[2]                    = "Fire";
 	stateTransitionOnTimeout[2]     = "Ready";
-	stateTimeoutValue[2]            = 0.5;
+	stateTimeoutValue[2]            = 0.6;
 	stateFire[2]                    = true;
 	stateAllowImageChange[2]        = false;
 	stateScript[2]                  = "onFire";
@@ -126,7 +127,7 @@ datablock ShapeBaseImageData(MeleeSpearImage)
 
 	stateName[5]                    = "ChargeFire";
 	stateTransitionOnTimeout[5]     = "Ready";
-	stateTimeoutValue[5]            = 0.7;
+	stateTimeoutValue[5]            = 0.8;
 	stateFire[5]                    = true;
 	stateAllowImageChange[5]        = false;
 	stateScript[5]                  = "onChargeFire";
@@ -140,27 +141,27 @@ datablock ShapeBaseImageData(MeleeSpearImage)
 
 function MeleeSpearImage::onMount(%this, %obj, %slot)
 {
-	%obj.playThread(2, spearswing @ (%obj.swingPhase + 1) % 2 + 1);
+	%obj.playthread(2, pikeswing1);
 	%obj.schedule(32, stopThread, 2);
 }
 
 function MeleeSpearImage::onFire(%this, %obj, %slot)
-{
-	%obj.swingPhase = (%obj.swingPhase + 1) % 2;
-	%obj.playthread(2, spearswing @ %obj.swingPhase + 1);
-	%this.schedule(100, MeleeHitregLoop, %obj, %slot, 12);
+{	
+	%obj.playthread(2, pikeswing1);
+	%this.MeleeHitregLoop(%obj, %slot, 12);
 }
 
 function MeleeSpearImage::onCharge(%this, %obj, %slot)
 {
-	%obj.playthread(2, spearcharge @ (%obj.swingPhase + 1) % 2 + 3);
+	%obj.playthread(2, pikecharge2);
 	%obj.playThread(3, plant);
 	serverPlay3D(MeleeChargeSound, %obj.getSlotTransform(%slot));
 }
 
 function MeleeSpearImage::onChargeFire(%this, %obj, %slot)
 {
-	%obj.swingPhase = (%obj.swingPhase + 1) % 2;
-	%obj.playthread(2, spearswing @ %obj.swingPhase + 3);
-	%this.schedule(150, MeleeHitregLoop, %obj, %slot, 20, 40, true);
+	%obj.playthread(2, pikeswing2);
+	%obj.playThread(3, plant);
+	%obj.chargeAttack = true;
+	%this.MeleeHitregLoop(%obj, %slot, 12, 60, true);
 }
