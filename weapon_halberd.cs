@@ -78,6 +78,8 @@ datablock ShapeBaseImageData(HalberdImage)
 	meleeBlockedVelocity = 9;
 	meleeBlockedStunTime = 1; //Length of stun in seconds (for self)
 
+	meleeBounceAnim[3] = "plant"; //Animation in [%slot] when hitting something
+
 	//raise your arm up or not
 	armReady = false;
 

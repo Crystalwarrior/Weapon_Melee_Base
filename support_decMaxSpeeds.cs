@@ -48,7 +48,10 @@ function Player::applySlowDown(%obj, %duration, %num, %die)
 	if(%die)
 	{
 		%obj.slowdown -= %num;
-		%obj.resetMaxSpeeds();
+		if(isFunction(%obj, "SD_updateSpeeds"))
+			%obj.SD_updateSpeeds();
+		else
+			%obj.resetMaxSpeeds();
 		return;
 	}
 	%obj.slowdown += %num;

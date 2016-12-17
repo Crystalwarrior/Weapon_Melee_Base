@@ -80,6 +80,9 @@ datablock ShapeBaseImageData(BattleAxeImage)
 	meleeBlockedVelocity = 9;
 	meleeBlockedStunTime = 1; //Length of stun in seconds (for self)
 
+	meleeBounceAnim[3] = "shiftAway"; //Animation in [%slot] when hitting something
+	meleeBounceAnim[1] = "leftRecoil";
+
 	//raise your arm up or not
 	armReady = false;
 

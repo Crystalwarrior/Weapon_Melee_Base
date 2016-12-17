@@ -87,6 +87,8 @@ datablock ShapeBaseImageData(DaggerImage)
 	meleeBlockedVelocity = 1;
 	meleeBlockedStunTime = 0.5; //Length of stun in seconds (for self)
 
+	meleeBounceAnim[3] = "plant"; //Animation in [%slot] when hitting something
+
 	//raise your arm up or not
 	armReady = false;
 

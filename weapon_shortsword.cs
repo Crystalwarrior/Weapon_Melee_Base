@@ -87,6 +87,8 @@ datablock ShapeBaseImageData(ShortSwordImage)
 	meleeBlockedVelocity = 7;
 	meleeBlockedStunTime = 0.6; //Length of stun in seconds (for self)
 
+	meleeBounceAnim[3] = "plant"; //Animation in [%slot] when hitting something
+
 	//raise your arm up or not
 	armReady = false;
 
@@ -190,5 +192,5 @@ function ShortSwordImage::onChargeFire(%this, %obj, %slot)
 	%frames = 12;
 	if(%obj.meleeStance)
 		%frames = 18;
-	%this.MeleeHitregLoop(%obj, %slot, %frames, 50);
+	%this.MeleeHitregLoop(%obj, %slot, %frames, 40);
 }

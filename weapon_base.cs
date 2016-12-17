@@ -169,6 +169,8 @@ function WeaponImage::MeleeHitregLoop(%this, %obj, %slot, %frames, %damage, %pie
 					%obj.swingPhase++;
 					%ray.schedule(%targImg.meleeBlockedStunTime * 1000, setImageLoaded, %slot, 1);
 					%obj.schedule(%this.meleeBlockedStunTime * 1000, setImageLoaded, %slot, 1);
+					%ray.setWhiteOut(0.1);
+					%obj.setWhiteOut(0.1);
 					%datablock = %this.meleeBlockedProjectile;
 				}
 				else
@@ -206,6 +208,14 @@ function WeaponImage::MeleeHitregLoop(%this, %obj, %slot, %frames, %damage, %pie
 
 			%projectile.explode();
 
+			if(!%hitplayer && !%this.meleePierceTerrain)
+			{
+				%obj.stopThread(2);
+				%obj.setImageLoaded(%slot, 0);
+				%obj.swingPhase++;
+				%obj.schedule(%this.meleeBlockedStunTime * 1000, setImageLoaded, %slot, 1);
+				%obj.setWhiteOut(0.1);
+			}
 			for(%i = 0; %i < 4; %i++)
 			{
 				if(%this.meleeBounceAnim[%i] !$= "")

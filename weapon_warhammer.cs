@@ -80,6 +80,8 @@ datablock ShapeBaseImageData(WarHammerImage)
 	meleeBlockedVelocity = 7;
 	meleeBlockedStunTime = 0.700; //Length of stun in seconds (for self)
 
+	meleeBounceAnim[3] = "shiftAway"; //Animation in [%slot] when hitting something
+
 	//raise your arm up or not
 	armReady = false;
 
