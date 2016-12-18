@@ -1,10 +1,10 @@
-datablock ItemData(WarHammerItem)
+datablock ItemData(CudgelItem)
 {
 	category = "Weapon";  // Mission editor category
 	className = "Weapon"; // For inventory system
 
 	// Basic Item Properties
-	shapeFile = "./WarHammer.dts";
+	shapeFile = "./Cudgel.dts";
 	mass = 1;
 	density = 0.2;
 	elasticity = 0.2;
@@ -12,23 +12,23 @@ datablock ItemData(WarHammerItem)
 	emap = true;
 
 	//gui stuff
-	uiName = "War Hammer";
+	uiName = "Cudgel";
 	iconName = "./icon_sword";
 	doColorShift = true;
-	colorShiftColor = "0.471 0.471 0.471 1.000";
+	colorShiftColor = "0.670 0.420 0.250 1.000";
 
 	// Dynamic properties defined by the scripts
-	image = WarHammerImage;
+	image = CudgelImage;
 	canDrop = true;
 };
 
 ////////////////
 //weapon image//
 ////////////////
-datablock ShapeBaseImageData(WarHammerImage)
+datablock ShapeBaseImageData(CudgelImage)
 {
 	// Basic Item properties
-	shapeFile = "./WarHammer.dts";
+	shapeFile = "./Cudgel.dts";
 	emap = true;
 
 	// Specify mount point & offset for 3rd person, and eye offset
@@ -49,7 +49,7 @@ datablock ShapeBaseImageData(WarHammerImage)
 	className = "WeaponImage";
 
 	// Projectile && Ammo.
-	item = WarHammerItem;
+	item = CudgelItem;
 	ammo = " ";
 	projectile = MeleeSharpProjectile;
 	projectileType = Projectile;
@@ -58,10 +58,7 @@ datablock ShapeBaseImageData(WarHammerImage)
 	melee = true;
 
 	//Special melee hitreg system
-	directDamage = 40;
-
-	//MedievalRP armor
-	armorPenetration = 0.2; //20%
+	directDamage = 30;
 
 	meleeEnabled = true;
 	meleeStances = false; //Use stance system?
@@ -87,7 +84,7 @@ datablock ShapeBaseImageData(WarHammerImage)
 
 	//casing = " ";
 	doColorShift = true;
-	colorShiftColor = "0.471 0.471 0.471 1.000";
+	colorShiftColor = "0.670 0.420 0.250 1.000";
 
 	// Images have a state system which controls how the animations
 	// are run, which sounds are played, script callbacks, etc. This
@@ -100,7 +97,7 @@ datablock ShapeBaseImageData(WarHammerImage)
 	stateName[0]                     = "Activate";
 	stateTimeoutValue[0]             = 0.6;
 	stateTransitionOnTimeout[0]      = "Ready";
-	stateSound[0]                    = MeleeDrawSound;
+	stateSound[0]                    = MeleeSwordDrawSound;
 
 	stateName[1]                     = "Ready";
 	stateTransitionOnTriggerDown[1]  = "CheckCharge";
@@ -143,20 +140,20 @@ datablock ShapeBaseImageData(WarHammerImage)
 	stateScript[8]                  = "onNoAmmo";
 };
 
-function WarHammerImage::onMount(%this, %obj, %slot)
+function CudgelImage::onMount(%this, %obj, %slot)
 {
 	%obj.playthread(2, bswing @ %obj.swingPhase + 1);
 	%obj.schedule(32, stopThread, 2);
 }
 
-function WarHammerImage::onFire(%this, %obj, %slot)
+function CudgelImage::onFire(%this, %obj, %slot)
 {
 	%obj.swingPhase = (%obj.swingPhase + 1) % 2;
 	%obj.playthread(2, bswing @ %obj.swingPhase + 1);
 	%this.schedule(200, MeleeHitregLoop, %obj, %slot, 12);
 }
 
-function WarHammerImage::onCharge(%this, %obj, %slot)
+function CudgelImage::onCharge(%this, %obj, %slot)
 {
 	%obj.swingPhase = 1; //Always horizontal swing
 	%obj.playthread(2, "2hswing" @ %obj.swingPhase + 1);
@@ -165,7 +162,7 @@ function WarHammerImage::onCharge(%this, %obj, %slot)
 	serverPlay3D(MeleeChargeSound, %obj.getSlotTransform(%slot));
 }
 
-function WarHammerImage::onChargeFire(%this, %obj, %slot)
+function CudgelImage::onChargeFire(%this, %obj, %slot)
 {
 	%obj.playthread(2, "2hswing" @ %obj.swingPhase + 1);
 	%obj.playThread(3, activate);

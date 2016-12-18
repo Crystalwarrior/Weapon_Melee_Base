@@ -1,10 +1,10 @@
-datablock ItemData(WarHammerItem)
+datablock ItemData(PitchforkItem)
 {
 	category = "Weapon";  // Mission editor category
 	className = "Weapon"; // For inventory system
 
 	// Basic Item Properties
-	shapeFile = "./WarHammer.dts";
+	shapeFile = "./pitchfork.dts";
 	mass = 1;
 	density = 0.2;
 	elasticity = 0.2;
@@ -12,23 +12,23 @@ datablock ItemData(WarHammerItem)
 	emap = true;
 
 	//gui stuff
-	uiName = "War Hammer";
+	uiName = "Pitchfork";
 	iconName = "./icon_sword";
 	doColorShift = true;
-	colorShiftColor = "0.471 0.471 0.471 1.000";
+	colorShiftColor = "0.670 0.420 0.250 1.000";
 
 	// Dynamic properties defined by the scripts
-	image = WarHammerImage;
+	image = PitchforkImage;
 	canDrop = true;
 };
 
 ////////////////
 //weapon image//
 ////////////////
-datablock ShapeBaseImageData(WarHammerImage)
+datablock ShapeBaseImageData(PitchforkImage)
 {
 	// Basic Item properties
-	shapeFile = "./WarHammer.dts";
+	shapeFile = "./pitchfork.dts";
 	emap = true;
 
 	// Specify mount point & offset for 3rd person, and eye offset
@@ -49,26 +49,23 @@ datablock ShapeBaseImageData(WarHammerImage)
 	className = "WeaponImage";
 
 	// Projectile && Ammo.
-	item = WarHammerItem;
+	item = PitchforkItem;
 	ammo = " ";
-	projectile = MeleeSharpProjectile;
+	projectile = PitchforkProjectile;
 	projectileType = Projectile;
 
 	//melee particles shoot from eye node for consistancy
 	melee = true;
 
 	//Special melee hitreg system
-	directDamage = 40;
-
-	//MedievalRP armor
-	armorPenetration = 0.2; //20%
+	directDamage = 30;
 
 	meleeEnabled = true;
 	meleeStances = false; //Use stance system?
 	meleeCanClash = true; //If stances are enabled, can it clash? Keep this on if you want dagger to clash it
 	meleeTick = 24; //The speed of schedule loop in MS. Change this to animation FPS
 
-	meleeRayLength = 1.4;
+	meleeRayLength = 2.8;
 
 	meleeHitProjectile = MeleeSharpProjectile;
 	meleeBlockedProjectile = MeleeBlockProjectile;
@@ -76,18 +73,19 @@ datablock ShapeBaseImageData(WarHammerImage)
 
 	meleePierceTerrain = false; //If we hit terrain hitreg will still go on until it hits a player
 	meleeSingleHitProjectile = false; //If pierce terrain is on, set this to true so it doesn't spam hit projectiles
+	meleeCanPierce = false; //All attacks pierce multiple targets
 
 	meleeBlockedVelocity = 7;
-	meleeBlockedStunTime = 0.700; //Length of stun in seconds (for self)
+	meleeBlockedStunTime = 1; //Length of stun in seconds (for self)
 
-	meleeBounceAnim[3] = "shiftAway"; //Animation in [%slot] when hitting something
+	meleeBounceAnim[3] = "plant"; //Animation in [%slot] when hitting something
 
 	//raise your arm up or not
 	armReady = false;
 
 	//casing = " ";
 	doColorShift = true;
-	colorShiftColor = "0.471 0.471 0.471 1.000";
+	colorShiftColor = "0.670 0.420 0.250 1.000";
 
 	// Images have a state system which controls how the animations
 	// are run, which sounds are played, script callbacks, etc. This
@@ -98,9 +96,9 @@ datablock ShapeBaseImageData(WarHammerImage)
 
 	// Initial start up state
 	stateName[0]                     = "Activate";
-	stateTimeoutValue[0]             = 0.6;
+	stateTimeoutValue[0]             = 1;
 	stateTransitionOnTimeout[0]      = "Ready";
-	stateSound[0]                    = MeleeDrawSound;
+	stateSound[0]                    = MeleeSwordDrawSound;
 
 	stateName[1]                     = "Ready";
 	stateTransitionOnTriggerDown[1]  = "CheckCharge";
@@ -110,7 +108,7 @@ datablock ShapeBaseImageData(WarHammerImage)
 
 	stateName[2]                    = "Fire";
 	stateTransitionOnTimeout[2]     = "Ready";
-	stateTimeoutValue[2]            = 0.6;
+	stateTimeoutValue[2]            = 0.8;
 	stateFire[2]                    = true;
 	stateAllowImageChange[2]        = false;
 	stateScript[2]                  = "onFire";
@@ -131,7 +129,7 @@ datablock ShapeBaseImageData(WarHammerImage)
 
 	stateName[5]                    = "ChargeFire";
 	stateTransitionOnTimeout[5]     = "Ready";
-	stateTimeoutValue[5]            = 0.6;
+	stateTimeoutValue[5]            = 0.9;
 	stateFire[5]                    = true;
 	stateAllowImageChange[5]        = false;
 	stateScript[5]                  = "onChargeFire";
@@ -143,32 +141,29 @@ datablock ShapeBaseImageData(WarHammerImage)
 	stateScript[8]                  = "onNoAmmo";
 };
 
-function WarHammerImage::onMount(%this, %obj, %slot)
+function PitchforkImage::onMount(%this, %obj, %slot)
 {
-	%obj.playthread(2, bswing @ %obj.swingPhase + 1);
+	%obj.playthread(2, pikeswing1);
 	%obj.schedule(32, stopThread, 2);
 }
 
-function WarHammerImage::onFire(%this, %obj, %slot)
-{
-	%obj.swingPhase = (%obj.swingPhase + 1) % 2;
-	%obj.playthread(2, bswing @ %obj.swingPhase + 1);
-	%this.schedule(200, MeleeHitregLoop, %obj, %slot, 12);
+function PitchforkImage::onFire(%this, %obj, %slot)
+{	
+	%obj.playthread(2, pikeswing1);
+	%this.MeleeHitregLoop(%obj, %slot, 12);
 }
 
-function WarHammerImage::onCharge(%this, %obj, %slot)
+function PitchforkImage::onCharge(%this, %obj, %slot)
 {
-	%obj.swingPhase = 1; //Always horizontal swing
-	%obj.playthread(2, "2hswing" @ %obj.swingPhase + 1);
-	%obj.schedule(0, stopThread, 2);
+	%obj.playthread(2, pikecharge2);
 	%obj.playThread(3, plant);
 	serverPlay3D(MeleeChargeSound, %obj.getSlotTransform(%slot));
 }
 
-function WarHammerImage::onChargeFire(%this, %obj, %slot)
+function PitchforkImage::onChargeFire(%this, %obj, %slot)
 {
-	%obj.playthread(2, "2hswing" @ %obj.swingPhase + 1);
-	%obj.playThread(3, activate);
+	%obj.playthread(2, pikeswing2);
+	%obj.playThread(3, plant);
 	%obj.chargeAttack = true;
-	%this.schedule(200, MeleeHitregLoop, %obj, %slot, 12, 50);
+	%this.MeleeHitregLoop(%obj, %slot, 12, 50, true);
 }
