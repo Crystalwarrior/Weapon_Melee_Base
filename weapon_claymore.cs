@@ -156,6 +156,7 @@ datablock ShapeBaseImageData(ClaymoreImage)
 
 	meleeBounceAnim[3] = "shiftAway"; //Animation in [%slot] when hitting something
 	meleeBounceAnim[1] = "leftRecoil";
+	meleeBouncePlayer = false; //Whether or not bounce animation is played when you hit players - enable for blunt weapons
 
 	//raise your arm up or not
 	armReady = false;
@@ -233,13 +234,8 @@ function ClaymoreImage::onFire(%this, %obj, %slot)
 
 function ClaymoreImage::onCharge(%this, %obj, %slot)
 {
-	if(%obj.swingPhase != 3) //Transitional animation!!! WOOT
-		%obj.playthread(2, "2hstab1charge");
-	else
-	{
-		%obj.playthread(2, "2hstab1");
-		%obj.schedule(0, stopThread, 2);
-	}
+	%obj.playthread(2, "2hstab1");
+	%obj.schedule(0, stopThread, 2);
 	%obj.playThread(3, plant);
 	serverPlay3D(MeleeChargeSound, %obj.getSlotTransform(%slot));
 }

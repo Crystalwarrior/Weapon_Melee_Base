@@ -26,6 +26,7 @@ exec("./weapon_mace.cs");
 //PEASANT
 exec("./weapon_pickaxe.cs");
 exec("./weapon_pitchfork.cs");
+exec("./weapon_scythe.cs");
 exec("./weapon_cudgel.cs");
 //Weirdness
 exec("./lightsaber/server.cs");

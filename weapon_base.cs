@@ -216,10 +216,13 @@ function WeaponImage::MeleeHitregLoop(%this, %obj, %slot, %frames, %damage, %pie
 				%obj.schedule(%this.meleeBlockedStunTime * 1000, setImageLoaded, %slot, 1);
 				%obj.setWhiteOut(0.1);
 			}
-			for(%i = 0; %i < 4; %i++)
+			if(!%hitplayer || %this.meleeBouncePlayer)
 			{
-				if(%this.meleeBounceAnim[%i] !$= "")
-					%obj.playThread(%i, %this.meleeBounceAnim[%i]);
+				for(%i = 0; %i < 4; %i++)
+				{
+					if(%this.meleeBounceAnim[%i] !$= "")
+						%obj.playThread(%i, %this.meleeBounceAnim[%i]);
+				}
 			}
 		}
 

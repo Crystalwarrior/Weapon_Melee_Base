@@ -79,6 +79,7 @@ datablock ShapeBaseImageData(HalberdImage)
 	meleeBlockedStunTime = 1; //Length of stun in seconds (for self)
 
 	meleeBounceAnim[3] = "plant"; //Animation in [%slot] when hitting something
+	meleeBouncePlayer = false; //Whether or not bounce animation is played when you hit players - enable for blunt weapons
 
 	//raise your arm up or not
 	armReady = false;
@@ -156,7 +157,8 @@ function HalberdImage::onFire(%this, %obj, %slot)
 
 function HalberdImage::onCharge(%this, %obj, %slot)
 {
-	%obj.playthread(2, spearcharge @ (%obj.swingPhase + 1) % 2 + 3);
+	%obj.playthread(2, spearswing @ (%obj.swingPhase + 1) % 2 + 3);
+	%obj.schedule(0, stopThread, 2);
 	%obj.playThread(3, plant);
 	serverPlay3D(MeleeChargeSound, %obj.getSlotTransform(%slot));
 }

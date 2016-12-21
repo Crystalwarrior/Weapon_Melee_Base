@@ -79,6 +79,7 @@ datablock ShapeBaseImageData(PitchforkImage)
 	meleeBlockedStunTime = 1; //Length of stun in seconds (for self)
 
 	meleeBounceAnim[3] = "plant"; //Animation in [%slot] when hitting something
+	meleeBouncePlayer = false; //Whether or not bounce animation is played when you hit players - enable for blunt weapons
 
 	//raise your arm up or not
 	armReady = false;
@@ -150,12 +151,13 @@ function PitchforkImage::onMount(%this, %obj, %slot)
 function PitchforkImage::onFire(%this, %obj, %slot)
 {	
 	%obj.playthread(2, pikeswing1);
-	%this.MeleeHitregLoop(%obj, %slot, 12);
+	%this.MeleeHitregLoop(%obj, %slot, 8);
 }
 
 function PitchforkImage::onCharge(%this, %obj, %slot)
 {
-	%obj.playthread(2, pikecharge2);
+	%obj.playthread(2, pikeswing2);
+	%obj.schedule(0, stopThread, 2);
 	%obj.playThread(3, plant);
 	serverPlay3D(MeleeChargeSound, %obj.getSlotTransform(%slot));
 }
@@ -165,5 +167,5 @@ function PitchforkImage::onChargeFire(%this, %obj, %slot)
 	%obj.playthread(2, pikeswing2);
 	%obj.playThread(3, plant);
 	%obj.chargeAttack = true;
-	%this.MeleeHitregLoop(%obj, %slot, 12, 50, true);
+	%this.MeleeHitregLoop(%obj, %slot, 10, 50, true);
 }

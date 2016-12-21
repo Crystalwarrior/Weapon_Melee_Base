@@ -80,6 +80,7 @@ datablock ShapeBaseImageData(LongSwordImage)
 	meleeBlockedStunTime = 0.6; //Length of stun in seconds (for self)
 
 	meleeBounceAnim[3] = "plant"; //Animation in [%slot] when hitting something
+	meleeBouncePlayer = false; //Whether or not bounce animation is played when you hit players - enable for blunt weapons
 
 	//raise your arm up or not
 	armReady = false;

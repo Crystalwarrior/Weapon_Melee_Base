@@ -82,6 +82,7 @@ datablock ShapeBaseImageData(BattleAxeImage)
 
 	meleeBounceAnim[3] = "shiftAway"; //Animation in [%slot] when hitting something
 	meleeBounceAnim[1] = "leftRecoil";
+	meleeBouncePlayer = false; //Whether or not bounce animation is played when you hit players - enable for blunt weapons
 
 	//raise your arm up or not
 	armReady = false;

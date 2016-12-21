@@ -81,6 +81,7 @@ datablock ShapeBaseImageData(WarHammerImage)
 	meleeBlockedStunTime = 0.700; //Length of stun in seconds (for self)
 
 	meleeBounceAnim[3] = "shiftAway"; //Animation in [%slot] when hitting something
+	meleeBouncePlayer = true; //Whether or not bounce animation is played when you hit players - enable for blunt weapons
 
 	//raise your arm up or not
 	armReady = false;

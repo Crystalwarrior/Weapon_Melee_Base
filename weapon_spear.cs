@@ -155,7 +155,8 @@ function MeleeSpearImage::onFire(%this, %obj, %slot)
 
 function MeleeSpearImage::onCharge(%this, %obj, %slot)
 {
-	%obj.playthread(2, pikecharge2);
+	%obj.playthread(2, pikeswing2);
+	%obj.schedule(0, stopThread, 2);
 	%obj.playThread(3, plant);
 	serverPlay3D(MeleeChargeSound, %obj.getSlotTransform(%slot));
 }

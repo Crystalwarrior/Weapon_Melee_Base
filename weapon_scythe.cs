@@ -65,7 +65,7 @@ datablock ShapeBaseImageData(ScytheImage)
 	meleeCanClash = true; //If stances are enabled, can it clash? Keep this on if you want dagger to clash it
 	meleeTick = 24; //The speed of schedule loop in MS. Change this to animation FPS
 
-	meleeRayLength = 2.8;
+	meleeRayLength = 2.6;
 
 	meleeHitProjectile = MeleeClaymoreProjectile;
 	meleeBlockedProjectile = MeleeClaymoreBlockProjectile;
@@ -79,6 +79,7 @@ datablock ShapeBaseImageData(ScytheImage)
 	meleeBlockedStunTime = 1; //Length of stun in seconds (for self)
 
 	meleeBounceAnim[3] = "plant"; //Animation in [%slot] when hitting something
+	meleeBouncePlayer = false; //Whether or not bounce animation is played when you hit players - enable for blunt weapons
 
 	//raise your arm up or not
 	armReady = false;
@@ -150,12 +151,13 @@ function ScytheImage::onMount(%this, %obj, %slot)
 function ScytheImage::onFire(%this, %obj, %slot)
 {	
 	%obj.playthread(2, "scytheswing1");
-	%this.MeleeHitregLoop(%obj, %slot, 12);
+	%this.schedule(100, MeleeHitregLoop, %obj, %slot, 12);
 }
 
 function ScytheImage::onCharge(%this, %obj, %slot)
 {
-	%obj.playthread(2, "scythecharge2");
+	%obj.playthread(2, "scytheswing2");
+	%obj.schedule(0, stopThread, 2);
 	%obj.playThread(3, plant);
 	serverPlay3D(MeleeChargeSound, %obj.getSlotTransform(%slot));
 }
@@ -163,7 +165,6 @@ function ScytheImage::onCharge(%this, %obj, %slot)
 function ScytheImage::onChargeFire(%this, %obj, %slot)
 {
 	%obj.playthread(2, "scytheswing2");
-	%obj.playThread(3, plant);
 	%obj.chargeAttack = true;
-	%this.MeleeHitregLoop(%obj, %slot, 12, 60);
+	%this.schedule(100, MeleeHitregLoop, %obj, %slot, 12, 60);
 }
