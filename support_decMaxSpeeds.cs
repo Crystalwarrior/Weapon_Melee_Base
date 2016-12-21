@@ -11,6 +11,17 @@ package decMaxSpeed
 		%obj.setMaxCrouchForwardSpeed(%db.maxForwardCrouchSpeed);
 		%obj.setMaxCrouchBackwardSpeed(%db.maxBackwardCrouchSpeed);
 		%obj.setMaxCrouchSideSpeed(%db.maxSideCrouchSpeed);
+
+		%dec = 0;
+		if(isObject(%image = %obj.getMountedImage(0)))
+		{
+			%dec += %image.slowdown;
+		}
+		if(%obj.slowdown)
+		{
+			%dec += %obj.slowdown;
+		}
+		%obj.decreaseMaxSpeeds(%dec);
 	}
 
 	function Player::decreaseMaxSpeeds(%obj, %num)
@@ -47,15 +58,17 @@ function Player::applySlowDown(%obj, %duration, %num, %die)
 
 	if(%die)
 	{
-		%obj.slowdown -= %num;
-		if(isFunction(%obj, "SD_updateSpeeds"))
+		%obj.slowdown = getMax(0, %obj.slowdown - %obj.removeSlow);
+		%obj.removeSlow = 0;
+		if(isFunction(%obj.getClassName(), "SD_updateSpeeds"))
 			%obj.SD_updateSpeeds();
 		else
 			%obj.resetMaxSpeeds();
 		return;
 	}
 	%obj.slowdown += %num;
-	if(isFunction(%obj, "SD_updateSpeeds"))
+	%obj.removeSlow += %num;
+	if(isFunction(%obj.getClassName(), "SD_updateSpeeds"))
 		%obj.SD_updateSpeeds();
 	else
 		%obj.decreaseMaxSpeeds(%num);

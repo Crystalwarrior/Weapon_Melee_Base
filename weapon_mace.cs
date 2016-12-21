@@ -22,6 +22,25 @@ datablock ItemData(MaceItem)
 	canDrop = true;
 };
 
+datablock ProjectileData(MeleeMaceBlockProjectile)
+{
+	explosion = BladeSmallMetalExplosion;
+};
+function MeleeMaceBlockProjectile::onExplode(%this, %obj, %pos)
+{
+	ServerPlay3D(MeleeMaceBlockSound @ getRandom(1, 3), %pos);
+}
+
+datablock ProjectileData(MaceBloodProjectile)
+{
+	explosion = MeleeBloodExplosion;
+};
+
+function MaceBloodProjectile::onExplode(%this, %obj, %pos)
+{
+	ServerPlay3D(MeleeBashSound @ getRandom(1, 6), %pos);
+}
+
 ////////////////
 //weapon image//
 ////////////////
@@ -51,7 +70,7 @@ datablock ShapeBaseImageData(MaceImage)
 	// Projectile && Ammo.
 	item = MaceItem;
 	ammo = " ";
-	projectile = MeleeSharpProjectile;
+	projectile = MeleeBluntProjectile;
 	projectileType = Projectile;
 
 	//melee particles shoot from eye node for consistancy
@@ -69,9 +88,9 @@ datablock ShapeBaseImageData(MaceImage)
 
 	meleeRayLength = 1.5;
 
-	meleeHitProjectile = MeleeSharpProjectile;
-	meleeBlockedProjectile = MeleeBlockProjectile;
-	meleeHitPlayerProjectile = SwordBloodProjectile;
+	meleeHitProjectile = MeleeBluntProjectile;
+	meleeBlockedProjectile = MeleeMaceBlockProjectile;
+	meleeHitPlayerProjectile = MaceBloodProjectile;
 
 	meleePierceTerrain = false; //If we hit terrain hitreg will still go on until it hits a player
 	meleeSingleHitProjectile = false; //If pierce terrain is on, set this to true so it doesn't spam hit projectiles

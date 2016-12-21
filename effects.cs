@@ -71,6 +71,63 @@ datablock AudioProfile(MeleeSwordHitSound6)
 };
 
 
+datablock AudioProfile(MeleeMaceBlockSound1)
+{
+	filename	= "./sounds/Mace_Blocking_01.wav";
+	description	= AudioClosest3d;
+	preload		= true;
+};
+datablock AudioProfile(MeleeMaceBlockSound2)
+{
+	filename	= "./sounds/Mace_Blocking_02.wav";
+	description	= AudioClosest3d;
+	preload		= true;
+};
+datablock AudioProfile(MeleeMaceBlockSound3)
+{
+	filename	= "./sounds/Mace_Blocking_03.wav";
+	description	= AudioClosest3d;
+	preload		= true;
+};
+
+datablock AudioProfile(MeleeMaceHitSound1)
+{
+	filename	= "./sounds/Mace_Blocked_01.wav";
+	description	= AudioClosest3d;
+	preload		= true;
+};
+datablock AudioProfile(MeleeMaceHitSound2)
+{
+	filename	= "./sounds/Mace_Blocked_02.wav";
+	description	= AudioClosest3d;
+	preload		= true;
+};
+datablock AudioProfile(MeleeMaceHitSound3)
+{
+	filename	= "./sounds/Mace_Blocked_03.wav";
+	description	= AudioClosest3d;
+	preload		= true;
+};
+datablock AudioProfile(MeleeMaceHitSound4)
+{
+	filename	= "./sounds/Mace_Blocked_04.wav";
+	description	= AudioClosest3d;
+	preload		= true;
+};
+datablock AudioProfile(MeleeMaceHitSound5)
+{
+	filename	= "./sounds/Mace_Blocked_05.wav";
+	description	= AudioClosest3d;
+	preload		= true;
+};
+datablock AudioProfile(MeleeMaceHitSound6)
+{
+	filename	= "./sounds/Mace_Blocked_06.wav";
+	description	= AudioClosest3d;
+	preload		= true;
+};
+
+
 datablock AudioProfile(MeleeChargeSound)
 {
 	filename = "base/data/sound/clickPlant.wav";
@@ -129,6 +186,78 @@ datablock AudioProfile(MeleeSlashSound3)
 datablock AudioProfile(MeleeSlashSound4)
 {
 	filename = "./sounds/slash_04.wav";
+	description = AudioClosest3d;
+	preload = false;
+};
+datablock AudioProfile(MeleeBashSound1)
+{
+	filename = "./sounds/blunt_01.wav";
+	description = AudioClosest3d;
+	preload = false;
+};
+datablock AudioProfile(MeleeBashSound2)
+{
+	filename = "./sounds/blunt_02.wav";
+	description = AudioClosest3d;
+	preload = false;
+};
+datablock AudioProfile(MeleeBashSound3)
+{
+	filename = "./sounds/blunt_03.wav";
+	description = AudioClosest3d;
+	preload = false;
+};
+datablock AudioProfile(MeleeBashSound4)
+{
+	filename = "./sounds/blunt_04.wav";
+	description = AudioClosest3d;
+	preload = false;
+};
+datablock AudioProfile(MeleeBashSound5)
+{
+	filename = "./sounds/blunt_05.wav";
+	description = AudioClosest3d;
+	preload = false;
+};
+datablock AudioProfile(MeleeBashSound6)
+{
+	filename = "./sounds/blunt_06.wav";
+	description = AudioClosest3d;
+	preload = false;
+};
+datablock AudioProfile(MeleeChopSound1)
+{
+	filename = "./sounds/chop_01.wav";
+	description = AudioClosest3d;
+	preload = false;
+};
+datablock AudioProfile(MeleeChopSound2)
+{
+	filename = "./sounds/chop_02.wav";
+	description = AudioClosest3d;
+	preload = false;
+};
+datablock AudioProfile(MeleeChopSound3)
+{
+	filename = "./sounds/chop_03.wav";
+	description = AudioClosest3d;
+	preload = false;
+};
+datablock AudioProfile(MeleeChopSound4)
+{
+	filename = "./sounds/chop_04.wav";
+	description = AudioClosest3d;
+	preload = false;
+};
+datablock AudioProfile(MeleeChopSound5)
+{
+	filename = "./sounds/chop_05.wav";
+	description = AudioClosest3d;
+	preload = false;
+};
+datablock AudioProfile(MeleeChopSound6)
+{
+	filename = "./sounds/chop_06.wav";
 	description = AudioClosest3d;
 	preload = false;
 };
@@ -224,7 +353,7 @@ datablock ProjectileData(MeleeBluntProjectile)
 
 function MeleeBluntProjectile::onExplode(%this, %obj, %pos)
 {
-	ServerPlay3D(MeleeSwordHitSound @ getRandom(1, 6), %pos);
+	ServerPlay3D(MeleeMaceHitSound @ getRandom(1, 6), %pos);
 }
 
 datablock ParticleData(MeleeBloodExplosionParticle)

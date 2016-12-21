@@ -70,9 +70,9 @@ datablock ShapeBaseImageData(WarHammerImage)
 
 	meleeRayLength = 1.4;
 
-	meleeHitProjectile = MeleeSharpProjectile;
-	meleeBlockedProjectile = MeleeBlockProjectile;
-	meleeHitPlayerProjectile = SwordBloodProjectile;
+	meleeHitProjectile = MeleeBluntProjectile;
+	meleeBlockedProjectile = MeleeMaceBlockProjectile;
+	meleeHitPlayerProjectile = MaceBloodProjectile;
 
 	meleePierceTerrain = false; //If we hit terrain hitreg will still go on until it hits a player
 	meleeSingleHitProjectile = false; //If pierce terrain is on, set this to true so it doesn't spam hit projectiles

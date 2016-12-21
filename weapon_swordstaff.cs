@@ -67,8 +67,8 @@ datablock ShapeBaseImageData(SwordstaffImage)
 
 	meleeRayLength = 2.8;
 
-	meleeHitProjectile = MeleeSharpProjectile;
-	meleeBlockedProjectile = MeleeBlockProjectile;
+	meleeHitProjectile = MeleeClaymoreProjectile;
+	meleeBlockedProjectile = MeleeClaymoreBlockProjectile;
 	meleeHitPlayerProjectile = SwordBloodProjectile;
 
 	meleePierceTerrain = false; //If we hit terrain hitreg will still go on until it hits a player

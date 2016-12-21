@@ -58,7 +58,9 @@ datablock ShapeBaseImageData(PikeImage)
 	melee = true;
 
 	//Special melee hitreg system
-	directDamage = 40;
+	directDamage = 35;
+
+	slowdown = 2; //How much slowdown is applied when this is wielded?
 
 	//meleeKnockbackVelocity = 0;
 
@@ -71,7 +73,7 @@ datablock ShapeBaseImageData(PikeImage)
 
 	meleeHitProjectile = MeleeClaymoreProjectile;
 	meleeBlockedProjectile = MeleeClaymoreBlockProjectile;
-	meleeHitPlayerProjectile = SwordBloodProjectile;
+	meleeHitPlayerProjectile = AxeBloodProjectile;
 
 	meleePierceTerrain = false; //If we hit terrain hitreg will still go on until it hits a player
 	meleeSingleHitProjectile = false; //If pierce terrain is on, set this to true so it doesn't spam hit projectiles
@@ -147,13 +149,6 @@ function PikeImage::onMount(%this, %obj, %slot)
 {
 	%obj.playthread(2, pikeswing2);
 	%obj.schedule(32, stopThread, 2);
-	%obj.slowdown += 2; //TEMPORARY
-}
-
-function PikeImage::onUnMount(%this, %obj, %slot)
-{
-	parent::onUnMount(%this, %obj, %slot);
-	%obj.slowdown -= 2;
 }
 
 function PikeImage::onFire(%this, %obj, %slot)

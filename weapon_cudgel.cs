@@ -67,9 +67,9 @@ datablock ShapeBaseImageData(CudgelImage)
 
 	meleeRayLength = 1.4;
 
-	meleeHitProjectile = MeleeSharpProjectile;
-	meleeBlockedProjectile = MeleeBlockProjectile;
-	meleeHitPlayerProjectile = SwordBloodProjectile;
+	meleeHitProjectile = MeleeBluntProjectile;
+	meleeBlockedProjectile = MeleeMaceBlockProjectile;
+	meleeHitPlayerProjectile = MaceBloodProjectile;
 
 	meleePierceTerrain = false; //If we hit terrain hitreg will still go on until it hits a player
 	meleeSingleHitProjectile = false; //If pierce terrain is on, set this to true so it doesn't spam hit projectiles
@@ -108,7 +108,7 @@ datablock ShapeBaseImageData(CudgelImage)
 
 	stateName[2]                    = "Fire";
 	stateTransitionOnTimeout[2]     = "Ready";
-	stateTimeoutValue[2]            = 0.6;
+	stateTimeoutValue[2]            = 0.5;
 	stateFire[2]                    = true;
 	stateAllowImageChange[2]        = false;
 	stateScript[2]                  = "onFire";
@@ -129,7 +129,7 @@ datablock ShapeBaseImageData(CudgelImage)
 
 	stateName[5]                    = "ChargeFire";
 	stateTransitionOnTimeout[5]     = "Ready";
-	stateTimeoutValue[5]            = 0.6;
+	stateTimeoutValue[5]            = 0.5;
 	stateFire[5]                    = true;
 	stateAllowImageChange[5]        = false;
 	stateScript[5]                  = "onChargeFire";

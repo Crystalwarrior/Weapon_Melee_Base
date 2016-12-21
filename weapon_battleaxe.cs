@@ -22,6 +22,16 @@ datablock ItemData(BattleAxeItem)
 	canDrop = true;
 };
 
+datablock ProjectileData(AxeBloodProjectile)
+{
+	explosion = MeleeBloodExplosion;
+};
+
+function AxeBloodProjectile::onExplode(%this, %obj, %pos)
+{
+	ServerPlay3D(MeleeChopSound @ getRandom(1, 6), %pos);
+}
+
 ////////////////
 //weapon image//
 ////////////////
@@ -71,7 +81,7 @@ datablock ShapeBaseImageData(BattleAxeImage)
 
 	meleeHitProjectile = MeleeClaymoreProjectile;
 	meleeBlockedProjectile = MeleeClaymoreBlockProjectile;
-	meleeHitPlayerProjectile = SwordBloodProjectile;
+	meleeHitPlayerProjectile = AxeBloodProjectile;
 
 	meleePierceTerrain = false; //If we hit terrain hitreg will still go on until it hits a player
 	meleeSingleHitProjectile = false; //If pierce terrain is on, set this to true so it doesn't spam hit projectiles

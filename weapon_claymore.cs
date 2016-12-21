@@ -145,7 +145,7 @@ datablock ShapeBaseImageData(ClaymoreImage)
 
 	meleeHitProjectile = MeleeClaymoreProjectile;
 	meleeBlockedProjectile = MeleeClaymoreBlockProjectile;
-	meleeHitPlayerProjectile = SwordBloodProjectile;
+	meleeHitPlayerProjectile = AxeBloodProjectile;
 
 	meleePierceTerrain = false; //If we hit terrain hitreg will still go on until it hits a player
 	meleeSingleHitProjectile = false; //If pierce terrain is on, set this to true so it doesn't spam hit projectiles
