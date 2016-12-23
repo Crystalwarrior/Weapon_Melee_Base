@@ -11,6 +11,7 @@ exec("./weapon_dagger.cs");
 exec("./weapon_shortsword.cs");
 exec("./weapon_longsword.cs");
 exec("./weapon_claymore.cs");
+exec("./weapon_zweihander.cs");
 //Axes
 exec("./weapon_axe.cs");
 exec("./weapon_battleaxe.cs");

@@ -1,10 +1,10 @@
-datablock ItemData(ClaymoreItem)
+datablock ItemData(ZweihanderItem)
 {
 	category = "Weapon";  // Mission editor category
 	className = "Weapon"; // For inventory system
 
 	// Basic Item Properties
-	shapeFile = "./claymore.dts";
+	shapeFile = "./Zweihander.dts";
 	mass = 1;
 	density = 0.2;
 	elasticity = 0.2;
@@ -12,99 +12,23 @@ datablock ItemData(ClaymoreItem)
 	emap = true;
 
 	//gui stuff
-	uiName = "Claymore";
+	uiName = "Zweihander";
 	iconName = "./icon_sword";
 	doColorShift = true;
 	colorShiftColor = "0.471 0.471 0.471 1.000";
 
 	// Dynamic properties defined by the scripts
-	image = ClaymoreImage;
+	image = ZweihanderImage;
 	canDrop = true;
 };
-
-datablock AudioProfile(MeleeClaymoreHitSound1)
-{
-	filename	= "./sounds/large_sword_Blocked_01.wav";
-	description	= AudioClosest3d;
-	preload		= true;
-};
-datablock AudioProfile(MeleeClaymoreHitSound2)
-{
-	filename	= "./sounds/large_sword_Blocked_02.wav";
-	description	= AudioClosest3d;
-	preload		= true;
-};
-datablock AudioProfile(MeleeClaymoreHitSound3)
-{
-	filename	= "./sounds/large_sword_Blocked_03.wav";
-	description	= AudioClosest3d;
-	preload		= true;
-};
-datablock AudioProfile(MeleeClaymoreHitSound4)
-{
-	filename	= "./sounds/large_sword_Blocked_04.wav";
-	description	= AudioClosest3d;
-	preload		= true;
-};
-datablock AudioProfile(MeleeClaymoreHitSound5)
-{
-	filename	= "./sounds/large_sword_Blocked_05.wav";
-	description	= AudioClosest3d;
-	preload		= true;
-};
-datablock AudioProfile(MeleeClaymoreHitSound6)
-{
-	filename	= "./sounds/large_sword_Blocked_06.wav";
-	description	= AudioClosest3d;
-	preload		= true;
-};
-
-datablock AudioProfile(MeleeClaymoreBlockSound1)
-{
-	filename	= "./sounds/large_sword_blocking_01.wav";
-	description	= AudioClosest3d;
-	preload		= true;
-};
-datablock AudioProfile(MeleeClaymoreBlockSound2)
-{
-	filename	= "./sounds/large_sword_blocking_02.wav";
-	description	= AudioClosest3d;
-	preload		= true;
-};
-datablock AudioProfile(MeleeClaymoreBlockSound3)
-{
-	filename	= "./sounds/large_sword_blocking_03.wav";
-	description	= AudioClosest3d;
-	preload		= true;
-};
-
-datablock ProjectileData(MeleeClaymoreProjectile)
-{
-	explosion = MeleeSharpExplosion;
-};
-
-function MeleeClaymoreProjectile::onExplode(%this, %obj, %pos)
-{
-	ServerPlay3D(MeleeClaymoreHitSound @ getRandom(1, 6), %pos);
-}
-
-datablock ProjectileData(MeleeClaymoreBlockProjectile)
-{
-	explosion = BladeSmallMetalExplosion;
-};
-function MeleeClaymoreBlockProjectile::onExplode(%this, %obj, %pos)
-{
-	ServerPlay3D(MeleeClaymoreBlockSound @ getRandom(1, 3), %pos);
-}
-
 
 ////////////////
 //weapon image//
 ////////////////
-datablock ShapeBaseImageData(ClaymoreImage)
+datablock ShapeBaseImageData(ZweihanderImage)
 {
 	// Basic Item properties
-	shapeFile = "./claymore.dts";
+	shapeFile = "./Zweihander.dts";
 	emap = true;
 
 	// Specify mount point & offset for 3rd person, and eye offset
@@ -125,7 +49,7 @@ datablock ShapeBaseImageData(ClaymoreImage)
 	className = "WeaponImage";
 
 	// Projectile && Ammo.
-	item = ClaymoreItem;
+	item = ZweihanderItem;
 	ammo = " ";
 	projectile = MeleeClaymoreProjectile;
 	projectileType = Projectile;
@@ -141,7 +65,7 @@ datablock ShapeBaseImageData(ClaymoreImage)
 	meleeCanClash = true; //If stances are enabled, can it clash? Keep this on if you want dagger to clash it
 	meleeTick = 24; //The speed of schedule loop in MS. Change this to animation FPS
 
-	meleeRayLength = 2.35;
+	meleeRayLength = 3.25;
 
 	meleeHitProjectile = MeleeClaymoreProjectile;
 	meleeBlockedProjectile = MeleeClaymoreBlockProjectile;
@@ -152,7 +76,7 @@ datablock ShapeBaseImageData(ClaymoreImage)
 	meleeCanPierce = true; //All attacks pierce multiple targets
 
 	meleeBlockedVelocity = 7;
-	meleeBlockedStunTime = 1; //Length of stun in seconds (for self)
+	meleeBlockedStunTime = 1.5; //Length of stun in seconds (for self)
 
 	meleeBounceAnim[3] = "shiftAway"; //Animation in [%slot] when hitting something
 	meleeBounceAnim[1] = "leftRecoil";
@@ -174,7 +98,7 @@ datablock ShapeBaseImageData(ClaymoreImage)
 
 	// Initial start up state
 	stateName[0]                     = "Activate";
-	stateTimeoutValue[0]             = 0.6;
+	stateTimeoutValue[0]             = 0.8;
 	stateTransitionOnTimeout[0]      = "Ready";
 	stateSound[0]                    = MeleeSwordDrawSound;
 
@@ -186,7 +110,7 @@ datablock ShapeBaseImageData(ClaymoreImage)
 
 	stateName[2]                    = "Fire";
 	stateTransitionOnTimeout[2]     = "Ready";
-	stateTimeoutValue[2]            = 0.8;
+	stateTimeoutValue[2]            = 1;
 	stateFire[2]                    = true;
 	stateAllowImageChange[2]        = false;
 	stateScript[2]                  = "onFire";
@@ -207,7 +131,7 @@ datablock ShapeBaseImageData(ClaymoreImage)
 
 	stateName[5]                    = "ChargeFire";
 	stateTransitionOnTimeout[5]     = "Ready";
-	stateTimeoutValue[5]            = 0.8;
+	stateTimeoutValue[5]            = 1;
 	stateFire[5]                    = true;
 	stateAllowImageChange[5]        = false;
 	stateScript[5]                  = "onChargeFire";
@@ -219,32 +143,30 @@ datablock ShapeBaseImageData(ClaymoreImage)
 	stateScript[8]                  = "onNoAmmo";
 };
 
-function ClaymoreImage::onMount(%this, %obj, %slot)
+function ZweihanderImage::onMount(%this, %obj, %slot)
 {
 	%obj.playThread(2, "2hswing" @ (%obj.swingPhase + 1) % 2 + 1);
 	%obj.schedule(32, stopThread, 2);
 }
 
-function ClaymoreImage::onFire(%this, %obj, %slot)
+function ZweihanderImage::onFire(%this, %obj, %slot)
 {
 	%obj.swingPhase = (%obj.swingPhase + 1) % 2;
 	%obj.playthread(2, "2hswing" @ %obj.swingPhase + 1);
 	%this.schedule(64, MeleeHitregLoop, %obj, %slot, 18);
 }
 
-function ClaymoreImage::onCharge(%this, %obj, %slot)
+function ZweihanderImage::onCharge(%this, %obj, %slot)
 {
-	%obj.playthread(2, "2hstab1");
-	%obj.schedule(0, stopThread, 2);
 	%obj.playThread(3, plant);
 	serverPlay3D(MeleeChargeSound, %obj.getSlotTransform(%slot));
 }
 
-function ClaymoreImage::onChargeFire(%this, %obj, %slot)
+function ZweihanderImage::onChargeFire(%this, %obj, %slot)
 {
-	%obj.swingPhase = 3; //Force a swing phase for later non-charge hits
-	%obj.playthread(2, "2hstab1");
-	//%obj.playThread(3, activate);
+	%obj.swingPhase = 1;
+	%obj.playthread(2, "2hswing" @ %obj.swingPhase + 1);
+	%obj.schedule(200, playThread, 3, shiftTo);
 	%obj.chargeAttack = true;
 	%this.schedule(200, MeleeHitregLoop, %obj, %slot, 18, 60);
 }
