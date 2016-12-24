@@ -68,7 +68,7 @@ datablock ShapeBaseImageData(ZweihanderImage)
 	meleeTick = 24; //The speed of schedule loop in MS. Change this to animation FPS
 	meleeTracerCount = 2; //Amount of "tracer raycasts" for better hit detection. Note that this is better for wide swings as opposed to stabs.
 
-	meleeRayLength = 3.25;
+	meleeRayLength = 2.85;
 
 	meleeHitProjectile = MeleeClaymoreProjectile;
 	meleeBlockedProjectile = MeleeClaymoreBlockProjectile;
