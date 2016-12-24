@@ -16,6 +16,8 @@ package decMaxSpeed
 		if(isObject(%image = %obj.getMountedImage(0)))
 		{
 			%dec += %image.slowdown;
+			if (%dec < %image.desiredSlowdown)
+				%dec += %image.desiredSlowdown - %dec;
 		}
 		if(%obj.slowdown)
 		{

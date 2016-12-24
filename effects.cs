@@ -1,266 +1,3 @@
-//Sounds
-datablock AudioProfile(MeleeDrawSound)
-{
-	filename	= "./sounds/generic_draw_01.wav";
-	description	= AudioClosest3d;
-	preload		= true;
-};
-
-datablock AudioProfile(MeleeSwordDrawSound)
-{
-	filename	= "./sounds/Sword_Draw_01.wav";
-	description	= AudioClosest3d;
-	preload		= true;
-};
-
-
-datablock AudioProfile(MeleeBlockSound1)
-{
-	filename	= "./sounds/Broadsword_Blocking_01.wav";
-	description	= AudioClosest3d;
-	preload		= true;
-};
-datablock AudioProfile(MeleeBlockSound2)
-{
-	filename	= "./sounds/Broadsword_Blocking_02.wav";
-	description	= AudioClosest3d;
-	preload		= true;
-};
-datablock AudioProfile(MeleeBlockSound3)
-{
-	filename	= "./sounds/Broadsword_Blocking_03.wav";
-	description	= AudioClosest3d;
-	preload		= true;
-};
-
-datablock AudioProfile(MeleeSwordHitSound1)
-{
-	filename	= "./sounds/Broadsword_Blocked_01.wav";
-	description	= AudioClosest3d;
-	preload		= true;
-};
-datablock AudioProfile(MeleeSwordHitSound2)
-{
-	filename	= "./sounds/Broadsword_Blocked_02.wav";
-	description	= AudioClosest3d;
-	preload		= true;
-};
-datablock AudioProfile(MeleeSwordHitSound3)
-{
-	filename	= "./sounds/Broadsword_Blocked_03.wav";
-	description	= AudioClosest3d;
-	preload		= true;
-};
-datablock AudioProfile(MeleeSwordHitSound4)
-{
-	filename	= "./sounds/Broadsword_Blocked_04.wav";
-	description	= AudioClosest3d;
-	preload		= true;
-};
-datablock AudioProfile(MeleeSwordHitSound5)
-{
-	filename	= "./sounds/Broadsword_Blocked_05.wav";
-	description	= AudioClosest3d;
-	preload		= true;
-};
-datablock AudioProfile(MeleeSwordHitSound6)
-{
-	filename	= "./sounds/Broadsword_Blocked_06.wav";
-	description	= AudioClosest3d;
-	preload		= true;
-};
-
-
-datablock AudioProfile(MeleeMaceBlockSound1)
-{
-	filename	= "./sounds/Mace_Blocking_01.wav";
-	description	= AudioClosest3d;
-	preload		= true;
-};
-datablock AudioProfile(MeleeMaceBlockSound2)
-{
-	filename	= "./sounds/Mace_Blocking_02.wav";
-	description	= AudioClosest3d;
-	preload		= true;
-};
-datablock AudioProfile(MeleeMaceBlockSound3)
-{
-	filename	= "./sounds/Mace_Blocking_03.wav";
-	description	= AudioClosest3d;
-	preload		= true;
-};
-
-datablock AudioProfile(MeleeMaceHitSound1)
-{
-	filename	= "./sounds/Mace_Blocked_01.wav";
-	description	= AudioClosest3d;
-	preload		= true;
-};
-datablock AudioProfile(MeleeMaceHitSound2)
-{
-	filename	= "./sounds/Mace_Blocked_02.wav";
-	description	= AudioClosest3d;
-	preload		= true;
-};
-datablock AudioProfile(MeleeMaceHitSound3)
-{
-	filename	= "./sounds/Mace_Blocked_03.wav";
-	description	= AudioClosest3d;
-	preload		= true;
-};
-datablock AudioProfile(MeleeMaceHitSound4)
-{
-	filename	= "./sounds/Mace_Blocked_04.wav";
-	description	= AudioClosest3d;
-	preload		= true;
-};
-datablock AudioProfile(MeleeMaceHitSound5)
-{
-	filename	= "./sounds/Mace_Blocked_05.wav";
-	description	= AudioClosest3d;
-	preload		= true;
-};
-datablock AudioProfile(MeleeMaceHitSound6)
-{
-	filename	= "./sounds/Mace_Blocked_06.wav";
-	description	= AudioClosest3d;
-	preload		= true;
-};
-
-
-datablock AudioProfile(MeleeChargeSound)
-{
-	filename = "base/data/sound/clickPlant.wav";
-	description = AudioClosest3d;
-	preload = false;
-};
-
-datablock AudioProfile(MeleeStabSound1)
-{
-	filename = "./sounds/stab1.wav";
-	description = AudioClosest3d;
-	preload = false;
-};
-datablock AudioProfile(MeleeStabSound2)
-{
-	filename = "./sounds/stab2.wav";
-	description = AudioClosest3d;
-	preload = false;
-};
-datablock AudioProfile(MeleeStabSound3)
-{
-	filename = "./sounds/stab3.wav";
-	description = AudioClosest3d;
-	preload = false;
-};
-datablock AudioProfile(MeleeStabSound4)
-{
-	filename = "./sounds/stab4.wav";
-	description = AudioClosest3d;
-	preload = false;
-};
-datablock AudioProfile(MeleeStabSound5)
-{
-	filename = "./sounds/stab5.wav";
-	description = AudioClosest3d;
-	preload = false;
-};
-datablock AudioProfile(MeleeSlashSound1)
-{
-	filename = "./sounds/slash_01.wav";
-	description = AudioClosest3d;
-	preload = false;
-};
-datablock AudioProfile(MeleeSlashSound2)
-{
-	filename = "./sounds/slash_02.wav";
-	description = AudioClosest3d;
-	preload = false;
-};
-datablock AudioProfile(MeleeSlashSound3)
-{
-	filename = "./sounds/slash_03.wav";
-	description = AudioClosest3d;
-	preload = false;
-};
-datablock AudioProfile(MeleeSlashSound4)
-{
-	filename = "./sounds/slash_04.wav";
-	description = AudioClosest3d;
-	preload = false;
-};
-datablock AudioProfile(MeleeBashSound1)
-{
-	filename = "./sounds/blunt_01.wav";
-	description = AudioClosest3d;
-	preload = false;
-};
-datablock AudioProfile(MeleeBashSound2)
-{
-	filename = "./sounds/blunt_02.wav";
-	description = AudioClosest3d;
-	preload = false;
-};
-datablock AudioProfile(MeleeBashSound3)
-{
-	filename = "./sounds/blunt_03.wav";
-	description = AudioClosest3d;
-	preload = false;
-};
-datablock AudioProfile(MeleeBashSound4)
-{
-	filename = "./sounds/blunt_04.wav";
-	description = AudioClosest3d;
-	preload = false;
-};
-datablock AudioProfile(MeleeBashSound5)
-{
-	filename = "./sounds/blunt_05.wav";
-	description = AudioClosest3d;
-	preload = false;
-};
-datablock AudioProfile(MeleeBashSound6)
-{
-	filename = "./sounds/blunt_06.wav";
-	description = AudioClosest3d;
-	preload = false;
-};
-datablock AudioProfile(MeleeChopSound1)
-{
-	filename = "./sounds/chop_01.wav";
-	description = AudioClosest3d;
-	preload = false;
-};
-datablock AudioProfile(MeleeChopSound2)
-{
-	filename = "./sounds/chop_02.wav";
-	description = AudioClosest3d;
-	preload = false;
-};
-datablock AudioProfile(MeleeChopSound3)
-{
-	filename = "./sounds/chop_03.wav";
-	description = AudioClosest3d;
-	preload = false;
-};
-datablock AudioProfile(MeleeChopSound4)
-{
-	filename = "./sounds/chop_04.wav";
-	description = AudioClosest3d;
-	preload = false;
-};
-datablock AudioProfile(MeleeChopSound5)
-{
-	filename = "./sounds/chop_05.wav";
-	description = AudioClosest3d;
-	preload = false;
-};
-datablock AudioProfile(MeleeChopSound6)
-{
-	filename = "./sounds/chop_06.wav";
-	description = AudioClosest3d;
-	preload = false;
-};
 //Emitters and juicy stuff
 datablock ParticleData(MeleeSharpExplosionParticle)
 {
@@ -490,4 +227,82 @@ datablock ProjectileData(MeleeBlockProjectile)
 function MeleeBlockProjectile::onExplode(%this, %obj, %pos)
 {
 	ServerPlay3D(MeleeBlockSound @ getRandom(1, 3), %pos);
+}
+
+datablock ParticleData(MeleeChargeParticle)
+{
+	dragCoefficient = 0.5;
+	windCoefficient = 0;
+	gravityCoefficient = 1;
+	inheritedVelFactor = 1;
+	constantAcceleration = 0;
+	lifetimeMS = 500;
+	lifetimeVarianceMS = 0;
+	spinSpeed = 0;
+	spinRandomMin = 0;
+	spinRandomMax = 0;
+	useInvAlpha = 0;
+	animateTexture = 0;
+	framesPerSec = 1;
+	textureName = "base/data/particles/star1";
+	animTexName[0] = "base/data/particles/star1";
+	colors[0] = "1.000000 1.000000 0.000000 1.000000";
+	colors[1] = "1.000000 1.000000 0.000000 1.000000";
+	colors[2] = "1.000000 1.000000 0.000000 1.000000";
+	colors[3] = "1.000000 1.000000 1.000000 1.000000";
+	sizes[0] = "0.897272";
+	sizes[1] = "0.897272";
+	sizes[2] = "0.897272";
+	sizes[3] = "1";
+	times[0] = "0";
+	times[1] = "0.2";
+	times[2] = "1";
+	times[3] = "2";
+};
+
+datablock ParticleEmitterData(MeleeChargeEmitter)
+{
+	ejectionPeriodMS = 35;
+	periodVarianceMS = 0;
+	ejectionVelocity = 8;
+	velocityVariance = 0;
+	ejectionOffset   = 0.0;
+	thetaMin         = 0;
+	thetaMax         = 0;
+	phiReferenceVel  = 0;
+	phiVariance      = 0;
+	overrideAdvance = false;
+	particles = MeleeChargeParticle;
+
+	uiName = "";
+};
+datablock ExplosionData(MeleeChargeExplosion)
+{
+	// soundProfile = bullethitSound;
+	lifeTimeMS = 150;
+	particleEmitter = MeleeChargeEmitter;
+	particleDensity = 5;
+	particleRadius = 0;
+	faceViewer     = true;
+	explosionScale = "1 1 1";
+	shakeCamera = false;
+};
+
+datablock ProjectileData(MeleeChargeProjectile)
+{
+	explosion = MeleeChargeExplosion;
+	muzzleVelocity = 50;
+};
+
+function Player::doChargeEmitter(%obj, %pos)
+{
+	%projectile = new projectile() {
+		dataBlock = MeleeChargeProjectile;
+		initialPosition = %pos;
+		initialVelocity = %obj.getVelocity();
+		sourceObject = %obj;
+		client = %obj.client;
+	};
+	MissionCleanup.add(%projectile);
+	%projectile.explode();
 }

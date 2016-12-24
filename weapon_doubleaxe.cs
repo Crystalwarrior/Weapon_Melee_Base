@@ -66,6 +66,7 @@ datablock ShapeBaseImageData(DoubleAxeImage)
 	meleeStances = false; //Use stance system?
 	meleeCanClash = true; //If stances are enabled, can it clash? Keep this on if you want dagger to clash it
 	meleeTick = 24; //The speed of schedule loop in MS. Change this to animation FPS
+	meleeTracerCount = 2; //Amount of "tracer raycasts" for better hit detection. Note that this is better for wide swings as opposed to stabs.
 
 	meleeRayLength = 2;
 
@@ -156,6 +157,7 @@ function DoubleAxeImage::onFire(%this, %obj, %slot)
 	%obj.swingPhase = (%obj.swingPhase + 1) % 2;
 	%obj.playthread(2, "2hswing" @ %obj.swingPhase + 1);
 	%this.schedule(64, MeleeHitregLoop, %obj, %slot, 18);
+	%obj.schedule(200, playAudio, 2, MesserSwingSound @ getRandom(1, 3));
 }
 
 function DoubleAxeImage::onCharge(%this, %obj, %slot)
@@ -164,6 +166,7 @@ function DoubleAxeImage::onCharge(%this, %obj, %slot)
 	%obj.schedule(0, stopThread, 2);
 	%obj.playThread(3, plant);
 	serverPlay3D(MeleeChargeSound, %obj.getSlotTransform(%slot));
+	%obj.doChargeEmitter(%obj.getSlotTransform(%slot));
 }
 
 function DoubleAxeImage::onChargeFire(%this, %obj, %slot)
@@ -173,4 +176,5 @@ function DoubleAxeImage::onChargeFire(%this, %obj, %slot)
 	//%obj.playThread(3, activate);
 	%obj.chargeAttack = true;
 	%this.schedule(200, MeleeHitregLoop, %obj, %slot, 18, 65);
+	%obj.schedule(200, playAudio, 2, AxeSwingSound);
 }

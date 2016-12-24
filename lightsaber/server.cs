@@ -311,6 +311,7 @@ datablock ShapeBaseImageData(lightSaberImage)
 	meleeStances = true; //Use stance system?
 	meleeCanClash = true; //If stances are enabled, can it clash?
 	meleeTick = 24; //The speed of schedule loop in MS. Change this to animation FPS
+	meleeTracerCount = 2; //Amount of "tracer raycasts" for better hit detection. Note that this is better for wide swings as opposed to stabs.
 
 	meleeRayLength = 2;
 
@@ -323,6 +324,8 @@ datablock ShapeBaseImageData(lightSaberImage)
 
 	meleeBlockedVelocity = 7;
 	meleeBlockedStunTime = 0.600; //Length of stun in seconds
+
+	meleeCanPierce = true; //All attacks pierce multiple targets
 
 	//raise your arm up or not
 	armReady = true;

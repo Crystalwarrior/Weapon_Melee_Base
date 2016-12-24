@@ -74,6 +74,7 @@ datablock ShapeBaseImageData(DaggerImage)
 	meleeStances = true; //Use stance system?
 	meleeCanClash = false; //If stances are enabled, can it clash?
 	meleeTick = 24; //The speed of schedule loop in MS. Change this to animation FPS
+	meleeTracerCount = 0; //Amount of "tracer raycasts" for better hit detection. Note that this is better for wide swings as opposed to stabs.
 
 	meleeRayLength = 1.3;
 
@@ -197,7 +198,8 @@ function DaggerImage::onFire(%this, %obj, %slot)
 		%obj.playthread(2, swingdagger @ %obj.swingPhase + 1);
 		%damage = 20;
 	}
-	
+	%obj.stopAudio(2);
+	%obj.playAudio(2, DaggerSwingSound);
 	%this.MeleeHitregLoop(%obj, %slot, 12, %damage);
 }
 
@@ -209,6 +211,7 @@ function DaggerImage::onCharge(%this, %obj, %slot)
 	%obj.schedule(0, stopThread, 2);
 	%obj.chargeAttack = true;
 	serverPlay3D(MeleeChargeSound, %obj.getSlotTransform(%slot));
+	%obj.doChargeEmitter(%obj.getSlotTransform(%slot));
 }
 
 function DaggerImage::MeleeDamage(%this, %obj, %slot, %col, %damage, %pos)

@@ -64,6 +64,7 @@ datablock ShapeBaseImageData(MeleeSpearImage)
 	meleeStances = false; //Use stance system?
 	meleeCanClash = true; //If stances are enabled, can it clash? Keep this on if you want dagger to clash it
 	meleeTick = 24; //The speed of schedule loop in MS. Change this to animation FPS
+	meleeTracerCount = 0; //Amount of "tracer raycasts" for better hit detection. Note that this is better for wide swings as opposed to stabs.
 
 	meleeRayLength = 2.8;
 
@@ -151,6 +152,7 @@ function MeleeSpearImage::onFire(%this, %obj, %slot)
 {	
 	%obj.playthread(2, pikeswing1);
 	%this.MeleeHitregLoop(%obj, %slot, 12);
+	%obj.playAudio(2, HalberdSwingSound @ getRandom(1, 3));
 }
 
 function MeleeSpearImage::onCharge(%this, %obj, %slot)
@@ -159,6 +161,7 @@ function MeleeSpearImage::onCharge(%this, %obj, %slot)
 	%obj.schedule(0, stopThread, 2);
 	%obj.playThread(3, plant);
 	serverPlay3D(MeleeChargeSound, %obj.getSlotTransform(%slot));
+	%obj.doChargeEmitter(%obj.getSlotTransform(%slot));
 }
 
 function MeleeSpearImage::onChargeFire(%this, %obj, %slot)
@@ -167,4 +170,5 @@ function MeleeSpearImage::onChargeFire(%this, %obj, %slot)
 	%obj.playThread(3, plant);
 	%obj.chargeAttack = true;
 	%this.MeleeHitregLoop(%obj, %slot, 12, 60, true);
+	%obj.schedule(50, playAudio, 2, maulSwingSound1);
 }

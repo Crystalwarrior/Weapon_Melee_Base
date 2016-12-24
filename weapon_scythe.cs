@@ -64,6 +64,7 @@ datablock ShapeBaseImageData(ScytheImage)
 	meleeStances = false; //Use stance system?
 	meleeCanClash = true; //If stances are enabled, can it clash? Keep this on if you want dagger to clash it
 	meleeTick = 24; //The speed of schedule loop in MS. Change this to animation FPS
+	meleeTracerCount = 2; //Amount of "tracer raycasts" for better hit detection. Note that this is better for wide swings as opposed to stabs.
 
 	meleeRayLength = 2.6;
 
@@ -152,6 +153,7 @@ function ScytheImage::onFire(%this, %obj, %slot)
 {	
 	%obj.playthread(2, "scytheswing1");
 	%this.schedule(100, MeleeHitregLoop, %obj, %slot, 12);
+	%obj.playAudio(2, HalberdSwingSound @ getRandom(1, 3));
 }
 
 function ScytheImage::onCharge(%this, %obj, %slot)
@@ -160,6 +162,7 @@ function ScytheImage::onCharge(%this, %obj, %slot)
 	%obj.schedule(0, stopThread, 2);
 	%obj.playThread(3, plant);
 	serverPlay3D(MeleeChargeSound, %obj.getSlotTransform(%slot));
+	%obj.doChargeEmitter(%obj.getSlotTransform(%slot));
 }
 
 function ScytheImage::onChargeFire(%this, %obj, %slot)
@@ -167,4 +170,5 @@ function ScytheImage::onChargeFire(%this, %obj, %slot)
 	%obj.playthread(2, "scytheswing2");
 	%obj.chargeAttack = true;
 	%this.schedule(100, MeleeHitregLoop, %obj, %slot, 12, 60);
+	%obj.schedule(150, playAudio, 2, maulSwingSound2);
 }

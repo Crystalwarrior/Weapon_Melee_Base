@@ -1,4 +1,5 @@
 exec("./debug/init.cs");
+exec("./sounds.cs");
 exec("./effects.cs");
 exec("./support_decMaxSpeeds.cs");
 

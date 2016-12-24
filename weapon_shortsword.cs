@@ -74,6 +74,7 @@ datablock ShapeBaseImageData(ShortSwordImage)
 	meleeStances = true; //Use stance system?
 	meleeCanClash = true; //If stances are enabled, can it clash? Keep this on if you want dagger to clash it
 	meleeTick = 24; //The speed of schedule loop in MS. Change this to animation FPS
+	meleeTracerCount = 2; //Amount of "tracer raycasts" for better hit detection. Note that this is better for wide swings as opposed to stabs.
 
 	meleeRayLength = 1.73895;
 
@@ -174,6 +175,8 @@ function ShortSwordImage::onFire(%this, %obj, %slot)
 	%obj.swingPhase = (%obj.swingPhase + 1) % 2;
 	%obj.playthread(2, tswing @ %obj.swingPhase + (%obj.meleeStance ? 3 : 1));
 	%this.MeleeHitregLoop(%obj, %slot, 12);
+	%obj.stopAudio(2);
+	%obj.playAudio(2, ShortswordSwingSound @ getRandom(1, 3));
 }
 
 function ShortSwordImage::onCharge(%this, %obj, %slot)
@@ -184,6 +187,7 @@ function ShortSwordImage::onCharge(%this, %obj, %slot)
 	%obj.schedule(0, stopThread, 2);
 	%obj.playThread(3, plant);
 	serverPlay3D(MeleeChargeSound, %obj.getSlotTransform(%slot));
+	%obj.doChargeEmitter(%obj.getSlotTransform(%slot));
 }
 
 function ShortSwordImage::onChargeFire(%this, %obj, %slot)
@@ -191,7 +195,12 @@ function ShortSwordImage::onChargeFire(%this, %obj, %slot)
 	%obj.playthread(2, "2h" @ (!%obj.meleeStance ? "stab1" : ("swing" @ %obj.swingPhase+1)));
 	%obj.chargeAttack = true;
 	%frames = 12;
+	%delay = 32;
 	if(%obj.meleeStance)
+	{
 		%frames = 18;
+		%delay = 200;
+	}
 	%this.MeleeHitregLoop(%obj, %slot, %frames, 40);
+	%obj.schedule(%delay, playAudio, 2, SwordSwingSound @ getRandom(1, 3));
 }

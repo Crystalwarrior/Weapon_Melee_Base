@@ -58,9 +58,9 @@ datablock ShapeBaseImageData(PikeImage)
 	melee = true;
 
 	//Special melee hitreg system
-	directDamage = 35;
+	directDamage = 40;
 
-	slowdown = 2; //How much slowdown is applied when this is wielded?
+	desiredSlowdown = 2; //How much slowdown is applied when this is wielded. Don't go above that limit, though.
 
 	//meleeKnockbackVelocity = 0;
 
@@ -68,6 +68,7 @@ datablock ShapeBaseImageData(PikeImage)
 	meleeStances = false; //Use stance system?
 	meleeCanClash = false; //If stances are enabled, can it clash? Keep this on if you want dagger to clash it
 	meleeTick = 24; //The speed of schedule loop in MS. Change this to animation FPS
+	meleeTracerCount = 0; //Amount of "tracer raycasts" for better hit detection. Note that this is better for wide swings as opposed to stabs.
 
 	meleeRayLength = 5;
 
@@ -133,7 +134,7 @@ datablock ShapeBaseImageData(PikeImage)
 
 	stateName[5]                    = "ChargeFire";
 	stateTransitionOnTimeout[5]     = "Ready";
-	stateTimeoutValue[5]            = 1.3;
+	stateTimeoutValue[5]            = 1;
 	stateFire[5]                    = true;
 	stateAllowImageChange[5]        = false;
 	stateScript[5]                  = "onChargeFire";
@@ -155,6 +156,7 @@ function PikeImage::onFire(%this, %obj, %slot)
 {	
 	%obj.playthread(2, pikeswing2);
 	%this.MeleeHitregLoop(%obj, %slot, 12);
+	%obj.schedule(50, playAudio, 2, maulSwingSound3);
 }
 
 function PikeImage::onCharge(%this, %obj, %slot)
@@ -163,6 +165,7 @@ function PikeImage::onCharge(%this, %obj, %slot)
 	%obj.schedule(0, stopThread, 2);
 	%obj.playThread(3, plant);
 	serverPlay3D(MeleeChargeSound, %obj.getSlotTransform(%slot));
+	%obj.doChargeEmitter(%obj.getSlotTransform(%slot));
 }
 
 function PikeImage::onChargeFire(%this, %obj, %slot)
@@ -171,4 +174,5 @@ function PikeImage::onChargeFire(%this, %obj, %slot)
 	%obj.playThread(3, plant);
 	%obj.chargeAttack = true;
 	%this.MeleeHitregLoop(%obj, %slot, 12, 60);
+	%obj.schedule(50, playAudio, 2, maulSwingSound1);
 }
