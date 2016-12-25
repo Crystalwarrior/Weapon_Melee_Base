@@ -196,11 +196,11 @@ function WeaponImage::MeleeHitregLoop(%this, %obj, %slot, %frames, %damage, %pie
 	if($ComplexDebug)
 	{
 		if (!isObject(%obj.line))
-				%obj.line = createShape(CubeGlowShapeData, "1 1 1 0.5");
+				%obj.line = createShape(CubeGlowShapeData, "1 0 0 1");
 		if (!isObject(%obj.line2) && %this.meleeTracerCount >= 1)
-				%obj.line2 = createShape(CubeGlowShapeData, "1 1 1 1");
+				%obj.line2 = createShape(CubeGlowShapeData, "1 1 0 1");
 		if (!isObject(%obj.line3) && %this.meleeTracerCount >= 2)
-				%obj.line3 = createShape(CubeGlowShapeData, "0.5 1 1 1");
+				%obj.line3 = createShape(CubeGlowShapeData, "0 1 1 1");
 	}
 
 	%a = getWords(%obj.getSlotTransform(%slot), 0, 2);

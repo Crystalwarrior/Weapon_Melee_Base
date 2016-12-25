@@ -99,7 +99,7 @@ datablock ShapeBaseImageData(CudgelImage)
 	stateName[0]                     = "Activate";
 	stateTimeoutValue[0]             = 0.6;
 	stateTransitionOnTimeout[0]      = "Ready";
-	stateSound[0]                    = MeleeSwordDrawSound;
+	stateSound[0]                    = MeleeDrawSound;
 
 	stateName[1]                     = "Ready";
 	stateTransitionOnTriggerDown[1]  = "CheckCharge";
