@@ -185,8 +185,8 @@ function ShortSwordImage::onFire(%this, %obj, %slot)
 function ShortSwordImage::onCharge(%this, %obj, %slot)
 {
 	if(%obj.meleeStance)
-		%obj.swingPhase = (%obj.swingPhase + 1) % 2;
-
+		%obj.swingPhase++;
+	%obj.swingPhase = %obj.swingPhase % 2;
 	%seq = "2h" @ (!%obj.meleeStance ? "stab1" : ("swing" @ %obj.swingPhase+1));
 	%shieldCheck = isObject(%obj.getMountedImage(3)) && %obj.getMountedImage(3).isShield;
 	if(%shieldCheck)
