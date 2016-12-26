@@ -57,6 +57,9 @@ datablock ShapeBaseImageData(ZweihanderImage)
 	//melee particles shoot from eye node for consistancy
 	melee = true;
 
+	//For shields
+	twoHanded = true;
+
 	//Special melee hitreg system
 	directDamage = 40;
 
@@ -157,7 +160,7 @@ function ZweihanderImage::onFire(%this, %obj, %slot)
 	%obj.swingPhase = (%obj.swingPhase + 1) % 2;
 	%obj.playthread(2, "2hswing" @ %obj.swingPhase + 1);
 	%this.schedule(64, MeleeHitregLoop, %obj, %slot, 18);
-	%obj.schedule(200, playAudio, 2, ClaymoreSwingSound @ getRandom(1, 3));
+	%obj.swingSchedule = %obj.schedule(200, playAudio, 2, ClaymoreSwingSound @ getRandom(1, 3));
 }
 
 function ZweihanderImage::onCharge(%this, %obj, %slot)
@@ -174,5 +177,5 @@ function ZweihanderImage::onChargeFire(%this, %obj, %slot)
 	%obj.schedule(200, playThread, 3, shiftTo);
 	%obj.chargeAttack = true;
 	%this.schedule(200, MeleeHitregLoop, %obj, %slot, 18, 60);
-	%obj.schedule(150, playAudio, 2, ClaymoreHeavySwingSound);
+	%obj.swingSchedule = %obj.schedule(150, playAudio, 2, ClaymoreHeavySwingSound);
 }

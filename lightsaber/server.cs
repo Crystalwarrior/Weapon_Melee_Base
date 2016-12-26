@@ -409,10 +409,6 @@ function lightSaberImage::onFire(%this, %obj, %slot)
 //dumb attempt at making projectile deflection below
 package lightSaberPackage
 {
-	function projectileData::damage(%this, %obj, %col, %pos, %fade, %normal)
-	{
-		parent::damage(%this, %obj, %col, %pos, %fade, %normal);
-	}
 	function projectileData::onCollision(%this, %obj, %col, %pos, %fade, %normal)
 	{
 		if (%col.getType() & $TypeMasks::PlayerObjectType && %col.getMountedImage(0) == lightSaberImage.getID() && %col.activeSwing)

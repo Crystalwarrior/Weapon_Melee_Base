@@ -57,6 +57,9 @@ datablock ShapeBaseImageData(PitchforkImage)
 	//melee particles shoot from eye node for consistancy
 	melee = true;
 
+	//For shields
+	twoHanded = true;
+
 	//Special melee hitreg system
 	directDamage = 30;
 
@@ -153,7 +156,7 @@ function PitchforkImage::onFire(%this, %obj, %slot)
 {	
 	%obj.playthread(2, pikeswing1);
 	%this.MeleeHitregLoop(%obj, %slot, 8);
-	%obj.schedule(50, playAudio, 2, WarhammerSwingSound @ getRandom(1, 3));
+	%obj.swingSchedule = %obj.schedule(50, playAudio, 2, WarhammerSwingSound @ getRandom(1, 3));
 }
 
 function PitchforkImage::onCharge(%this, %obj, %slot)
@@ -171,5 +174,5 @@ function PitchforkImage::onChargeFire(%this, %obj, %slot)
 	%obj.playThread(3, plant);
 	%obj.chargeAttack = true;
 	%this.MeleeHitregLoop(%obj, %slot, 10, 50, true);
-	%obj.schedule(50, playAudio, 2, HalberdSwingSound @ 2);
+	%obj.swingSchedule = %obj.schedule(50, playAudio, 2, HalberdSwingSound @ 2);
 }

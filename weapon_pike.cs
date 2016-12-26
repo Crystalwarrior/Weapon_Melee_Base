@@ -57,6 +57,9 @@ datablock ShapeBaseImageData(PikeImage)
 	//melee particles shoot from eye node for consistancy
 	melee = true;
 
+	//For shields
+	twoHanded = true;
+
 	//Special melee hitreg system
 	directDamage = 40;
 
@@ -156,7 +159,7 @@ function PikeImage::onFire(%this, %obj, %slot)
 {	
 	%obj.playthread(2, pikeswing2);
 	%this.MeleeHitregLoop(%obj, %slot, 12);
-	%obj.schedule(50, playAudio, 2, maulSwingSound3);
+	%obj.swingSchedule = %obj.schedule(50, playAudio, 2, maulSwingSound3);
 }
 
 function PikeImage::onCharge(%this, %obj, %slot)
@@ -174,5 +177,5 @@ function PikeImage::onChargeFire(%this, %obj, %slot)
 	%obj.playThread(3, plant);
 	%obj.chargeAttack = true;
 	%this.MeleeHitregLoop(%obj, %slot, 12, 60);
-	%obj.schedule(50, playAudio, 2, maulSwingSound1);
+	%obj.swingSchedule = %obj.schedule(50, playAudio, 2, maulSwingSound1);
 }

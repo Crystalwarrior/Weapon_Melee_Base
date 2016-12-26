@@ -64,6 +64,12 @@ function WeaponImage::stopMeleeHitregLoop(%this, %obj, %slot)
 function WeaponImage::MeleeCheckClash(%this, %obj, %slot, %col)
 {
 	%targImg = %col.getMountedImage(%slot);
+	%shieldImg = %col.getMountedImage(3);
+	if(isObject(%shieldImg) && %shieldImg.isShield && getSimTime() - %col.lastShield <= $ShieldBlockTime) //We got a shielder here
+	{
+		if(%shieldImg.onBlock(%col, %slot, %obj))
+			return true;
+	}
 	if (%obj.chargeAttack || %col.chargeAttack)
 		return false; //Charge attacks prevent clashing for everything
 	return %obj.activeSwing && %this.meleeStances && %this.meleeCanClash && isObject(%targImg) && %targImg.meleeStances && %targImg.meleeCanClash && %obj.meleeStance == !%col.meleeStance && %col.activeSwing;
@@ -82,15 +88,22 @@ function WeaponImage::onImpact(%this, %obj, %slot, %col, %pos, %normal, %damage,
 		if(%piercecheck)
 		{
 			%targImg = %col.getMountedImage(%slot);
-			if (%this.MeleeCheckClash(%obj, %slot, %col) || isObject(%targImg) && %targImg.MeleeCheckClash(%col, %slot, %obj))
+			if (%this.MeleeCheckClash(%obj, %slot, %col) || (isObject(%targImg) && %targImg.MeleeCheckClash(%col, %slot, %obj)))
 			{
 				%start = %obj.getPosition();
 				%end = %col.getPosition();
-				%velmult = %this.meleeBlockedVelocity;
-				%col.setVelocity(vectorAdd(vectorScale(vectorNormalize(vectorSub(%end, %start)), %velmult), "0 0 3"));
-				%obj.setVelocity(vectorAdd(vectorScale(vectorNormalize(vectorSub(%start, %end)), %velmult), "0 0 3"));
+				%vel = %targImg.meleeBlockedVelocity;
+
+				if(isObject(%shieldImg = %col.getMountedImage(3)) && %shieldImg.isShield)
+					%vel = %this.meleeBlockedVelocity * %shieldImg.impulseScale;
+
+				%col.setVelocity(vectorAdd(vectorScale(vectorNormalize(vectorSub(%end, %start)), %vel), "0 0 3"));
+				%obj.setVelocity(vectorAdd(vectorScale(vectorNormalize(vectorSub(%start, %end)), %this.meleeBlockedVelocity), "0 0 3"));
 				%this.clash(%obj, %slot);
-				%targImg.clash(%col, %slot);
+				if(isObject(%targImg) && isFunction(%targImg.getName(), "clash"))
+				{
+					%targImg.clash(%col, %slot);
+				}
 				%datablock = %this.meleeBlockedProjectile;
 			}
 			else
@@ -151,6 +164,8 @@ function WeaponImage::onImpact(%this, %obj, %slot, %col, %pos, %normal, %damage,
 
 function WeaponImage::Clash(%this, %obj, %slot)
 {
+	cancel(%obj.swingSchedule);
+	//%obj.stopAudio(2);
 	%obj.stopThread(2);
 	%obj.stopping = true;
 	%obj.setImageLoaded(%slot, 0);
@@ -243,10 +258,11 @@ function WeaponImage::MeleeHitregLoop(%this, %obj, %slot, %frames, %damage, %pie
 	%swingspeed = vectorDist(%last, %b);
 	if ((%ray || %ray2 || %ray3) && (!%this.meleeIsFreeform || %swingspeed >= 0.2))
 	{
-		if(!%ray && %ray2)
-			%ray = %ray2;
-		else if(!%ray && %ray3)
+		if(%ray3)
 			%ray = %ray3;
+
+		if(%ray2)
+			%ray = %ray2;
 
 		%normal = normalFromRaycast(%ray);
 		%pos = getWords(%ray, 1, 3);

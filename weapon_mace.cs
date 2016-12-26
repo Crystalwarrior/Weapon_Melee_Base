@@ -167,16 +167,24 @@ datablock ShapeBaseImageData(MaceImage)
 function MaceImage::onMount(%this, %obj, %slot)
 {
 	fixArmReady(%obj);
-	%obj.playthread(2, "2hswing" @ %obj.swingPhase + 1);
+	%shieldCheck = isObject(%obj.getMountedImage(3)) && %obj.getMountedImage(3).isShield;
+	%seq = "2hswing";
+	if(%shieldCheck)
+		%seq = "bswing";
+	%obj.playthread(2, %seq @ %obj.swingPhase + 1);
 	%obj.schedule(32, stopThread, 2);
 }
 
 function MaceImage::onFire(%this, %obj, %slot)
 {
 	%obj.swingPhase = (%obj.swingPhase + 1) % 2;
-	%obj.playthread(2, "2hswing" @ %obj.swingPhase + 1);
+	%shieldCheck = isObject(%obj.getMountedImage(3)) && %obj.getMountedImage(3).isShield;
+	%seq = "2hswing";
+	if(%shieldCheck)
+		%seq = "bswing";
+	%obj.playthread(2, %seq @ %obj.swingPhase + 1);
 	%this.schedule(200, MeleeHitregLoop, %obj, %slot, 12);
-	%obj.schedule(200, playAudio, 2, MaceSwingSound @ getRandom(1, 3));
+	%obj.swingSchedule = %obj.schedule(200, playAudio, 2, MaceSwingSound @ getRandom(1, 3));
 }
 
 function MaceImage::onCharge(%this, %obj, %slot)
@@ -189,11 +197,15 @@ function MaceImage::onCharge(%this, %obj, %slot)
 function MaceImage::onChargeFire(%this, %obj, %slot)
 {
 	%obj.swingPhase = (%obj.swingPhase + 1) % 2;
-	%obj.playthread(2, "2hswing" @ %obj.swingPhase + 1);
+	%shieldCheck = isObject(%obj.getMountedImage(3)) && %obj.getMountedImage(3).isShield;
+	%seq = "2hswing";
+	if(%shieldCheck)
+		%seq = "bswing";
+	%obj.playthread(2, %seq @ %obj.swingPhase + 1);
 	%obj.playThread(3, activate);
 	%obj.chargeAttack = true;
 	%this.schedule(200, MeleeHitregLoop, %obj, %slot, 12, 60);
-	%obj.schedule(150, playAudio, 2, maulSwingSound2);
+	%obj.swingSchedule = %obj.schedule(150, playAudio, 2, maulSwingSound2);
 }
 
 function MaceImage::MeleeDamage(%this, %obj, %slot, %col, %damage, %pos)

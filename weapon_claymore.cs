@@ -133,6 +133,9 @@ datablock ShapeBaseImageData(ClaymoreImage)
 	//melee particles shoot from eye node for consistancy
 	melee = true;
 
+	//For shields
+	twoHanded = true;
+
 	//Special melee hitreg system
 	directDamage = 40;
 
@@ -231,7 +234,7 @@ function ClaymoreImage::onFire(%this, %obj, %slot)
 	%obj.swingPhase = (%obj.swingPhase + 1) % 2;
 	%obj.playthread(2, "2hswing" @ %obj.swingPhase + 1);
 	%this.schedule(64, MeleeHitregLoop, %obj, %slot, 18);
-	%obj.schedule(200, playAudio, 2, longswordSwingSound @ getRandom(1, 3));
+	%obj.swingSchedule = %obj.schedule(200, playAudio, 2, longswordSwingSound @ getRandom(1, 3));
 }
 
 function ClaymoreImage::onCharge(%this, %obj, %slot)
@@ -250,5 +253,5 @@ function ClaymoreImage::onChargeFire(%this, %obj, %slot)
 	//%obj.playThread(3, activate);
 	%obj.chargeAttack = true;
 	%this.schedule(200, MeleeHitregLoop, %obj, %slot, 18, 60);
-	%obj.schedule(50, playAudio, 2, longswordHeavySwingSound);
+	%obj.swingSchedule = %obj.schedule(50, playAudio, 2, longswordHeavySwingSound);
 }

@@ -57,6 +57,9 @@ datablock ShapeBaseImageData(ScytheImage)
 	//melee particles shoot from eye node for consistancy
 	melee = true;
 
+	//For shields
+	twoHanded = true;
+
 	//Special melee hitreg system
 	directDamage = 35;
 
@@ -170,5 +173,5 @@ function ScytheImage::onChargeFire(%this, %obj, %slot)
 	%obj.playthread(2, "scytheswing2");
 	%obj.chargeAttack = true;
 	%this.schedule(100, MeleeHitregLoop, %obj, %slot, 12, 60);
-	%obj.schedule(150, playAudio, 2, maulSwingSound2);
+	%obj.swingSchedule = %obj.schedule(150, playAudio, 2, maulSwingSound2);
 }

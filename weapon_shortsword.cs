@@ -154,6 +154,9 @@ datablock ShapeBaseImageData(ShortSwordImage)
 
 function ShortSwordImage::onMount(%this, %obj, %slot)
 {
+	%shieldCheck = isObject(%obj.getMountedImage(3)) && %obj.getMountedImage(3).isShield;
+	if(%shieldCheck)
+		%obj.meleeStance = 1;
 	%obj.playThread(2, tswing @ (%obj.swingPhase + 1) % 2 + (%obj.meleeStance ? 3 : 1));
 	%obj.schedule(32, stopThread, 2);
 }
@@ -183,7 +186,12 @@ function ShortSwordImage::onCharge(%this, %obj, %slot)
 {
 	if(%obj.meleeStance)
 		%obj.swingPhase = (%obj.swingPhase + 1) % 2;
-	%obj.playthread(2, "2h" @ (!%obj.meleeStance ? "stab1" : ("swing" @ %obj.swingPhase+1)));
+
+	%seq = "2h" @ (!%obj.meleeStance ? "stab1" : ("swing" @ %obj.swingPhase+1));
+	%shieldCheck = isObject(%obj.getMountedImage(3)) && %obj.getMountedImage(3).isShield;
+	if(%shieldCheck)
+		%seq = "bswing" @ %obj.swingPhase + 1;
+	%obj.playthread(2, %seq);
 	%obj.schedule(0, stopThread, 2);
 	%obj.playThread(3, plant);
 	serverPlay3D(MeleeChargeSound, %obj.getSlotTransform(%slot));
@@ -192,15 +200,19 @@ function ShortSwordImage::onCharge(%this, %obj, %slot)
 
 function ShortSwordImage::onChargeFire(%this, %obj, %slot)
 {
-	%obj.playthread(2, "2h" @ (!%obj.meleeStance ? "stab1" : ("swing" @ %obj.swingPhase+1)));
+	%seq = "2h" @ (!%obj.meleeStance ? "stab1" : ("swing" @ %obj.swingPhase+1));
+	%shieldCheck = isObject(%obj.getMountedImage(3)) && %obj.getMountedImage(3).isShield;
+	if(%shieldCheck)
+		%seq = "bswing" @ %obj.swingPhase + 1;
+	%obj.playthread(2, %seq);
 	%obj.chargeAttack = true;
 	%frames = 12;
 	%delay = 32;
-	if(%obj.meleeStance)
+	if(%obj.meleeStance || %shieldCheck)
 	{
 		%frames = 18;
 		%delay = 200;
 	}
 	%this.MeleeHitregLoop(%obj, %slot, %frames, 40);
-	%obj.schedule(%delay, playAudio, 2, SwordSwingSound @ getRandom(1, 3));
+	%obj.swingSchedule = %obj.schedule(%delay, playAudio, 2, SwordSwingSound @ getRandom(1, 3));
 }

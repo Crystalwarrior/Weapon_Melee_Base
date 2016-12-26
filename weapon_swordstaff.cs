@@ -57,8 +57,11 @@ datablock ShapeBaseImageData(SwordstaffImage)
 	//melee particles shoot from eye node for consistancy
 	melee = true;
 
+	//For shields
+	twoHanded = true;
+
 	//Special melee hitreg system
-	directDamage = 25;
+	directDamage = 35;
 
 	meleeEnabled = true;
 	meleeStances = false; //Use stance system?
@@ -154,7 +157,7 @@ function SwordstaffImage::onFire(%this, %obj, %slot)
 	%obj.swingPhase = (%obj.swingPhase + 1) % 2;
 	%obj.playthread(2, spearswing @ %obj.swingPhase + 1);
 	%this.schedule(100, MeleeHitregLoop, %obj, %slot, 12);
-	%obj.playAudio(2, HalberdSwingSound @ getRandom(1, 3));
+	%obj.swingSchedule = %obj.playAudio(2, HalberdSwingSound @ getRandom(1, 3));
 }
 
 function SwordstaffImage::onCharge(%this, %obj, %slot)
@@ -171,6 +174,6 @@ function SwordstaffImage::onChargeFire(%this, %obj, %slot)
 	%obj.swingPhase = (%obj.swingPhase + 1) % 2;
 	%obj.playthread(2, spearswing @ %obj.swingPhase + 3);
 	%obj.chargeAttack = true;
-	%this.schedule(150, MeleeHitregLoop, %obj, %slot, 20, 40);
-	%obj.schedule(150, playAudio, 2, maulSwingSound @ %obj.swingPhase + 1);
+	%this.schedule(150, MeleeHitregLoop, %obj, %slot, 20, 60);
+	%obj.swingSchedule = %obj.schedule(150, playAudio, 2, maulSwingSound @ %obj.swingPhase + 1);
 }

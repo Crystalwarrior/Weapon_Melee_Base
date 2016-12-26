@@ -57,6 +57,9 @@ datablock ShapeBaseImageData(HalberdImage)
 	//melee particles shoot from eye node for consistancy
 	melee = true;
 
+	//For shields
+	twoHanded = true;
+
 	//Special melee hitreg system
 	directDamage = 35;
 
@@ -172,5 +175,5 @@ function HalberdImage::onChargeFire(%this, %obj, %slot)
 	%obj.playthread(2, spearswing @ %obj.swingPhase + 3);
 	%obj.chargeAttack = true;
 	%this.schedule(150, MeleeHitregLoop, %obj, %slot, 12, 60);
-	%obj.schedule(150, playAudio, 2, maulSwingSound @ %obj.swingPhase + 1);
+	%obj.swingSchedule = %obj.schedule(150, playAudio, 2, maulSwingSound @ %obj.swingPhase + 1);
 }

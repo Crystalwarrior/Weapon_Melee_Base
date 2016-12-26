@@ -57,6 +57,9 @@ datablock ShapeBaseImageData(DoubleAxeImage)
 	//melee particles shoot from eye node for consistancy
 	melee = true;
 
+	//For shields
+	twoHanded = true;
+
 	//Special melee hitreg system
 	directDamage = 45;
 
@@ -157,7 +160,7 @@ function DoubleAxeImage::onFire(%this, %obj, %slot)
 	%obj.swingPhase = (%obj.swingPhase + 1) % 2;
 	%obj.playthread(2, "2hswing" @ %obj.swingPhase + 1);
 	%this.schedule(64, MeleeHitregLoop, %obj, %slot, 18);
-	%obj.schedule(200, playAudio, 2, MesserSwingSound @ getRandom(1, 3));
+	%obj.swingSchedule = %obj.schedule(200, playAudio, 2, MesserSwingSound @ getRandom(1, 3));
 }
 
 function DoubleAxeImage::onCharge(%this, %obj, %slot)
@@ -176,5 +179,5 @@ function DoubleAxeImage::onChargeFire(%this, %obj, %slot)
 	//%obj.playThread(3, activate);
 	%obj.chargeAttack = true;
 	%this.schedule(200, MeleeHitregLoop, %obj, %slot, 18, 65);
-	%obj.schedule(200, playAudio, 2, AxeSwingSound);
+	%obj.swingSchedule = %obj.schedule(200, playAudio, 2, AxeSwingSound);
 }

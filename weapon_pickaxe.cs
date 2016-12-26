@@ -152,12 +152,16 @@ function PickaxeImage::onFire(%this, %obj, %slot)
 {
 	%obj.playthread(2, bswing1);
 	%this.schedule(200, MeleeHitregLoop, %obj, %slot, 12);
-	%obj.schedule(200, playAudio, 2, MaceSwingSound @ getRandom(1, 3));
+	%obj.swingSchedule = %obj.schedule(200, playAudio, 2, MaceSwingSound @ getRandom(1, 3));
 }
 
 function PickaxeImage::onCharge(%this, %obj, %slot)
 {
-	%obj.playthread(2, "2hswing1");
+	%shieldCheck = isObject(%obj.getMountedImage(3)) && %obj.getMountedImage(3).isShield;
+	%seq = "2hswing1";
+	if(%shieldCheck)
+		%seq = "bswing1";
+	%obj.playthread(2, %seq);
 	%obj.schedule(0, stopThread, 2);
 	%obj.playThread(3, plant);
 	serverPlay3D(MeleeChargeSound, %obj.getSlotTransform(%slot));
@@ -166,9 +170,13 @@ function PickaxeImage::onCharge(%this, %obj, %slot)
 
 function PickaxeImage::onChargeFire(%this, %obj, %slot)
 {
-	%obj.playthread(2, "2hswing1");
+	%shieldCheck = isObject(%obj.getMountedImage(3)) && %obj.getMountedImage(3).isShield;
+	%seq = "2hswing1";
+	if(%shieldCheck)
+		%seq = "bswing1";
+	%obj.playthread(2, %seq);
 	%obj.playThread(3, activate);
 	%obj.chargeAttack = true;
 	%this.schedule(200, MeleeHitregLoop, %obj, %slot, 12, 50);
-	%obj.schedule(150, playAudio, 2, maulSwingSound1);
+	%obj.swingSchedule = %obj.schedule(150, playAudio, 2, maulSwingSound1);
 }

@@ -57,8 +57,11 @@ datablock ShapeBaseImageData(MeleeSpearImage)
 	//melee particles shoot from eye node for consistancy
 	melee = true;
 
+	//For shields
+	twoHanded = true;
+
 	//Special melee hitreg system
-	directDamage = 35;
+	directDamage = 40;
 
 	meleeEnabled = true;
 	meleeStances = false; //Use stance system?

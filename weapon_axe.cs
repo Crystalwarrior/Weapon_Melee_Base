@@ -153,7 +153,7 @@ function AxeImage::onFire(%this, %obj, %slot)
 	%obj.swingPhase = (%obj.swingPhase + 1) % 2;
 	%obj.playthread(2, bswing @ %obj.swingPhase + 1);
 	%this.schedule(200, MeleeHitregLoop, %obj, %slot, 12);
-	%obj.schedule(200, playAudio, 2, WarhammerSwingSound @ getRandom(1, 3));
+	%obj.swingSchedule = %obj.schedule(200, playAudio, 2, WarhammerSwingSound @ getRandom(1, 3));
 }
 
 function AxeImage::onCharge(%this, %obj, %slot)
@@ -172,5 +172,5 @@ function AxeImage::onChargeFire(%this, %obj, %slot)
 	%obj.playThread(3, activate);
 	%obj.chargeAttack = true;
 	%this.schedule(200, MeleeHitregLoop, %obj, %slot, 12, 60, true);
-	%obj.schedule(200, playAudio, 2, MesserSwingSound @ getRandom(1, 3));
+	%obj.swingSchedule = %obj.schedule(200, playAudio, 2, MesserSwingSound @ getRandom(1, 3));
 }

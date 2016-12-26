@@ -67,6 +67,9 @@ datablock ShapeBaseImageData(DaggerImage)
 	//melee particles shoot from eye node for consistancy
 	melee = true;
 
+	//For shields
+	twoHanded = true;
+
 	//Special melee hitreg system
 	directDamage = 20;
 
@@ -231,6 +234,12 @@ function DaggerImage::MeleeDamage(%this, %obj, %slot, %col, %damage, %pos)
 function DaggerImage::MeleeCheckClash(%this, %obj, %slot, %col)
 {
 	%targImg = %col.getMountedImage(%slot);
+	%shieldImg = %col.getMountedImage(3);
+	if(isObject(%shieldImg) && %shieldImg.isShield && getSimTime() - %col.lastShield <= $ShieldBlockTime) //We got a shielder here
+	{
+		if(%shieldImg.onBlock(%col, %slot, %obj))
+			return true;
+	}
 	if (isObject(%targImg) && %targImg == DaggerImage.getID())
 		return %obj.activeSwing && %obj.meleeStance == 0 && %col.activeSwing && %col.meleeStance == 0;
 	if (%obj.chargeAttack && !%col.chargeAttack || !%obj.chargeAttack && %col.chargeAttack) //If you charge with dagger you can ONLY clash with enemy charge attack
