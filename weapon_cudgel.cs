@@ -144,6 +144,7 @@ datablock ShapeBaseImageData(CudgelImage)
 
 function CudgelImage::onMount(%this, %obj, %slot)
 {
+    parent::onMount(%this, %obj, %slot);
 	%obj.playthread(2, bswing @ %obj.swingPhase + 1);
 	%obj.schedule(32, stopThread, 2);
 }

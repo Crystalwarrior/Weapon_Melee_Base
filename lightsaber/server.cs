@@ -375,6 +375,7 @@ datablock ShapeBaseImageData(lightSaberImage)
 
 function lightSaberImage::onMount(%this, %obj, %slot)
 {
+    parent::onMount(%this, %obj, %slot);
 	%obj.playThread(2, tswing @ (%obj.swingPhase + 1) % 2 + (%obj.meleeStance ? 3 : 1));
 	%obj.schedule(32, stopThread, 2);
 	%obj.playAudio(2, lightSaberHumSound);
@@ -382,6 +383,7 @@ function lightSaberImage::onMount(%this, %obj, %slot)
 
 function lightSaberImage::onUnMount(%this, %obj, %slot)
 {
+	parent::onUnMount(%this, %obj, %slot);
 	%obj.stopAudio(2);
 	%obj.playThread(2, root);
 }

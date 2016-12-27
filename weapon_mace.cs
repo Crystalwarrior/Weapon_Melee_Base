@@ -166,6 +166,7 @@ datablock ShapeBaseImageData(MaceImage)
 
 function MaceImage::onMount(%this, %obj, %slot)
 {
+    parent::onMount(%this, %obj, %slot);
 	fixArmReady(%obj);
 	%shieldCheck = isObject(%obj.getMountedImage(3)) && %obj.getMountedImage(3).isShield;
 	%seq = "2hswing";
@@ -210,8 +211,8 @@ function MaceImage::onChargeFire(%this, %obj, %slot)
 
 function MaceImage::MeleeDamage(%this, %obj, %slot, %col, %damage, %pos)
 {
-	%duration = 1500;
-	%col.applySlowDown(%duration, 3);
+	%duration = 1500;			
+	%col.applySlowDown(%duration, 2);
 
 	Parent::MeleeDamage(%this, %obj, %slot, %col, %damage, %pos);
 }

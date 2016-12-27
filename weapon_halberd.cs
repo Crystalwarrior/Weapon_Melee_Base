@@ -148,6 +148,7 @@ datablock ShapeBaseImageData(HalberdImage)
 
 function HalberdImage::onMount(%this, %obj, %slot)
 {
+    parent::onMount(%this, %obj, %slot);
 	%obj.playThread(2, spearswing @ (%obj.swingPhase + 1) % 2 + 1);
 	%obj.schedule(32, stopThread, 2);
 }

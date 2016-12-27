@@ -148,6 +148,7 @@ datablock ShapeBaseImageData(ScytheImage)
 
 function ScytheImage::onMount(%this, %obj, %slot)
 {
+    parent::onMount(%this, %obj, %slot);
 	%obj.playthread(2, "scytheswing1");
 	%obj.schedule(32, stopThread, 2);
 }

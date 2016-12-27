@@ -154,6 +154,7 @@ datablock ShapeBaseImageData(ShortSwordImage)
 
 function ShortSwordImage::onMount(%this, %obj, %slot)
 {
+    parent::onMount(%this, %obj, %slot);
 	%shieldCheck = isObject(%obj.getMountedImage(3)) && %obj.getMountedImage(3).isShield;
 	if(%shieldCheck)
 		%obj.meleeStance = 1;

@@ -133,7 +133,7 @@ datablock ShapeBaseImageData(WarHammerImage)
 
 	stateName[5]                    = "ChargeFire";
 	stateTransitionOnTimeout[5]     = "Ready";
-	stateTimeoutValue[5]            = 0.6;
+	stateTimeoutValue[5]            = 0.8;
 	stateFire[5]                    = true;
 	stateAllowImageChange[5]        = false;
 	stateScript[5]                  = "onChargeFire";
@@ -147,6 +147,7 @@ datablock ShapeBaseImageData(WarHammerImage)
 
 function WarHammerImage::onMount(%this, %obj, %slot)
 {
+    parent::onMount(%this, %obj, %slot);
 	%obj.playthread(2, bswing @ %obj.swingPhase + 1);
 	%obj.schedule(32, stopThread, 2);
 }
@@ -161,7 +162,6 @@ function WarHammerImage::onFire(%this, %obj, %slot)
 
 function WarHammerImage::onCharge(%this, %obj, %slot)
 {
-	%obj.swingPhase = 1; //Always horizontal swing
 	%shieldCheck = isObject(%obj.getMountedImage(3)) && %obj.getMountedImage(3).isShield;
 	%seq = "2hswing";
 	if(%shieldCheck)
@@ -175,6 +175,7 @@ function WarHammerImage::onCharge(%this, %obj, %slot)
 
 function WarHammerImage::onChargeFire(%this, %obj, %slot)
 {
+	%obj.swingPhase = (%obj.swingPhase + 1) % 2;
 	%shieldCheck = isObject(%obj.getMountedImage(3)) && %obj.getMountedImage(3).isShield;
 	%seq = "2hswing";
 	if(%shieldCheck)

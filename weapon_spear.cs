@@ -147,6 +147,7 @@ datablock ShapeBaseImageData(MeleeSpearImage)
 
 function MeleeSpearImage::onMount(%this, %obj, %slot)
 {
+    parent::onMount(%this, %obj, %slot);
 	%obj.playthread(2, pikeswing1);
 	%obj.schedule(32, stopThread, 2);
 }

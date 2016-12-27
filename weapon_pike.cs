@@ -151,6 +151,7 @@ datablock ShapeBaseImageData(PikeImage)
 
 function PikeImage::onMount(%this, %obj, %slot)
 {
+    parent::onMount(%this, %obj, %slot);
 	%obj.playthread(2, pikeswing2);
 	%obj.schedule(32, stopThread, 2);
 }

@@ -225,6 +225,7 @@ datablock ShapeBaseImageData(ClaymoreImage)
 
 function ClaymoreImage::onMount(%this, %obj, %slot)
 {
+    parent::onMount(%this, %obj, %slot);
 	%obj.playThread(2, "2hswing" @ (%obj.swingPhase + 1) % 2 + 1);
 	%obj.schedule(32, stopThread, 2);
 }
@@ -253,5 +254,5 @@ function ClaymoreImage::onChargeFire(%this, %obj, %slot)
 	//%obj.playThread(3, activate);
 	%obj.chargeAttack = true;
 	%this.schedule(200, MeleeHitregLoop, %obj, %slot, 18, 60);
-	%obj.swingSchedule = %obj.schedule(50, playAudio, 2, longswordHeavySwingSound);
+	%obj.swingSchedule = %obj.schedule(50, playAudio, 2, maulSwingSound1);
 }

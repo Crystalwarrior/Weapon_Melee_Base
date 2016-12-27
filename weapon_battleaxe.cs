@@ -161,6 +161,7 @@ datablock ShapeBaseImageData(BattleAxeImage)
 
 function BattleAxeImage::onMount(%this, %obj, %slot)
 {
+    parent::onMount(%this, %obj, %slot);
 	%obj.playThread(2, "2hswing" @ (%obj.swingPhase + 1) % 2 + 1);
 	%obj.schedule(32, stopThread, 2);
 }

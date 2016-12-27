@@ -1,6 +1,24 @@
 package decMaxSpeed
 {
-	function Player::resetMaxSpeeds(%obj)
+	function WeaponImage::onMount(%this, %obj, %slot)
+	{
+		parent::onMount(%this, %obj, %slot);
+		if(isFunction(%obj.getClassName(), "SD_updateSpeeds"))
+			%obj.SD_updateSpeeds();
+		else
+			%obj._resetMaxSpeeds();			
+	}
+
+	function WeaponImage::onUnMount(%this, %obj, %slot)
+	{
+		parent::onUnMount(%this, %obj, %slot);
+		if(isFunction(%obj.getClassName(), "SD_updateSpeeds"))
+			%obj.SD_updateSpeeds(-1);
+		else
+			%obj._resetMaxSpeeds(-1);
+	}
+
+	function Player::_resetMaxSpeeds(%obj, %noimg)
 	{
 		%db = %obj.getDataBlock();
 
@@ -13,7 +31,7 @@ package decMaxSpeed
 		%obj.setMaxCrouchSideSpeed(%db.maxSideCrouchSpeed);
 
 		%dec = 0;
-		if(isObject(%image = %obj.getMountedImage(0)))
+		if(!%noimg && isObject(%image = %obj.getMountedImage(0)))
 		{
 			%dec += %image.slowdown;
 			if (%dec < %image.desiredSlowdown)
@@ -26,7 +44,7 @@ package decMaxSpeed
 		%obj.decreaseMaxSpeeds(%dec);
 	}
 
-	function Player::decreaseMaxSpeeds(%obj, %num)
+	function Player::_decreaseMaxSpeeds(%obj, %num)
 	{
 		%maxForwardSpeed = %obj.getMaxForwardSpeed();
 		%maxBackwardSpeed = %obj.getMaxBackwardSpeed();
@@ -48,9 +66,7 @@ package decMaxSpeed
 		%obj.setMaxCrouchSideSpeed(mClamp(%maxCrouchSideSpeed - %num, %min, %max));
 	}
 };
-
-if(!isPackage(SD_MedArmorPackage))
-	activatePackage(decMaxSpeed);
+activatePackage(decMaxSpeed);
 
 function Player::applySlowDown(%obj, %duration, %num, %die)
 {
@@ -65,7 +81,7 @@ function Player::applySlowDown(%obj, %duration, %num, %die)
 		if(isFunction(%obj.getClassName(), "SD_updateSpeeds"))
 			%obj.SD_updateSpeeds();
 		else
-			%obj.resetMaxSpeeds();
+			%obj._resetMaxSpeeds();
 		return;
 	}
 	%obj.slowdown += %num;
@@ -73,6 +89,6 @@ function Player::applySlowDown(%obj, %duration, %num, %die)
 	if(isFunction(%obj.getClassName(), "SD_updateSpeeds"))
 		%obj.SD_updateSpeeds();
 	else
-		%obj.decreaseMaxSpeeds(%num);
+		%obj._decreaseMaxSpeeds(%num);
 	%obj.slowDownSchedule = %obj.schedule(%duration, applySlowDown, %obj, %num, true);
 }

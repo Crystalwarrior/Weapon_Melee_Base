@@ -161,6 +161,7 @@ datablock ShapeBaseImageData(DaggerImage)
 
 function DaggerImage::onMount(%this, %obj, %slot)
 {
+    parent::onMount(%this, %obj, %slot);
 	if (%obj.meleeStance)
 		%obj.playthread(2, stabdagger @ (%obj.swingPhase + 1) % 2 + 1);
 	else
