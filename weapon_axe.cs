@@ -159,7 +159,11 @@ function AxeImage::onFire(%this, %obj, %slot)
 function AxeImage::onCharge(%this, %obj, %slot)
 {
 	%obj.swingPhase = 1; //Always horizontal swing
-	%obj.playthread(2, "2hswing" @ %obj.swingPhase + 1);
+	%shieldCheck = isObject(%obj.getMountedImage(3)) && %obj.getMountedImage(3).isShield;
+	%seq = "2hswing";
+	if(%shieldCheck)
+		%seq = "bswing";
+	%obj.playthread(2, %seq @ %obj.swingPhase + 1);
 	%obj.schedule(0, stopThread, 2);
 	%obj.playThread(3, plant);
 	serverPlay3D(MeleeChargeSound, %obj.getSlotTransform(%slot));
@@ -168,7 +172,11 @@ function AxeImage::onCharge(%this, %obj, %slot)
 
 function AxeImage::onChargeFire(%this, %obj, %slot)
 {
-	%obj.playthread(2, "2hswing" @ %obj.swingPhase + 1);
+	%shieldCheck = isObject(%obj.getMountedImage(3)) && %obj.getMountedImage(3).isShield;
+	%seq = "2hswing";
+	if(%shieldCheck)
+		%seq = "bswing";
+	%obj.playthread(2, %seq @ %obj.swingPhase + 1);
 	%obj.playThread(3, activate);
 	%obj.chargeAttack = true;
 	%this.schedule(200, MeleeHitregLoop, %obj, %slot, 12, 60, true);

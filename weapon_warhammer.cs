@@ -58,7 +58,7 @@ datablock ShapeBaseImageData(WarHammerImage)
 	melee = true;
 
 	//Special melee hitreg system
-	directDamage = 40;
+	directDamage = 35;
 
 	//MedievalRP armor
 	armorPenetration = 0.2; //20%

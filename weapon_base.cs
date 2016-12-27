@@ -94,7 +94,7 @@ function WeaponImage::onImpact(%this, %obj, %slot, %col, %pos, %normal, %damage,
 				%end = %col.getPosition();
 				%vel = %targImg.meleeBlockedVelocity;
 
-				if(isObject(%shieldImg = %col.getMountedImage(3)) && %shieldImg.isShield)
+				if(isObject(%shieldImg = %col.getMountedImage(3)) && %shieldImg.isShield && getSimTime() - %col.lastShield <= $ShieldBlockTime)
 					%vel = %this.meleeBlockedVelocity * %shieldImg.impulseScale;
 
 				%col.setVelocity(vectorAdd(vectorScale(vectorNormalize(vectorSub(%end, %start)), %vel), "0 0 3"));
