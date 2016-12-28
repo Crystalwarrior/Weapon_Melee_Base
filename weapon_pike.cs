@@ -68,6 +68,7 @@ datablock ShapeBaseImageData(PikeImage)
 	//meleeKnockbackVelocity = 0;
 
 	meleeEnabled = true;
+	meleeBadJump = true; //Screw with the jump so it's discouraged
 	meleeStances = false; //Use stance system?
 	meleeCanClash = false; //If stances are enabled, can it clash? Keep this on if you want dagger to clash it
 	meleeTick = 24; //The speed of schedule loop in MS. Change this to animation FPS

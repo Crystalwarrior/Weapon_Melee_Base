@@ -11,11 +11,15 @@ package MeleeBasePackage
 	{
 		Parent::onTrigger(%data, %this, %trig, %tog);
 		%image = %this.getMountedImage(0);
-		if (!isObject(%image) || !%image.meleeEnabled || !%image.meleeStances)
+		if (!isObject(%image) || !%image.meleeEnabled)
 			return;
-		if (%trig == 4 && %tog)
+		if (%image.meleeStances && %trig == 4 && %tog)
 		{
 			%image.onStanceSwitch(%this, 0);
+		}
+		if (%image.meleeBadJump && %trig == 2)
+		{
+			%this.schedule(32, badJumpLoop, %tog);
 		}
 
 		//if (%trig == 0 && %tog)
@@ -39,8 +43,23 @@ package MeleeBasePackage
 		//}
 	}
 };
-
 activatePackage("MeleeBasePackage");
+
+function Player::badJumpLoop(%this, %tog)
+{
+	cancel(%this.badJumpLoop);
+	if(!%tog)
+		return;
+	if(%this.getState() $= "Dead")
+		return;
+	if(!isObject(%this.getMountedImage(0)) || !%this.getMountedImage(0).meleeBadJump)
+		return;
+
+	if(getWord(%this.getVelocity(), 2) >= 0)
+		%this.setVelocity("0 0 0");
+
+	%this.badJumpLoop = %this.schedule(100, badJumpLoop, %tog);
+}
 
 function WeaponImage::onStanceSwitch(%this, %obj, %slot)
 {
