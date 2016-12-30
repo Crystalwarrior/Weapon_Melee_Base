@@ -68,7 +68,9 @@ datablock ShapeBaseImageData(PikeImage)
 	//meleeKnockbackVelocity = 0;
 
 	meleeEnabled = true;
-	meleeBadJump = true; //Screw with the jump so it's discouraged
+
+	meleeJumpDrain = 100; //How much energy drain does jumping with this weapon do?
+
 	meleeStances = false; //Use stance system?
 	meleeCanClash = false; //If stances are enabled, can it clash? Keep this on if you want dagger to clash it
 	meleeTick = 24; //The speed of schedule loop in MS. Change this to animation FPS
@@ -160,7 +162,7 @@ function PikeImage::onMount(%this, %obj, %slot)
 function PikeImage::onFire(%this, %obj, %slot)
 {	
 	%obj.playthread(2, pikeswing2);
-	%this.MeleeHitregLoop(%obj, %slot, 12);
+	%this.schedule(16, MeleeHitregLoop, %obj, %slot, 12);
 	%obj.swingSchedule = %obj.schedule(50, playAudio, 2, maulSwingSound3);
 }
 
@@ -178,6 +180,6 @@ function PikeImage::onChargeFire(%this, %obj, %slot)
 	%obj.playthread(2, pikeswing2);
 	%obj.playThread(3, plant);
 	%obj.chargeAttack = true;
-	%this.MeleeHitregLoop(%obj, %slot, 12, 60);
+	%this.schedule(16, MeleeHitregLoop, %obj, %slot, 12, 60);
 	%obj.swingSchedule = %obj.schedule(50, playAudio, 2, maulSwingSound1);
 }

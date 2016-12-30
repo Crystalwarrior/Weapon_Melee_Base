@@ -404,7 +404,7 @@ function lightSaberImage::onFire(%this, %obj, %slot)
 {
 	%obj.swingPhase = (%obj.swingPhase + 1) % 2;
 	%obj.playthread(2, tswing @ %obj.swingPhase + (%obj.meleeStance ? 3 : 1));
-	%this.MeleeHitregLoop(%obj, %slot, 12);
+	%this.schedule(16, MeleeHitregLoop, %obj, %slot, 12);
 	serverPlay3d(lightSaberSwingSound @ getRandom(1, 3), %obj.getSlotTransform(%slot));
 }
 

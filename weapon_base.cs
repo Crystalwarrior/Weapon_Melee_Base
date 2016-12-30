@@ -4,11 +4,16 @@ package MeleeBasePackage
 	//{
 	//	%obj.swingPhase = (%obj.swingPhase + 1) % 2;
 	//	%obj.playthread(2, %this.meleeAnimation @ %obj.swingPhase + (%obj.meleeStance ? 3 : 1));
-	//	%this.MeleeHitregLoop(%obj, %slot, 12);
+	//	%this.schedule(16, MeleeHitregLoop, %obj, %slot, 12);
 	//}
 
 	function Armor::onTrigger(%data, %this, %trig, %tog)
 	{
+		//if (%trig == 2)
+		//{
+		//	%this.schedule(0, meleeJumpLoop, %tog);
+		//}
+
 		Parent::onTrigger(%data, %this, %trig, %tog);
 		%image = %this.getMountedImage(0);
 		if (!isObject(%image) || !%image.meleeEnabled)
@@ -16,10 +21,6 @@ package MeleeBasePackage
 		if (%image.meleeStances && %trig == 4 && %tog)
 		{
 			%image.onStanceSwitch(%this, 0);
-		}
-		if (%image.meleeBadJump && %trig == 2)
-		{
-			%this.schedule(32, badJumpLoop, %tog);
 		}
 
 		//if (%trig == 0 && %tog)
@@ -45,21 +46,28 @@ package MeleeBasePackage
 };
 activatePackage("MeleeBasePackage");
 
-function Player::badJumpLoop(%this, %tog)
-{
-	cancel(%this.badJumpLoop);
-	if(!%tog)
-		return;
-	if(%this.getState() $= "Dead")
-		return;
-	if(!isObject(%this.getMountedImage(0)) || !%this.getMountedImage(0).meleeBadJump)
-		return;
-
-	if(getWord(%this.getVelocity(), 2) >= 0)
-		%this.setVelocity("0 0 0");
-
-	%this.badJumpLoop = %this.schedule(100, badJumpLoop, %tog);
-}
+//function Player::meleeJumpLoop(%this, %tog)
+//{
+//	cancel(%this.meleeJumpLoop);
+//	if(!%tog)
+//		return;
+//	if(%this.getState() $= "Dead")
+//		return;
+//
+//	%data = %this.getDataBlock();
+//	%delay = 100;
+//	if(isObject(%this.getMountedImage(0)) && %drain = %this.getMountedImage(0).meleeJumpDrain)
+//	{	
+//		%delay = %data.jumpDelay * 32; //A player tick is 32ms
+//		if(%this.getEnergyLevel() >= %data.maxEnergy && getWord(%this.getVelocity(), 2) > 0)
+//			%this.setEnergyLevel(%this.getEnergyLevel() - %drain);
+//		else
+//			%delay = 100;
+//	}
+//	talk(%delay SPC getWord(%this.getVelocity(), 2));
+//
+//	%this.meleeJumpLoop = %this.schedule(%delay, meleeJumpLoop, %tog);
+//}
 
 function WeaponImage::onStanceSwitch(%this, %obj, %slot)
 {
@@ -67,6 +75,7 @@ function WeaponImage::onStanceSwitch(%this, %obj, %slot)
 
 function WeaponImage::stopMeleeHitregLoop(%this, %obj, %slot)
 {
+	cancel(%obj.swingSchedule);
 	cancel(%obj.MeleeHitregLoop);
 	if (isObject(%obj.line))
 		%obj.line.delete();
@@ -113,15 +122,17 @@ function WeaponImage::onImpact(%this, %obj, %slot, %col, %pos, %normal, %damage,
 				%end = %col.getPosition();
 				%vel = %targImg.meleeBlockedVelocity;
 
-				if(isObject(%shieldImg = %col.getMountedImage(3)) && %shieldImg.isShield && getSimTime() - %col.lastShield <= $ShieldBlockTime)
-					%vel = %this.meleeBlockedVelocity * %shieldImg.impulseScale;
-
 				%col.setVelocity(vectorAdd(vectorScale(vectorNormalize(vectorSub(%end, %start)), %vel), "0 0 3"));
 				%obj.setVelocity(vectorAdd(vectorScale(vectorNormalize(vectorSub(%start, %end)), %this.meleeBlockedVelocity), "0 0 3"));
-				%this.clash(%obj, %slot);
-				if(isObject(%targImg) && isFunction(%targImg.getName(), "clash"))
+				if(isObject(%shieldImg = %col.getMountedImage(3)) && %shieldImg.isShield && getSimTime() - %col.lastShield <= $ShieldBlockTime)
 				{
-					%targImg.clash(%col, %slot);
+					%vel = %this.meleeBlockedVelocity * %shieldImg.impulseScale;
+				}
+				else
+				{
+					%this.clash(%obj, %slot);
+					if(isObject(%targImg) && isFunction(%targImg.getName(), "clash"))
+						%targImg.clash(%col, %slot);
 				}
 				%datablock = %this.meleeBlockedProjectile;
 			}
@@ -181,15 +192,18 @@ function WeaponImage::onImpact(%this, %obj, %slot, %col, %pos, %normal, %damage,
 	return 0;
 }
 
-function WeaponImage::Clash(%this, %obj, %slot)
+function WeaponImage::Clash(%this, %obj, %slot, %duration)
 {
-	cancel(%obj.swingSchedule);
+	%this.stopMeleeHitregLoop(%obj, %slot);
+	if(%duration $= "")
+		%duration = %this.meleeBlockedStunTime;
 	//%obj.stopAudio(2);
 	%obj.stopThread(2);
 	%obj.stopping = true;
 	%obj.setImageLoaded(%slot, 0);
 	%obj.swingPhase++;
-	%obj.schedule(%this.meleeBlockedStunTime * 1000, setImageLoaded, %slot, 1);
+	cancel(%obj.clashSchedule);
+	%obj.clashSchedule = %obj.schedule(%duration * 1000, setImageLoaded, %slot, 1);
 	%obj.setWhiteOut(0.1);
 }
 

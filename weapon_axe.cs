@@ -61,6 +61,9 @@ datablock ShapeBaseImageData(AxeImage)
 	directDamage = 40;
 
 	meleeEnabled = true;
+
+	meleeJumpDrain = 50; //How much energy drain does jumping with this weapon do?
+
 	meleeStances = false; //Use stance system?
 	meleeCanClash = true; //If stances are enabled, can it clash? Keep this on if you want dagger to clash it
 	meleeTick = 24; //The speed of schedule loop in MS. Change this to animation FPS

@@ -204,7 +204,7 @@ function DaggerImage::onFire(%this, %obj, %slot)
 	}
 	%obj.stopAudio(2);
 	%obj.playAudio(2, DaggerSwingSound);
-	%this.MeleeHitregLoop(%obj, %slot, 12, %damage);
+	%this.schedule(16, MeleeHitregLoop, %obj, %slot, 12, %damage);
 }
 
 

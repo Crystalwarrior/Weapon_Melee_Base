@@ -170,7 +170,7 @@ function LongSwordImage::onFire(%this, %obj, %slot)
 {
 	%obj.swingPhase = (%obj.swingPhase + 1) % 2;
 	%obj.playthread(2, tswing @ %obj.swingPhase + (%obj.meleeStance ? 3 : 1));
-	%this.MeleeHitregLoop(%obj, %slot, 12);
+	%this.schedule(16, MeleeHitregLoop, %obj, %slot, 12);
 	%obj.playAudio(2, SwordSwingSound @ getRandom(1, 3));
 }
 
@@ -205,6 +205,6 @@ function LongSwordImage::onChargeFire(%this, %obj, %slot)
 		%frames = 18;
 		%delay = 200;
 	}
-	%this.MeleeHitregLoop(%obj, %slot, %frames, 50);
+	%this.schedule(16, MeleeHitregLoop, %obj, %slot, %frames, 50);
 	%obj.swingSchedule = %obj.schedule(%delay, playAudio, 2, longswordSwingSound @ getRandom(1, 3));
 }
