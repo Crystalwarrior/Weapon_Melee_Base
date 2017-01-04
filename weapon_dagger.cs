@@ -226,8 +226,6 @@ function DaggerImage::MeleeDamage(%this, %obj, %slot, %col, %damage, %pos)
 	if (%dot > 0)
 	{
 		%damage *= 2 + (1 * %obj.meleeStance);
-		if(%col.isDowned)
-			%damage = 200; //You're screwed, only 40% armor will leave you at 20HP downed.
 	}
 	%col.damage(%obj, %pos, %damage, $DamageType::Sword);
 }
