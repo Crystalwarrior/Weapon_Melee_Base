@@ -306,3 +306,12 @@ function Player::doChargeEmitter(%obj, %pos)
 	MissionCleanup.add(%projectile);
 	%projectile.explode();
 }
+
+datablock ProjectileData(MeleeStickBlockProjectile)
+{
+	explosion = BladeSmallMetalExplosion;
+};
+function MeleeStickBlockProjectile::onExplode(%this, %obj, %pos)
+{
+	ServerPlay3D(MeleeStickBlockSound @ getRandom(1, 2), %pos);
+}

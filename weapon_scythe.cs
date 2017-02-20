@@ -67,7 +67,9 @@ datablock ShapeBaseImageData(ScytheImage)
 	meleeStances = false; //Use stance system?
 	meleeCanClash = true; //If stances are enabled, can it clash? Keep this on if you want dagger to clash it
 	meleeTick = 24; //The speed of schedule loop in MS. Change this to animation FPS
-	meleeTracerCount = 2; //Amount of "tracer raycasts" for better hit detection. Note that this is better for wide swings as opposed to stabs.
+	meleeTracerCount = 1; //Amount of "tracer raycasts" for better hit detection. Note that this is better for wide swings as opposed to stabs.
+	meleeTipFactor = 0.2; //Where the "tip" starts
+	meleeTipDamage = true; //Only use tip to damage
 
 	meleeRayLength = 2.6;
 

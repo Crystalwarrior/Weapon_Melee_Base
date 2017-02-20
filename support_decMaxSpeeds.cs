@@ -37,10 +37,11 @@ package decMaxSpeed
 			if (%dec < %image.desiredSlowdown)
 				%dec += %image.desiredSlowdown - %dec;
 		}
-		if(%obj.slowdown)
-		{
-			%dec += %obj.slowdown;
-		}
+
+		%dec += %obj.slowdown;
+		if (%dec < %obj.desiredSlowdown)
+			%dec += %obj.desiredSlowdown - %dec;
+
 		%obj.decreaseMaxSpeeds(%dec);
 	}
 

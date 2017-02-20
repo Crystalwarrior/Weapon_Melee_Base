@@ -68,6 +68,8 @@ datablock ShapeBaseImageData(PitchforkImage)
 	meleeCanClash = true; //If stances are enabled, can it clash? Keep this on if you want dagger to clash it
 	meleeTick = 24; //The speed of schedule loop in MS. Change this to animation FPS
 	meleeTracerCount = 0; //Amount of "tracer raycasts" for better hit detection. Note that this is better for wide swings as opposed to stabs.
+	meleeTipFactor = 0.7; //Where the "tip" starts
+	meleeTipDamage = true; //Only use tip to damage
 
 	meleeRayLength = 2.8;
 
@@ -174,6 +176,6 @@ function PitchforkImage::onChargeFire(%this, %obj, %slot)
 	%obj.playthread(2, pikeswing2);
 	%obj.playThread(3, plant);
 	%obj.chargeAttack = true;
-	%this.schedule(16, MeleeHitregLoop, %obj, %slot, 10, 50, true);
+	%this.schedule(16, MeleeHitregLoop, %obj, %slot, 12, 50, true);
 	%obj.swingSchedule = %obj.schedule(50, playAudio, 2, HalberdSwingSound @ 2);
 }

@@ -130,6 +130,19 @@ datablock AudioProfile(MeleeMaceHitSound6)
 	preload		= true;
 };
 
+datablock AudioProfile(MeleeStickBlockSound1)
+{
+	filename	= "./sounds/Blunt_Light_14.wav";
+	description	= AudioClosest3d;
+	preload		= true;
+};
+datablock AudioProfile(MeleeStickBlockSound2)
+{
+	filename	= "./sounds/Blunt_Light_15.wav";
+	description	= AudioClosest3d;
+	preload		= true;
+};
+
 //Charge
 
 datablock AudioProfile(MeleeChargeSound)

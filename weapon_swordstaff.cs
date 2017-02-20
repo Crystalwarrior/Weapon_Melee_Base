@@ -68,8 +68,11 @@ datablock ShapeBaseImageData(SwordstaffImage)
 	meleeCanClash = true; //If stances are enabled, can it clash? Keep this on if you want dagger to clash it
 	meleeTick = 24; //The speed of schedule loop in MS. Change this to animation FPS
 	meleeTracerCount = 2; //Amount of "tracer raycasts" for better hit detection. Note that this is better for wide swings as opposed to stabs.
+	meleeTipFactor = 0.3; //Where the "tip" starts
+	meleeTipDamage = true; //Only use tip to damage
 
 	meleeRayLength = 2.8;
+
 
 	meleeHitProjectile = MeleeClaymoreProjectile;
 	meleeBlockedProjectile = MeleeClaymoreBlockProjectile;
@@ -157,7 +160,7 @@ function SwordstaffImage::onFire(%this, %obj, %slot)
 {
 	%obj.swingPhase = (%obj.swingPhase + 1) % 2;
 	%obj.playthread(2, spearswing @ %obj.swingPhase + 1);
-	%this.schedule(100, MeleeHitregLoop, %obj, %slot, 12);
+	%this.schedule(16, MeleeHitregLoop, %obj, %slot, 12);
 	%obj.swingSchedule = %obj.playAudio(2, HalberdSwingSound @ getRandom(1, 3));
 }
 
