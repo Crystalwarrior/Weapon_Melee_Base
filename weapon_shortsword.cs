@@ -156,8 +156,6 @@ function ShortSwordImage::onMount(%this, %obj, %slot)
 {
     parent::onMount(%this, %obj, %slot);
 	%shieldCheck = isObject(%obj.getMountedImage(3)) && %obj.getMountedImage(3).isShield;
-	if(%shieldCheck)
-		%obj.meleeStance = 1;
 	%obj.playThread(2, tswing @ (%obj.swingPhase + 1) % 2 + (%obj.meleeStance ? 3 : 1));
 	%obj.schedule(32, stopThread, 2);
 }
