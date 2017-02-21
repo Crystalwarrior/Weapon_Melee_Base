@@ -178,7 +178,7 @@ datablock ShapeBaseImageData(ClaymoreImage)
 
 	// Initial start up state
 	stateName[0]                     = "Activate";
-	stateTimeoutValue[0]             = 0.6;
+	stateTimeoutValue[0]             = 1.1;
 	stateTransitionOnTimeout[0]      = "Ready";
 	stateSound[0]                    = MeleeSwordDrawSound;
 
@@ -190,7 +190,7 @@ datablock ShapeBaseImageData(ClaymoreImage)
 
 	stateName[2]                    = "Fire";
 	stateTransitionOnTimeout[2]     = "Ready";
-	stateTimeoutValue[2]            = 0.8;
+	stateTimeoutValue[2]            = 0.9;
 	stateFire[2]                    = true;
 	stateAllowImageChange[2]        = false;
 	stateScript[2]                  = "onFire";
@@ -211,7 +211,7 @@ datablock ShapeBaseImageData(ClaymoreImage)
 
 	stateName[5]                    = "ChargeFire";
 	stateTransitionOnTimeout[5]     = "Ready";
-	stateTimeoutValue[5]            = 0.8;
+	stateTimeoutValue[5]            = 1.1;
 	stateFire[5]                    = true;
 	stateAllowImageChange[5]        = false;
 	stateScript[5]                  = "onChargeFire";

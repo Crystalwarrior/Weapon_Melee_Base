@@ -68,7 +68,7 @@ datablock ShapeBaseImageData(PitchforkImage)
 	meleeCanClash = true; //If stances are enabled, can it clash? Keep this on if you want dagger to clash it
 	meleeTick = 24; //The speed of schedule loop in MS. Change this to animation FPS
 	meleeTracerCount = 0; //Amount of "tracer raycasts" for better hit detection. Note that this is better for wide swings as opposed to stabs.
-	meleeTipFactor = 0.7; //Where the "tip" starts
+	meleeTipFactor = 0.6; //Where the "tip" starts
 	meleeTipDamage = true; //Only use tip to damage
 
 	meleeRayLength = 2.8;

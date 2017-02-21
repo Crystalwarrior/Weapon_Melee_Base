@@ -116,7 +116,7 @@ datablock ShapeBaseImageData(SwordstaffImage)
 
 	stateName[2]                    = "Fire";
 	stateTransitionOnTimeout[2]     = "Ready";
-	stateTimeoutValue[2]            = 0.5;
+	stateTimeoutValue[2]            = 0.6;
 	stateFire[2]                    = true;
 	stateAllowImageChange[2]        = false;
 	stateScript[2]                  = "onFire";

@@ -104,7 +104,7 @@ datablock ShapeBaseImageData(ZweihanderImage)
 
 	// Initial start up state
 	stateName[0]                     = "Activate";
-	stateTimeoutValue[0]             = 0.8;
+	stateTimeoutValue[0]             = 1.3;
 	stateTransitionOnTimeout[0]      = "Ready";
 	stateSound[0]                    = MeleeSwordDrawSound;
 

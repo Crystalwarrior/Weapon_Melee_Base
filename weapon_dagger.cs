@@ -110,7 +110,7 @@ datablock ShapeBaseImageData(DaggerImage)
 
 	// Initial start up state
 	stateName[0]                     = "Activate";
-	stateTimeoutValue[0]             = 0.2; //fast asspull weapon
+	stateTimeoutValue[0]             = 0.4; //fast asspull weapon
 	stateTransitionOnTimeout[0]      = "Ready";
 	stateSound[0]                    = ""; //No sound
 

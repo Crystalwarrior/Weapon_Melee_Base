@@ -107,7 +107,7 @@ datablock ShapeBaseImageData(ShortSwordImage)
 
 	// Initial start up state
 	stateName[0]                     = "Activate";
-	stateTimeoutValue[0]             = 0.6;
+	stateTimeoutValue[0]             = 0.7;
 	stateTransitionOnTimeout[0]      = "Ready";
 	stateSound[0]                    = MeleeSwordDrawSound;
 
@@ -128,7 +128,7 @@ datablock ShapeBaseImageData(ShortSwordImage)
 	stateName[3]                    = "CheckCharge";
 	stateTransitionOnTriggerUp[3]   = "Fire";
 	stateTransitionOnTimeout[3]		= "ChargeReady";
-	stateTimeoutValue[3]            = 1;
+	stateTimeoutValue[3]            = 0.8;
 	stateAllowImageChange[3]        = false;
 	stateWaitForTimeout[3]			= false;
 	stateScript[3]                  = "onCheckCharge";

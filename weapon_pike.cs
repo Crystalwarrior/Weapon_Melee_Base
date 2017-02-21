@@ -142,7 +142,7 @@ datablock ShapeBaseImageData(PikeImage)
 
 	stateName[5]                    = "ChargeFire";
 	stateTransitionOnTimeout[5]     = "Ready";
-	stateTimeoutValue[5]            = 1;
+	stateTimeoutValue[5]            = 1.3;
 	stateFire[5]                    = true;
 	stateAllowImageChange[5]        = false;
 	stateScript[5]                  = "onChargeFire";
