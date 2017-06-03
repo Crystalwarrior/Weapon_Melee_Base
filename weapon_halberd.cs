@@ -61,7 +61,7 @@ datablock ShapeBaseImageData(HalberdImage)
 	twoHanded = true;
 
 	//Special melee hitreg system
-	directDamage = 40;
+	directDamage = 35;
 
 	meleeEnabled = true;
 	meleeStances = false; //Use stance system?

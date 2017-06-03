@@ -61,7 +61,7 @@ datablock ShapeBaseImageData(PitchforkImage)
 	twoHanded = true;
 
 	//Special melee hitreg system
-	directDamage = 30;
+	directDamage = 25;
 
 	meleeEnabled = true;
 	meleeStances = false; //Use stance system?

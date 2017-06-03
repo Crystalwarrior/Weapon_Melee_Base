@@ -61,8 +61,10 @@ datablock ShapeBaseImageData(PikeImage)
 	twoHanded = true;
 
 	//Special melee hitreg system
-	directDamage = 40;
+	directDamage = 20;
 
+	armorPenetration = 0.2;
+		
 	desiredSlowdown = 2; //How much slowdown is applied when this is wielded. Don't go above that limit, though.
 
 	//meleeKnockbackVelocity = 0;
@@ -182,6 +184,6 @@ function PikeImage::onChargeFire(%this, %obj, %slot)
 	%obj.playthread(2, pikeswing2);
 	%obj.playThread(3, plant);
 	%obj.chargeAttack = true;
-	%this.schedule(16, MeleeHitregLoop, %obj, %slot, 12, 60);
+	%this.schedule(16, MeleeHitregLoop, %obj, %slot, 12, 40);
 	%obj.swingSchedule = %obj.schedule(50, playAudio, 2, maulSwingSound1);
 }

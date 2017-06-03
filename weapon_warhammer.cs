@@ -58,10 +58,10 @@ datablock ShapeBaseImageData(WarHammerImage)
 	melee = true;
 
 	//Special melee hitreg system
-	directDamage = 35;
+	directDamage = 28;
 
 	//MedievalRP armor
-	armorPenetration = 0.2; //20%
+	armorPenetration = 0.5; //50%
 
 	meleeEnabled = true;
 	meleeStances = false; //Use stance system?

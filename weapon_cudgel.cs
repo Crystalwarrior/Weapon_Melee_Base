@@ -60,6 +60,8 @@ datablock ShapeBaseImageData(CudgelImage)
 	//Special melee hitreg system
 	directDamage = 30;
 
+	armorPenetration = 0.1;
+	
 	meleeEnabled = true;
 	meleeStances = false; //Use stance system?
 	meleeCanClash = true; //If stances are enabled, can it clash? Keep this on if you want dagger to clash it

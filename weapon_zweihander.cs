@@ -63,6 +63,8 @@ datablock ShapeBaseImageData(ZweihanderImage)
 	//Special melee hitreg system
 	directDamage = 40;
 
+	armorPenetration = 0.0;
+	
 	desiredSlowdown = 1; //How much slowdown is applied when this is wielded. Don't go above that limit, though.
 
 	meleeEnabled = true;

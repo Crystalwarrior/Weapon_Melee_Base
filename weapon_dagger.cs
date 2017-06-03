@@ -71,7 +71,7 @@ datablock ShapeBaseImageData(DaggerImage)
 	twoHanded = true;
 
 	//Special melee hitreg system
-	directDamage = 20;
+	directDamage = 15;
 
 	meleeEnabled = true;
 	meleeStances = true; //Use stance system?
@@ -230,18 +230,18 @@ function DaggerImage::MeleeDamage(%this, %obj, %slot, %col, %damage, %pos)
 	%col.damage(%obj, %pos, %damage, $DamageType::Sword);
 }
 
-function DaggerImage::MeleeCheckClash(%this, %obj, %slot, %col)
-{
-	%targImg = %col.getMountedImage(%slot);
-	%shieldImg = %col.getMountedImage(3);
-	if(isObject(%shieldImg) && %shieldImg.isShield && getSimTime() - %col.lastShield <= $ShieldBlockTime) //We got a shielder here
-	{
-		if(%shieldImg.onBlock(%col, %slot, %obj))
-			return true;
-	}
-	if (isObject(%targImg) && %targImg == DaggerImage.getID())
-		return %obj.activeSwing && %obj.meleeStance == 0 && %col.activeSwing && %col.meleeStance == 0;
-	if (%obj.chargeAttack && !%col.chargeAttack || !%obj.chargeAttack && %col.chargeAttack) //If you charge with dagger you can ONLY clash with enemy charge attack
-		return false; //Charge attacks prevent clashing for everything
-	return %obj.activeSwing && %obj.meleeStance == 0 && isObject(%targImg) && %targImg.meleeCanClash && %col.activeSwing;
-}
+// function DaggerImage::MeleeCheckClash(%this, %obj, %slot, %col)
+// {
+	// %targImg = %col.getMountedImage(%slot);
+	// %shieldImg = %col.getMountedImage(3);
+	// if(isObject(%shieldImg) && %shieldImg.isShield && getSimTime() - %col.lastShield <= $ShieldBlockTime) //We got a shielder here
+	// {
+		// if(%shieldImg.onBlock(%col, %slot, %obj))
+			// return true;
+	// }
+	// if (isObject(%targImg) && %targImg == DaggerImage.getID())
+		// return %obj.activeSwing && %obj.meleeStance == 0 && %col.activeSwing && %col.meleeStance == 0;
+	// if (%obj.chargeAttack && !%col.chargeAttack || !%obj.chargeAttack && %col.chargeAttack) //If you charge with dagger you can ONLY clash with enemy charge attack
+		// return false; //Charge attacks prevent clashing for everything
+	// return %obj.activeSwing && %obj.meleeStance == 0 && isObject(%targImg) && %targImg.meleeCanClash && %col.activeSwing;
+// }

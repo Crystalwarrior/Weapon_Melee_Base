@@ -61,7 +61,8 @@ datablock ShapeBaseImageData(LongSwordImage)
 
 	//Special melee hitreg system
 	directDamage = 35;
-
+	armorPenetration = 0.1;
+	
 	meleeEnabled = true;
 	meleeStances = true; //Use stance system?
 	meleeCanClash = true; //If stances are enabled, can it clash?

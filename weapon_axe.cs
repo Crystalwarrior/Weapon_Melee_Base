@@ -59,7 +59,10 @@ datablock ShapeBaseImageData(AxeImage)
 
 	//Special melee hitreg system
 	directDamage = 40;
-
+	
+	//MedievalRP armor
+	armorPenetration = 0.1;
+	
 	meleeEnabled = true;
 
 	meleeJumpDrain = 50; //How much energy drain does jumping with this weapon do?

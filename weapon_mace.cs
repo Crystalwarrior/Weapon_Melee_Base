@@ -79,6 +79,8 @@ datablock ShapeBaseImageData(MaceImage)
 	//Special melee hitreg system
 	directDamage = 40;
 
+	armorPenetration = 0.2;
+	
 	meleeKnockbackVelocity = 0;
 
 	meleeEnabled = true;

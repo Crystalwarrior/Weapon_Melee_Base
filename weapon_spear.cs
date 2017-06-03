@@ -61,8 +61,10 @@ datablock ShapeBaseImageData(MeleeSpearImage)
 	twoHanded = true;
 
 	//Special melee hitreg system
-	directDamage = 40;
+	directDamage = 35;
 
+	armorPenetration = 0.2;
+	
 	meleeEnabled = true;
 	meleeStances = false; //Use stance system?
 	meleeCanClash = true; //If stances are enabled, can it clash? Keep this on if you want dagger to clash it
