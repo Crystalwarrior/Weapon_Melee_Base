@@ -89,7 +89,7 @@ datablock ShapeBaseImageData(DaggerImage)
 	meleeSingleHitProjectile = false; //If pierce terrain is on, set this to true so it doesn't spam hit projectiles
 
 	meleeBlockedVelocity = 1;
-	meleeBlockedStunTime = 0.5; //Length of stun in seconds (for self)
+	meleeBlockedStunTime = 0.1; //Length of stun in seconds (for self)
 
 	meleeBounceAnim[3] = "plant"; //Animation in [%slot] when hitting something
 	meleeBouncePlayer = false; //Whether or not bounce animation is played when you hit players - enable for blunt weapons
