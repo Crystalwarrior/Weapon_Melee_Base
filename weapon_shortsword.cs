@@ -69,6 +69,7 @@ datablock ShapeBaseImageData(ShortSwordImage)
 
 	//Special melee hitreg system
 	directDamage = 30;
+	armorPenetration = 0.1;
 
 	meleeEnabled = true;
 	meleeStances = true; //Use stance system?
@@ -86,7 +87,7 @@ datablock ShapeBaseImageData(ShortSwordImage)
 	meleeSingleHitProjectile = false; //If pierce terrain is on, set this to true so it doesn't spam hit projectiles
 
 	meleeBlockedVelocity = 7;
-	meleeBlockedStunTime = 0.6; //Length of stun in seconds (for self)
+	meleeBlockedStunTime = 0.5; //Length of stun in seconds (for self)
 
 	meleeBounceAnim[3] = "plant"; //Animation in [%slot] when hitting something
 	meleeBouncePlayer = false; //Whether or not bounce animation is played when you hit players - enable for blunt weapons
@@ -176,7 +177,7 @@ function ShortSwordImage::onFire(%this, %obj, %slot)
 {
 	%obj.swingPhase = (%obj.swingPhase + 1) % 2;
 	%obj.playthread(2, tswing @ %obj.swingPhase + (%obj.meleeStance ? 3 : 1));
-	%this.schedule(16, MeleeHitregLoop, %obj, %slot, 12);
+	%this.schedule(16, MeleeHitregLoop, %obj, %slot, 14);
 	%obj.stopAudio(2);
 	%obj.playAudio(2, ShortswordSwingSound @ getRandom(1, 3));
 }

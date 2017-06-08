@@ -139,6 +139,8 @@ datablock ShapeBaseImageData(ClaymoreImage)
 	//Special melee hitreg system
 	directDamage = 40;
 
+	desiredSlowdown = 1; //How much slowdown is applied when this is wielded. Don't go above that limit, though.
+
 	meleeEnabled = true;
 	meleeStances = false; //Use stance system?
 	meleeCanClash = true; //If stances are enabled, can it clash? Keep this on if you want dagger to clash it

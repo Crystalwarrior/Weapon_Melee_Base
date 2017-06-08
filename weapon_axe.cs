@@ -65,7 +65,7 @@ datablock ShapeBaseImageData(AxeImage)
 	
 	meleeEnabled = true;
 
-	meleeJumpDrain = 50; //How much energy drain does jumping with this weapon do?
+	meleeJumpDrain = 0; //How much energy drain does jumping with this weapon do?
 
 	meleeStances = false; //Use stance system?
 	meleeCanClash = true; //If stances are enabled, can it clash? Keep this on if you want dagger to clash it
