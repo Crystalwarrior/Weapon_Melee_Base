@@ -255,6 +255,6 @@ function ClaymoreImage::onChargeFire(%this, %obj, %slot)
 	%obj.playthread(2, "2hstab1");
 	//%obj.playThread(3, activate);
 	%obj.chargeAttack = true;
-	%this.schedule(200, MeleeHitregLoop, %obj, %slot, 18, 60);
+	%this.schedule(200, MeleeHitregLoop, %obj, %slot, 18, 55);
 	%obj.swingSchedule = %obj.schedule(50, playAudio, 2, maulSwingSound1);
 }
