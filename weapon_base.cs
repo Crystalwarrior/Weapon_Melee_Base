@@ -7,6 +7,46 @@ package MeleeBasePackage
 	//	%this.schedule(16, MeleeHitregLoop, %obj, %slot, 12);
 	//}
 
+	function WeaponImage::onMount(%this, %obj, %slot)
+	{
+		parent::onMount(%this, %obj, %slot);
+		%props = %obj.getItemProps();
+		if(%props.class !$= "MeleeWeaponProps")
+			return;
+
+		if(%props.durability <= 0)
+		{
+			%pos = %obj.getSlotTransform(%slot);
+			%obj.tool[%props.itemSlot] = "";
+			if (isObject(%obj.client))
+				messageClient(%obj.client, 'MsgItemPickup', '', %props.itemSlot, 0);
+			%props.delete();
+
+			%projectile = new Projectile()
+			{
+				datablock = MeleeBreakProjectile;
+				initialPosition = %pos;
+				initialVelocity = "0 0 0";
+			};
+			MissionCleanup.add(%projectile);
+			%projectile.explode();
+
+			%obj.unMountImage(0);
+			return;
+		}
+		else if(isObject(%client = %obj.client))
+		{
+			if(%props.durability <= (%this.item.durability / 2))
+				%msg = "Your weapon feels flimsy.";
+			if(%props.durability <= (%this.item.durability / 4))
+				%msg = "Your weapon feels very flimsy!";
+			if(%props.durability <= 10)
+				%msg = "Your weapon is about to break!";
+			if(%msg !$= "")
+				messageClient(%client, '', '\c4WARNING\c3: %1', %msg);
+		}
+	}
+
 	function Armor::onTrigger(%data, %this, %trig, %tog)
 	{
 		//if (%trig == 2)
@@ -68,6 +108,7 @@ activatePackage("MeleeBasePackage");
 //
 //	%this.meleeJumpLoop = %this.schedule(%delay, meleeJumpLoop, %tog);
 //}
+
 
 function WeaponImage::onStanceSwitch(%this, %obj, %slot)
 {
@@ -176,9 +217,9 @@ function WeaponImage::onImpact(%this, %obj, %slot, %col, %pos, %normal, %damage,
 	{
 		%projectile = new Projectile()
 		{
-				datablock = %datablock;
-				initialPosition = %pos;
-				initialVelocity = "0 0 0";
+			datablock = %datablock;
+			initialPosition = %pos;
+			initialVelocity = "0 0 0";
 		};
 
 		MissionCleanup.add(%projectile);
@@ -197,6 +238,31 @@ function WeaponImage::onImpact(%this, %obj, %slot, %col, %pos, %normal, %damage,
 					%obj.playThread(%i, %this.meleeBounceAnim[%i]);
 			}
 		}
+	}
+
+	%props = %obj.getItemProps();
+	if(%props.class $= "MeleeWeaponProps")
+		%props.durability--;
+
+	if(%props.durability <= 0)
+	{
+		%pos = %obj.getSlotTransform(%slot);
+		%obj.tool[%props.itemSlot] = "";
+		if (isObject(%obj.client))
+			messageClient(%obj.client, 'MsgItemPickup', '', %props.itemSlot, 0);
+		%props.delete();
+
+		%projectile = new Projectile()
+		{
+			datablock = MeleeBreakProjectile;
+			initialPosition = %pos;
+			initialVelocity = "0 0 0";
+		};
+		MissionCleanup.add(%projectile);
+		%projectile.explode();
+
+		%obj.unMountImage(0);
+		return 1;
 	}
 
 	if ((!%pierce && %hitplayer) || (!%hitplayer && !%this.meleePierceTerrain))//!%this.meleePierceTerrain && (!%hitplayer && !%pierce))

@@ -20,6 +20,12 @@ datablock ItemData(MaceItem)
 	// Dynamic properties defined by the scripts
 	image = MaceImage;
 	canDrop = true;
+
+	itemPropsClass = "MeleeWeaponProps";
+	customPickupAlways = false;
+	customPickupMultiple = false;
+
+	durability = 2000; //hits until weapon breaks
 };
 
 datablock ProjectileData(MeleeMaceBlockProjectile)

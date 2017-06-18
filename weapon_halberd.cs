@@ -20,6 +20,12 @@ datablock ItemData(HalberdItem)
 	// Dynamic properties defined by the scripts
 	image = HalberdImage;
 	canDrop = true;
+
+	itemPropsClass = "MeleeWeaponProps";
+	customPickupAlways = false;
+	customPickupMultiple = false;
+
+	durability = 1000; //hits until weapon breaks
 };
 
 ////////////////

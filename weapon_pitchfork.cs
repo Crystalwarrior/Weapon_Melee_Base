@@ -20,6 +20,12 @@ datablock ItemData(PitchforkItem)
 	// Dynamic properties defined by the scripts
 	image = PitchforkImage;
 	canDrop = true;
+
+	itemPropsClass = "MeleeWeaponProps";
+	customPickupAlways = false;
+	customPickupMultiple = false;
+
+	durability = 500; //hits until weapon breaks
 };
 
 ////////////////

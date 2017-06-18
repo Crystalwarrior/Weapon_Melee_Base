@@ -20,6 +20,12 @@ datablock ItemData(ShortSwordItem)
 	// Dynamic properties defined by the scripts
 	image = ShortSwordImage;
 	canDrop = true;
+
+	itemPropsClass = "MeleeWeaponProps";
+	customPickupAlways = false;
+	customPickupMultiple = false;
+
+	durability = 2500; //hits until weapon breaks
 };
 
 datablock ProjectileData(SwordBloodProjectile)

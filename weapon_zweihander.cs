@@ -20,6 +20,12 @@ datablock ItemData(ZweihanderItem)
 	// Dynamic properties defined by the scripts
 	image = ZweihanderImage;
 	canDrop = true;
+
+	itemPropsClass = "MeleeWeaponProps";
+	customPickupAlways = false;
+	customPickupMultiple = false;
+
+	durability = 3000; //hits until weapon breaks
 };
 
 ////////////////

@@ -20,6 +20,12 @@ datablock ItemData(ScytheItem)
 	// Dynamic properties defined by the scripts
 	image = ScytheImage;
 	canDrop = true;
+
+	itemPropsClass = "MeleeWeaponProps";
+	customPickupAlways = false;
+	customPickupMultiple = false;
+
+	durability = 500; //hits until weapon breaks
 };
 
 ////////////////

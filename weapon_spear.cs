@@ -20,6 +20,12 @@ datablock ItemData(MeleeSpearItem)
 	// Dynamic properties defined by the scripts
 	image = MeleeSpearImage;
 	canDrop = true;
+
+	itemPropsClass = "MeleeWeaponProps";
+	customPickupAlways = false;
+	customPickupMultiple = false;
+
+	durability = 1000; //hits until weapon breaks
 };
 
 ////////////////

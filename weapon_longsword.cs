@@ -22,6 +22,12 @@ datablock ItemData(LongSwordItem)
 	// Dynamic properties defined by the scripts
 	image = LongSwordImage;
 	canDrop = true;
+
+	itemPropsClass = "MeleeWeaponProps";
+	customPickupAlways = false;
+	customPickupMultiple = false;
+
+	durability = 2500; //hits until weapon breaks
 };
 
 ////////////////

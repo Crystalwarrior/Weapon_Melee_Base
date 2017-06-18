@@ -20,6 +20,12 @@ datablock ItemData(ClaymoreItem)
 	// Dynamic properties defined by the scripts
 	image = ClaymoreImage;
 	canDrop = true;
+
+	itemPropsClass = "MeleeWeaponProps";
+	customPickupAlways = false;
+	customPickupMultiple = false;
+
+	durability = 3000; //hits until weapon breaks
 };
 
 datablock AudioProfile(MeleeClaymoreHitSound1)

@@ -1,7 +1,10 @@
+RTB_registerPref("Durability", "Medieval Weapons", "$MeleeWeapons::Durability", "bool 0 1", "Weapon_Melee_Base", 1, 0, 0);
+
 exec("./debug/init.cs");
 exec("./sounds.cs");
 exec("./effects.cs");
 exec("./support_decMaxSpeeds.cs");
+exec("./itemprops.cs");
 
 exec("./weapon_base.cs");
 
@@ -32,3 +35,8 @@ exec("./weapon_scythe.cs");
 exec("./weapon_cudgel.cs");
 //Weirdness
 exec("./lightsaber/server.cs");
+
+function MeleeWeaponProps::onAdd(%this)
+{
+	%this.durability = %this.sourceItemData.durability;
+}

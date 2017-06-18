@@ -20,6 +20,12 @@ datablock ItemData(CudgelItem)
 	// Dynamic properties defined by the scripts
 	image = CudgelImage;
 	canDrop = true;
+
+	itemPropsClass = "MeleeWeaponProps";
+	customPickupAlways = false;
+	customPickupMultiple = false;
+
+	durability = 700; //hits until weapon breaks
 };
 
 ////////////////

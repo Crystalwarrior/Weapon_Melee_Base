@@ -20,6 +20,12 @@ datablock ItemData(DoubleAxeItem)
 	// Dynamic properties defined by the scripts
 	image = DoubleAxeImage;
 	canDrop = true;
+
+	itemPropsClass = "MeleeWeaponProps";
+	customPickupAlways = false;
+	customPickupMultiple = false;
+
+	durability = 2000; //hits until weapon breaks
 };
 
 ////////////////

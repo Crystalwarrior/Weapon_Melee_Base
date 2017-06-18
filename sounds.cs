@@ -14,6 +14,19 @@ datablock AudioProfile(MeleeSwordDrawSound)
 	preload		= true;
 };
 
+datablock AudioProfile(MeleeBreakSound1)
+{
+	filename	= "./sounds/metal_block_01.wav";
+	description	= AudioClosest3d;
+	preload		= true;
+};
+datablock AudioProfile(MeleeBreakSound2)
+{
+	filename	= "./sounds/metal_block_02.wav";
+	description	= AudioClosest3d;
+	preload		= true;
+};
+
 //Swords
 
 datablock AudioProfile(MeleeBlockSound1)

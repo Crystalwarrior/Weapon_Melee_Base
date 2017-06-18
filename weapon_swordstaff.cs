@@ -20,6 +20,12 @@ datablock ItemData(SwordstaffItem)
 	// Dynamic properties defined by the scripts
 	image = SwordstaffImage;
 	canDrop = true;
+
+	itemPropsClass = "MeleeWeaponProps";
+	customPickupAlways = false;
+	customPickupMultiple = false;
+
+	durability = 1000; //hits until weapon breaks
 };
 
 ////////////////

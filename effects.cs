@@ -315,3 +315,12 @@ function MeleeStickBlockProjectile::onExplode(%this, %obj, %pos)
 {
 	ServerPlay3D(MeleeStickBlockSound @ getRandom(1, 2), %pos);
 }
+
+datablock ProjectileData(MeleeBreakProjectile)
+{
+	explosion = BladeSmallMetalExplosion;
+};
+function MeleeBreakProjectile::onExplode(%this, %obj, %pos)
+{
+	ServerPlay3D(MeleeBreakSound @ getRandom(1, 2), %pos);
+}
