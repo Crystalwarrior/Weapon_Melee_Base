@@ -77,7 +77,7 @@ datablock ShapeBaseImageData(BattleAxeImage)
 	twoHanded = true;
 
 	//Special melee hitreg system
-	directDamage = 45;
+	directDamage = 35;
 
 	meleeKnockbackVelocity = 9;
 
@@ -195,6 +195,6 @@ function BattleAxeImage::onChargeFire(%this, %obj, %slot)
 	%obj.playthread(2, "2hswing" @ %obj.swingPhase + 1);
 	//%obj.playThread(3, activate);
 	%obj.chargeAttack = true;
-	%this.schedule(200, MeleeHitregLoop, %obj, %slot, 15, 65);
+	%this.schedule(200, MeleeHitregLoop, %obj, %slot, 15, 55);
 	%obj.swingSchedule = %obj.schedule(200, playAudio, 2, AxeSwingSound);
 }

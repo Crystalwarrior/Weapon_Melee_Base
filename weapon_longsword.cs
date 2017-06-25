@@ -210,6 +210,6 @@ function LongSwordImage::onChargeFire(%this, %obj, %slot)
 		%frames = 18;
 		%delay = 200;
 	}
-	%this.schedule(16, MeleeHitregLoop, %obj, %slot, %frames, 50);
+	%this.schedule(16, MeleeHitregLoop, %obj, %slot, %frames, %obj.meleeStance ? 50 : 40); //slash VS stab
 	%obj.swingSchedule = %obj.schedule(%delay, playAudio, 2, longswordSwingSound @ getRandom(1, 3));
 }

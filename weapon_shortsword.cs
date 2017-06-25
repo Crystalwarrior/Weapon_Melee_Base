@@ -74,7 +74,7 @@ datablock ShapeBaseImageData(ShortSwordImage)
 	melee = true;
 
 	//Special melee hitreg system
-	directDamage = 30;
+	directDamage = 34;
 	armorPenetration = 0.1;
 
 	meleeEnabled = true;
@@ -219,6 +219,6 @@ function ShortSwordImage::onChargeFire(%this, %obj, %slot)
 		%frames = 18;
 		%delay = 200;
 	}
-	%this.schedule(16, MeleeHitregLoop, %obj, %slot, %frames, 40);
+	%this.schedule(16, MeleeHitregLoop, %obj, %slot, %frames, %obj.meleeStance ? 50 : 40); //slash VS stab
 	%obj.swingSchedule = %obj.schedule(%delay, playAudio, 2, SwordSwingSound @ getRandom(1, 3));
 }
