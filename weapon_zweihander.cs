@@ -166,12 +166,16 @@ function ZweihanderImage::onMount(%this, %obj, %slot)
 
 function ZweihanderImage::onFire(%this, %obj, %slot)
 {
+	%this.setChargeSlowdown(%obj, 0);
 	%obj.swingPhase = (%obj.swingPhase + 1) % 2;
 	%obj.playthread(2, "2hswing" @ %obj.swingPhase + 1);
 	%this.schedule(64, MeleeHitregLoop, %obj, %slot, 18);
 	%obj.swingSchedule = %obj.schedule(200, playAudio, 2, ClaymoreSwingSound @ getRandom(1, 3));
 }
-
+function ZweihanderImage::onCheckCharge(%this, %obj, %slot)
+{
+	%this.setChargeSlowdown(%obj, 1);
+}
 function ZweihanderImage::onCharge(%this, %obj, %slot)
 {
 	%obj.playThread(3, plant);
@@ -181,6 +185,7 @@ function ZweihanderImage::onCharge(%this, %obj, %slot)
 
 function ZweihanderImage::onChargeFire(%this, %obj, %slot)
 {
+	%this.setChargeSlowdown(%obj, 0);
 	%obj.swingPhase = 1;
 	%obj.playthread(2, "2hswing" @ %obj.swingPhase + 1);
 	%obj.schedule(200, playThread, 3, shiftTo);

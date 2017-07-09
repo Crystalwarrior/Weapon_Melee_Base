@@ -165,12 +165,16 @@ function HalberdImage::onMount(%this, %obj, %slot)
 
 function HalberdImage::onFire(%this, %obj, %slot)
 {
+	%this.setChargeSlowdown(%obj, 0);
 	%obj.swingPhase = (%obj.swingPhase + 1) % 2;
 	%obj.playthread(2, spearswing @ %obj.swingPhase + 1);
 	%this.schedule(16, MeleeHitregLoop, %obj, %slot, 8);
 	%obj.playAudio(2, HalberdSwingSound @ getRandom(1, 3));
 }
-
+function HalberdImage::onCheckCharge(%this, %obj, %slot)
+{
+	%this.setChargeSlowdown(%obj, 1);
+}
 function HalberdImage::onCharge(%this, %obj, %slot)
 {
 	%obj.playthread(2, spearswing @ (%obj.swingPhase + 1) % 2 + 3);
@@ -182,6 +186,7 @@ function HalberdImage::onCharge(%this, %obj, %slot)
 
 function HalberdImage::onChargeFire(%this, %obj, %slot)
 {
+	%this.setChargeSlowdown(%obj, 0);
 	%obj.swingPhase = (%obj.swingPhase + 1) % 2;
 	%obj.playthread(2, spearswing @ %obj.swingPhase + 3);
 	%obj.chargeAttack = true;

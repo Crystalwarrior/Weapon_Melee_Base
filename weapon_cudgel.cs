@@ -159,11 +159,17 @@ function CudgelImage::onMount(%this, %obj, %slot)
 
 function CudgelImage::onFire(%this, %obj, %slot)
 {
+	%this.setChargeSlowdown(%obj, 0);
 	%obj.swingPhase = (%obj.swingPhase + 1) % 2;
 	%obj.playthread(2, bswing @ %obj.swingPhase + 1);
 	%this.schedule(200, MeleeHitregLoop, %obj, %slot, 12);
 	%obj.stopAudio(2);
 	%obj.swingSchedule = %obj.schedule(200, playAudio, 2, WarhammerSwingSound @ getRandom(1, 3));
+}
+
+function CudgelImage::onCheckCharge(%this, %obj, %slot)
+{
+	%this.setChargeSlowdown(%obj, 1);
 }
 
 function CudgelImage::onCharge(%this, %obj, %slot)
@@ -182,6 +188,7 @@ function CudgelImage::onCharge(%this, %obj, %slot)
 
 function CudgelImage::onChargeFire(%this, %obj, %slot)
 {
+	%this.setChargeSlowdown(%obj, 0);
 	%shieldCheck = isObject(%obj.getMountedImage(3)) && %obj.getMountedImage(3).isShield;
 	%seq = "2hswing";
 	if(%shieldCheck)

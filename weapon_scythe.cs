@@ -163,9 +163,14 @@ function ScytheImage::onMount(%this, %obj, %slot)
 
 function ScytheImage::onFire(%this, %obj, %slot)
 {	
+	%this.setChargeSlowdown(%obj, 0);
 	%obj.playthread(2, "scytheswing1");
 	%this.schedule(100, MeleeHitregLoop, %obj, %slot, 12);
 	%obj.playAudio(2, HalberdSwingSound @ getRandom(1, 3));
+}
+function ScytheImage::onCheckCharge(%this, %obj, %slot)
+{
+	%this.setChargeSlowdown(%obj, 1);
 }
 
 function ScytheImage::onCharge(%this, %obj, %slot)
@@ -179,6 +184,7 @@ function ScytheImage::onCharge(%this, %obj, %slot)
 
 function ScytheImage::onChargeFire(%this, %obj, %slot)
 {
+	%this.setChargeSlowdown(%obj, 0);
 	%obj.playthread(2, "scytheswing2");
 	%obj.chargeAttack = true;
 	%this.schedule(100, MeleeHitregLoop, %obj, %slot, 12, 60);

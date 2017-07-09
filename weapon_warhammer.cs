@@ -160,12 +160,16 @@ function WarHammerImage::onMount(%this, %obj, %slot)
 
 function WarHammerImage::onFire(%this, %obj, %slot)
 {
+	%this.setChargeSlowdown(%obj, 0);
 	%obj.swingPhase = (%obj.swingPhase + 1) % 2;
 	%obj.playthread(2, bswing @ %obj.swingPhase + 1);
 	%this.schedule(200, MeleeHitregLoop, %obj, %slot, 12);
 	%obj.swingSchedule = %obj.schedule(200, playAudio, 2, WarhammerSwingSound @ getRandom(1, 3));
 }
-
+function WarHammerImage::onCheckCharge(%this, %obj, %slot)
+{
+	%this.setChargeSlowdown(%obj, 1);
+}
 function WarHammerImage::onCharge(%this, %obj, %slot)
 {
 	%shieldCheck = isObject(%obj.getMountedImage(3)) && %obj.getMountedImage(3).isShield;
@@ -181,6 +185,7 @@ function WarHammerImage::onCharge(%this, %obj, %slot)
 
 function WarHammerImage::onChargeFire(%this, %obj, %slot)
 {
+	%this.setChargeSlowdown(%obj, 0);
 	%obj.swingPhase = (%obj.swingPhase + 1) % 2;
 	%shieldCheck = isObject(%obj.getMountedImage(3)) && %obj.getMountedImage(3).isShield;
 	%seq = "2hswing";

@@ -164,11 +164,15 @@ function MeleeSpearImage::onMount(%this, %obj, %slot)
 
 function MeleeSpearImage::onFire(%this, %obj, %slot)
 {	
+	%this.setChargeSlowdown(%obj, 0);
 	%obj.playthread(2, pikeswing1);
 	%this.schedule(16, MeleeHitregLoop, %obj, %slot, 12);
 	%obj.swingSchedule = %obj.schedule(16, playAudio, 2, HalberdSwingSound @ getRandom(1, 3));
 }
-
+function MeleeSpearImage::onCheckCharge(%this, %obj, %slot)
+{
+	%this.setChargeSlowdown(%obj, 1);
+}
 function MeleeSpearImage::onCharge(%this, %obj, %slot)
 {
 	%obj.playthread(2, pikeswing2);
@@ -180,6 +184,7 @@ function MeleeSpearImage::onCharge(%this, %obj, %slot)
 
 function MeleeSpearImage::onChargeFire(%this, %obj, %slot)
 {
+	%this.setChargeSlowdown(%obj, 0);
 	%obj.playthread(2, pikeswing2);
 	%obj.playThread(3, plant);
 	%obj.chargeAttack = true;

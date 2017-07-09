@@ -166,12 +166,16 @@ function SwordstaffImage::onMount(%this, %obj, %slot)
 
 function SwordstaffImage::onFire(%this, %obj, %slot)
 {
+	%this.setChargeSlowdown(%obj, 0);
 	%obj.swingPhase = (%obj.swingPhase + 1) % 2;
 	%obj.playthread(2, spearswing @ %obj.swingPhase + 1);
 	%this.schedule(16, MeleeHitregLoop, %obj, %slot, 12);
 	%obj.swingSchedule = %obj.playAudio(2, HalberdSwingSound @ getRandom(1, 3));
 }
-
+function SwordstaffImage::onCheckCharge(%this, %obj, %slot)
+{
+	%this.setChargeSlowdown(%obj, 1);
+}
 function SwordstaffImage::onCharge(%this, %obj, %slot)
 {
 	%obj.playthread(2, spearswing @ (%obj.swingPhase + 1) % 2 + 3);
@@ -183,6 +187,7 @@ function SwordstaffImage::onCharge(%this, %obj, %slot)
 
 function SwordstaffImage::onChargeFire(%this, %obj, %slot)
 {
+	%this.setChargeSlowdown(%obj, 0);
 	%obj.swingPhase = (%obj.swingPhase + 1) % 2;
 	%obj.playthread(2, spearswing @ %obj.swingPhase + 3);
 	%obj.chargeAttack = true;

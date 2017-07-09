@@ -240,10 +240,15 @@ function ClaymoreImage::onMount(%this, %obj, %slot)
 
 function ClaymoreImage::onFire(%this, %obj, %slot)
 {
+	%this.setChargeSlowdown(%obj, 0);
 	%obj.swingPhase = (%obj.swingPhase + 1) % 2;
 	%obj.playthread(2, "2hswing" @ %obj.swingPhase + 1);
 	%this.schedule(64, MeleeHitregLoop, %obj, %slot, 18);
 	%obj.swingSchedule = %obj.schedule(200, playAudio, 2, longswordSwingSound @ getRandom(1, 3));
+}
+function ClaymoreImage::onCheckCharge(%this, %obj, %slot)
+{
+	%this.setChargeSlowdown(%obj, 1);
 }
 
 function ClaymoreImage::onCharge(%this, %obj, %slot)
@@ -257,6 +262,7 @@ function ClaymoreImage::onCharge(%this, %obj, %slot)
 
 function ClaymoreImage::onChargeFire(%this, %obj, %slot)
 {
+	%this.setChargeSlowdown(%obj, 0);
 	%obj.swingPhase = 3; //Force a swing phase for later non-charge hits
 	%obj.playthread(2, "2hstab1");
 	//%obj.playThread(3, activate);

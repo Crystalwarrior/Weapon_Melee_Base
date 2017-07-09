@@ -174,10 +174,15 @@ function BattleAxeImage::onMount(%this, %obj, %slot)
 
 function BattleAxeImage::onFire(%this, %obj, %slot)
 {
+	%this.setChargeSlowdown(%obj, 0);
 	%obj.swingPhase = (%obj.swingPhase + 1) % 2;
 	%obj.playthread(2, "2hswing" @ %obj.swingPhase + 1);
 	%this.schedule(200, MeleeHitregLoop, %obj, %slot, 15);
 	%obj.swingSchedule = %obj.schedule(200, playAudio, 2, MesserSwingSound @ getRandom(1, 3));
+}
+function BattleAxeImage::onCheckCharge(%this, %obj, %slot)
+{
+	%this.setChargeSlowdown(%obj, 1);
 }
 
 function BattleAxeImage::onCharge(%this, %obj, %slot)
@@ -191,6 +196,7 @@ function BattleAxeImage::onCharge(%this, %obj, %slot)
 
 function BattleAxeImage::onChargeFire(%this, %obj, %slot)
 {
+	%this.setChargeSlowdown(%obj, 0);
 	%obj.swingPhase = 0; //Always vertical swing
 	%obj.playthread(2, "2hswing" @ %obj.swingPhase + 1);
 	//%obj.playThread(3, activate);

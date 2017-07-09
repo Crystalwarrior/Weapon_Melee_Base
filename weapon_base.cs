@@ -7,11 +7,22 @@ package MeleeBasePackage
 	//	%this.schedule(16, MeleeHitregLoop, %obj, %slot, 12);
 	//}
 
+	function WeaponImage::onUnMount(%this, %obj, %slot)
+	{
+		if(!%this.meleeEnabled)
+			return parent::onUnMount(%this, %obj, %slot);
+		%this.setChargeSlowdown(%obj, 0);
+		parent::onUnMount(%this, %obj, %slot);
+	}
+
 	function WeaponImage::onMount(%this, %obj, %slot)
 	{
 		parent::onMount(%this, %obj, %slot);
 		%props = %obj.getItemProps();
 		if(%props.class !$= "MeleeWeaponProps")
+			return;
+
+		if(%props.durability $= "" && %props.sourceItemData.durability $= "")
 			return;
 
 		if(%props.durability <= 0)
@@ -109,6 +120,21 @@ activatePackage("MeleeBasePackage");
 //	%this.meleeJumpLoop = %this.schedule(%delay, meleeJumpLoop, %tog);
 //}
 
+
+function WeaponImage::setChargeSlowdown(%this, %obj, %tog)
+{
+	if(%tog)
+		%obj.desiredSlowdown = 3;
+	else
+		%obj.desiredSlowdown = 0;
+	if(%tog && getWord(%obj.getVelocity(), 2) > 0)
+		%obj.setVelocity(setWord(%obj.getVelocity(), 2, 0));
+	%obj.SD_updateSpeeds();
+	if((%data = %obj.getDataBlock()) == nameToID("SurvivorArmor"))
+	{
+		%data.setCanJump(%obj, !%tog);
+	}
+}
 
 function WeaponImage::onStanceSwitch(%this, %obj, %slot)
 {
@@ -241,28 +267,31 @@ function WeaponImage::onImpact(%this, %obj, %slot, %col, %pos, %normal, %damage,
 	}
 
 	%props = %obj.getItemProps();
-	if(%props.class $= "MeleeWeaponProps")
-		%props.durability--;
-
-	if(%props.durability <= 0)
+	if(%props.durability !$= "" || %props.sourceItemData.durability !$= "")
 	{
-		%pos = %obj.getSlotTransform(%slot);
-		%obj.tool[%props.itemSlot] = "";
-		if (isObject(%obj.client))
-			messageClient(%obj.client, 'MsgItemPickup', '', %props.itemSlot, 0);
-		%props.delete();
+		if(%props.class $= "MeleeWeaponProps")
+			%props.durability--;
 
-		%projectile = new Projectile()
+		if(%props.durability <= 0)
 		{
-			datablock = MeleeBreakProjectile;
-			initialPosition = %pos;
-			initialVelocity = "0 0 0";
-		};
-		MissionCleanup.add(%projectile);
-		%projectile.explode();
+			%pos = %obj.getSlotTransform(%slot);
+			%obj.tool[%props.itemSlot] = "";
+			if (isObject(%obj.client))
+				messageClient(%obj.client, 'MsgItemPickup', '', %props.itemSlot, 0);
+			%props.delete();
 
-		%obj.unMountImage(0);
-		return 1;
+			%projectile = new Projectile()
+			{
+				datablock = MeleeBreakProjectile;
+				initialPosition = %pos;
+				initialVelocity = "0 0 0";
+			};
+			MissionCleanup.add(%projectile);
+			%projectile.explode();
+
+			%obj.unMountImage(0);
+			return 1;
+		}
 	}
 
 	if ((!%pierce && %hitplayer) || (!%hitplayer && !%this.meleePierceTerrain))//!%this.meleePierceTerrain && (!%hitplayer && !%pierce))

@@ -159,11 +159,15 @@ function PickaxeImage::onMount(%this, %obj, %slot)
 
 function PickaxeImage::onFire(%this, %obj, %slot)
 {
+	%this.setChargeSlowdown(%obj, 0);
 	%obj.playthread(2, bswing1);
 	%this.schedule(200, MeleeHitregLoop, %obj, %slot, 12);
 	%obj.swingSchedule = %obj.schedule(200, playAudio, 2, MaceSwingSound @ getRandom(1, 3));
 }
-
+function PickaxeImage::onCheckCharge(%this, %obj, %slot)
+{
+	%this.setChargeSlowdown(%obj, 1);
+}
 function PickaxeImage::onCharge(%this, %obj, %slot)
 {
 	%shieldCheck = isObject(%obj.getMountedImage(3)) && %obj.getMountedImage(3).isShield;
@@ -179,6 +183,7 @@ function PickaxeImage::onCharge(%this, %obj, %slot)
 
 function PickaxeImage::onChargeFire(%this, %obj, %slot)
 {
+	%this.setChargeSlowdown(%obj, 0);
 	%shieldCheck = isObject(%obj.getMountedImage(3)) && %obj.getMountedImage(3).isShield;
 	%seq = "2hswing1";
 	if(%shieldCheck)

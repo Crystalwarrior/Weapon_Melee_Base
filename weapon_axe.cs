@@ -163,10 +163,16 @@ function AxeImage::onMount(%this, %obj, %slot)
 
 function AxeImage::onFire(%this, %obj, %slot)
 {
+	%this.setChargeSlowdown(%obj, 0);
 	%obj.swingPhase = (%obj.swingPhase + 1) % 2;
 	%obj.playthread(2, bswing @ %obj.swingPhase + 1);
 	%this.schedule(200, MeleeHitregLoop, %obj, %slot, 12);
 	%obj.swingSchedule = %obj.schedule(200, playAudio, 2, WarhammerSwingSound @ getRandom(1, 3));
+}
+
+function AxeImage::onCheckCharge(%this, %obj, %slot)
+{
+	%this.setChargeSlowdown(%obj, 1);
 }
 
 function AxeImage::onCharge(%this, %obj, %slot)
@@ -185,6 +191,7 @@ function AxeImage::onCharge(%this, %obj, %slot)
 
 function AxeImage::onChargeFire(%this, %obj, %slot)
 {
+	%this.setChargeSlowdown(%obj, 0);
 	%shieldCheck = isObject(%obj.getMountedImage(3)) && %obj.getMountedImage(3).isShield;
 	%seq = "2hswing";
 	if(%shieldCheck)

@@ -162,12 +162,16 @@ function PitchforkImage::onMount(%this, %obj, %slot)
 }
 
 function PitchforkImage::onFire(%this, %obj, %slot)
-{	
+{
+	%this.setChargeSlowdown(%obj, 0);
 	%obj.playthread(2, pikeswing1);
 	%this.schedule(16, MeleeHitregLoop, %obj, %slot, 8);
 	%obj.swingSchedule = %obj.schedule(50, playAudio, 2, WarhammerSwingSound @ getRandom(1, 3));
 }
-
+function PitchforkImage::onCheckCharge(%this, %obj, %slot)
+{
+	%this.setChargeSlowdown(%obj, 1);
+}
 function PitchforkImage::onCharge(%this, %obj, %slot)
 {
 	%obj.playthread(2, pikeswing2);
@@ -179,6 +183,7 @@ function PitchforkImage::onCharge(%this, %obj, %slot)
 
 function PitchforkImage::onChargeFire(%this, %obj, %slot)
 {
+	%this.setChargeSlowdown(%obj, 0);
 	%obj.playthread(2, pikeswing2);
 	%obj.playThread(3, plant);
 	%obj.chargeAttack = true;

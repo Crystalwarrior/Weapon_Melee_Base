@@ -181,13 +181,17 @@ function ShortSwordImage::onStanceSwitch(%this, %obj, %slot)
 
 function ShortSwordImage::onFire(%this, %obj, %slot)
 {
+	%this.setChargeSlowdown(%obj, 0);
 	%obj.swingPhase = (%obj.swingPhase + 1) % 2;
 	%obj.playthread(2, tswing @ %obj.swingPhase + (%obj.meleeStance ? 3 : 1));
 	%this.schedule(16, MeleeHitregLoop, %obj, %slot, 14);
 	%obj.stopAudio(2);
 	%obj.playAudio(2, ShortswordSwingSound @ getRandom(1, 3));
 }
-
+function ShortSwordImage::onCheckCharge(%this, %obj, %slot)
+{
+	%this.setChargeSlowdown(%obj, 1);
+}
 function ShortSwordImage::onCharge(%this, %obj, %slot)
 {
 	if(%obj.meleeStance)
@@ -206,6 +210,7 @@ function ShortSwordImage::onCharge(%this, %obj, %slot)
 
 function ShortSwordImage::onChargeFire(%this, %obj, %slot)
 {
+	%this.setChargeSlowdown(%obj, 0);
 	%seq = "2h" @ (!%obj.meleeStance ? "stab1" : ("swing" @ %obj.swingPhase+1));
 	%shieldCheck = isObject(%obj.getMountedImage(3)) && %obj.getMountedImage(3).isShield;
 	if(%shieldCheck)
